@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-candlelion-41/my-app-server/dev
-# timestamp: Tue May 22 2018 12:48:43 GMT-0600 (CST)
+# timestamp: Tue May 22 2018 15:15:54 GMT-0600 (CST)
 
 type AggregateCartProduct {
   count: Int!
@@ -815,33 +815,33 @@ type Mutation {
   createClient(data: ClientCreateInput!): Client!
   createUser(data: UserCreateInput!): User!
   createProduct(data: ProductCreateInput!): Product!
-  createCartProduct(data: CartProductCreateInput!): CartProduct!
   createSale(data: SaleCreateInput!): Sale!
+  createCartProduct(data: CartProductCreateInput!): CartProduct!
   updateClient(data: ClientUpdateInput!, where: ClientWhereUniqueInput!): Client
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
-  updateCartProduct(data: CartProductUpdateInput!, where: CartProductWhereUniqueInput!): CartProduct
   updateSale(data: SaleUpdateInput!, where: SaleWhereUniqueInput!): Sale
+  updateCartProduct(data: CartProductUpdateInput!, where: CartProductWhereUniqueInput!): CartProduct
   deleteClient(where: ClientWhereUniqueInput!): Client
   deleteUser(where: UserWhereUniqueInput!): User
   deleteProduct(where: ProductWhereUniqueInput!): Product
-  deleteCartProduct(where: CartProductWhereUniqueInput!): CartProduct
   deleteSale(where: SaleWhereUniqueInput!): Sale
+  deleteCartProduct(where: CartProductWhereUniqueInput!): CartProduct
   upsertClient(where: ClientWhereUniqueInput!, create: ClientCreateInput!, update: ClientUpdateInput!): Client!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
-  upsertCartProduct(where: CartProductWhereUniqueInput!, create: CartProductCreateInput!, update: CartProductUpdateInput!): CartProduct!
   upsertSale(where: SaleWhereUniqueInput!, create: SaleCreateInput!, update: SaleUpdateInput!): Sale!
+  upsertCartProduct(where: CartProductWhereUniqueInput!, create: CartProductCreateInput!, update: CartProductUpdateInput!): CartProduct!
   updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
-  updateManyCartProducts(data: CartProductUpdateInput!, where: CartProductWhereInput): BatchPayload!
   updateManySales(data: SaleUpdateInput!, where: SaleWhereInput): BatchPayload!
+  updateManyCartProducts(data: CartProductUpdateInput!, where: CartProductWhereInput): BatchPayload!
   deleteManyClients(where: ClientWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
-  deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
   deleteManySales(where: SaleWhereInput): BatchPayload!
+  deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -875,6 +875,7 @@ type Product implements Node {
   id: ID!
   name: String!
   price: Float!
+  isDeleted: Boolean
   quantity: Int!
   client(where: ClientWhereInput): Client!
 }
@@ -892,6 +893,7 @@ type ProductConnection {
 input ProductCreateInput {
   name: String!
   price: Float!
+  isDeleted: Boolean
   quantity: Int!
   client: ClientCreateOneWithoutProductsInput!
 }
@@ -904,6 +906,7 @@ input ProductCreateManyWithoutClientInput {
 input ProductCreateWithoutClientInput {
   name: String!
   price: Float!
+  isDeleted: Boolean
   quantity: Int!
 }
 
@@ -923,6 +926,8 @@ enum ProductOrderByInput {
   name_DESC
   price_ASC
   price_DESC
+  isDeleted_ASC
+  isDeleted_DESC
   quantity_ASC
   quantity_DESC
   updatedAt_ASC
@@ -935,6 +940,7 @@ type ProductPreviousValues {
   id: ID!
   name: String!
   price: Float!
+  isDeleted: Boolean
   quantity: Int!
 }
 
@@ -980,6 +986,7 @@ input ProductSubscriptionWhereInput {
 input ProductUpdateInput {
   name: String
   price: Float
+  isDeleted: Boolean
   quantity: Int
   client: ClientUpdateOneWithoutProductsInput
 }
@@ -996,6 +1003,7 @@ input ProductUpdateManyWithoutClientInput {
 input ProductUpdateWithoutClientDataInput {
   name: String
   price: Float
+  isDeleted: Boolean
   quantity: Int
 }
 
@@ -1121,6 +1129,10 @@ input ProductWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
+  isDeleted: Boolean
+
+  """All values that are not equal to given value."""
+  isDeleted_not: Boolean
   quantity: Int
 
   """All values that are not equal to given value."""
@@ -1154,18 +1166,18 @@ type Query {
   clients(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
-  cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale]!
+  cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
   client(where: ClientWhereUniqueInput!): Client
   user(where: UserWhereUniqueInput!): User
   product(where: ProductWhereUniqueInput!): Product
-  cartProduct(where: CartProductWhereUniqueInput!): CartProduct
   sale(where: SaleWhereUniqueInput!): Sale
+  cartProduct(where: CartProductWhereUniqueInput!): CartProduct
   clientsConnection(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClientConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
-  cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
   salesConnection(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SaleConnection!
+  cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1177,6 +1189,7 @@ type Query {
 type Sale implements Node {
   id: ID!
   products(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct!]
+  isDeleted: Boolean
   client(where: ClientWhereInput): Client!
   soldBy(where: UserWhereInput): User!
 }
@@ -1192,6 +1205,7 @@ type SaleConnection {
 }
 
 input SaleCreateInput {
+  isDeleted: Boolean
   products: CartProductCreateManyWithoutSaleInput
   client: ClientCreateOneWithoutSalesInput!
   soldBy: UserCreateOneWithoutSalesInput!
@@ -1213,16 +1227,19 @@ input SaleCreateOneWithoutProductsInput {
 }
 
 input SaleCreateWithoutClientInput {
+  isDeleted: Boolean
   products: CartProductCreateManyWithoutSaleInput
   soldBy: UserCreateOneWithoutSalesInput!
 }
 
 input SaleCreateWithoutProductsInput {
+  isDeleted: Boolean
   client: ClientCreateOneWithoutSalesInput!
   soldBy: UserCreateOneWithoutSalesInput!
 }
 
 input SaleCreateWithoutSoldByInput {
+  isDeleted: Boolean
   products: CartProductCreateManyWithoutSaleInput
   client: ClientCreateOneWithoutSalesInput!
 }
@@ -1239,6 +1256,8 @@ type SaleEdge {
 enum SaleOrderByInput {
   id_ASC
   id_DESC
+  isDeleted_ASC
+  isDeleted_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1247,6 +1266,7 @@ enum SaleOrderByInput {
 
 type SalePreviousValues {
   id: ID!
+  isDeleted: Boolean
 }
 
 type SaleSubscriptionPayload {
@@ -1289,6 +1309,7 @@ input SaleSubscriptionWhereInput {
 }
 
 input SaleUpdateInput {
+  isDeleted: Boolean
   products: CartProductUpdateManyWithoutSaleInput
   client: ClientUpdateOneWithoutSalesInput
   soldBy: UserUpdateOneWithoutSalesInput
@@ -1321,16 +1342,19 @@ input SaleUpdateOneWithoutProductsInput {
 }
 
 input SaleUpdateWithoutClientDataInput {
+  isDeleted: Boolean
   products: CartProductUpdateManyWithoutSaleInput
   soldBy: UserUpdateOneWithoutSalesInput
 }
 
 input SaleUpdateWithoutProductsDataInput {
+  isDeleted: Boolean
   client: ClientUpdateOneWithoutSalesInput
   soldBy: UserUpdateOneWithoutSalesInput
 }
 
 input SaleUpdateWithoutSoldByDataInput {
+  isDeleted: Boolean
   products: CartProductUpdateManyWithoutSaleInput
   client: ClientUpdateOneWithoutSalesInput
 }
@@ -1411,6 +1435,10 @@ input SaleWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  isDeleted: Boolean
+
+  """All values that are not equal to given value."""
+  isDeleted_not: Boolean
   products_every: CartProductWhereInput
   products_some: CartProductWhereInput
   products_none: CartProductWhereInput
@@ -1426,8 +1454,8 @@ type Subscription {
   client(where: ClientSubscriptionWhereInput): ClientSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
-  cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
   sale(where: SaleSubscriptionWhereInput): SaleSubscriptionPayload
+  cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
 }
 
 type User implements Node {

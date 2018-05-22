@@ -21,8 +21,17 @@ type Product {
   id: ID! @unique
   name: String!
   price: Float!
+  isDeleted: Boolean @default(value: false)
   quantity: Int!
   client: Client!
+}
+
+type Sale {
+  id: ID! @unique
+  products: [CartProduct!]!
+  isDeleted: Boolean @default(value: false)
+  client: Client!
+  soldBy: User!
 }
 
 type CartProduct {
@@ -31,11 +40,4 @@ type CartProduct {
   price: Float!
   quantitySold: Int!
   sale: Sale!
-}
-
-type Sale {
-  id: ID! @unique
-  products: [CartProduct!]!
-  client: Client!
-  soldBy: User!
 }

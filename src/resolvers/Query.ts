@@ -8,6 +8,11 @@ export const Query = {
 
   products: (root, args, ctx: Context, info) => {
     const clientId = getClientId(ctx)
-    return ctx.db.query.products({ where: { client: { id: clientId } } })
+    return ctx.db.query.products({ where: { client: { id: clientId } } }, info)
+  },
+
+  sales: (root, args, ctx: Context, info) => {
+    const clientId = getClientId(ctx)
+    return ctx.db.query.sales({ where: { client: { id: clientId } } }, info)
   },
 }

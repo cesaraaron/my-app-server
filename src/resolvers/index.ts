@@ -1,9 +1,8 @@
 import { Query } from './Query'
-import { auth } from './Mutation/auth'
+import { Mutation} from './Mutation'
+// import { auth } from './Mutation/auth'
 
 export default {
   Query,
-  Mutation: {
-    ...auth,
-  },
+  Mutation
 }

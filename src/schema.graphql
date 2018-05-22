@@ -1,14 +1,28 @@
-# import User, Product from "./generated/prisma.graphql"
+# import Product, Sale, User from "./generated/prisma.graphql"
 
 type Query {
   users: [User!]!
   products: [Product!]!
+  sales: [Sale!]!
 }
 
 type Mutation {
   login(phoneNumber: String!, password: String!): AuthPayload!
+  createProduct(name: String!, price: Float!, quantity: Int!): Product
+  createUser(name: String!): User
 }
 
 type AuthPayload {
   token: String!
+}
+
+type Client {
+  id: ID!
+  name: String!
+  lastName: String
+  email: String
+  phoneNumber: String!
+  users: [User!]!
+  products: [Product!]!
+  sales: [Sale!]!
 }

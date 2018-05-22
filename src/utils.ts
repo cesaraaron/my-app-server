@@ -11,6 +11,7 @@ export function getClientId(ctx: Context) {
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
     const { clientId } = jwt.verify(token, process.env.APP_SECRET) as { clientId: string }
+
     return clientId
   }
 
