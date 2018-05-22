@@ -3,32 +3,20 @@ import * as jwt from 'jsonwebtoken'
 import { Context } from '../../utils'
 
 export const auth = {
-  async signup(parent, args, ctx: Context, info) {
-    const password = await bcrypt.hash(args.password, 10)
-    const user = await ctx.db.mutation.createUser({
-      data: { ...args, password },
-    })
+  async login(parent, { phoneNumber, password }, ctx: Context, info) {
+    const client = await ctx.db.query.client({ where: { phoneNumber } })
 
-    return {
-      token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
-      user,
-    }
-  },
-
-  async login(parent, { email, password }, ctx: Context, info) {
-    const user = await ctx.db.query.user({ where: { email } })
-    if (!user) {
-      throw new Error(`No such user found for email: ${email}`)
+    if (!client) {
+      throw new Error(`Ningun usuario fue encontrado con el numero: ${phoneNumber}`)
     }
 
-    const valid = await bcrypt.compare(password, user.password)
+    const valid = await bcrypt.compare(password, client.password)
     if (!valid) {
-      throw new Error('Invalid password')
+      throw new Error('Contraseña invalida')
     }
 
     return {
-      token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
-      user,
+      token: jwt.sign({ userId: client.id }, process.env.APP_SECRET),
     }
   },
 }

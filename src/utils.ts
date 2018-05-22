@@ -6,12 +6,12 @@ export interface Context {
   request: any
 }
 
-export function getUserId(ctx: Context) {
+export function getClientId(ctx: Context) {
   const Authorization = ctx.request.get('Authorization')
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
-    const { userId } = jwt.verify(token, process.env.APP_SECRET) as { userId: string }
-    return userId
+    const { clientId } = jwt.verify(token, process.env.APP_SECRET) as { clientId: string }
+    return clientId
   }
 
   throw new AuthError()
@@ -19,6 +19,6 @@ export function getUserId(ctx: Context) {
 
 export class AuthError extends Error {
   constructor() {
-    super('Not authorized')
+    super('Acceso denegado')
   }
 }

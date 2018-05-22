@@ -1,17 +1,41 @@
-type Post {
+type Client {
   id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  isPublished: Boolean! @default(value: "false")
-  title: String!
-  text: String!
-  author: User!
+  name: String!
+  lastName: String
+  password: String!
+  email: String @unique
+  phoneNumber: String! @unique
+  users: [User!]!
+  products: [Product!]!
+  sales: [Sale!]!
 }
 
 type User {
   id: ID! @unique
-  email: String! @unique
-  password: String!
   name: String!
-  posts: [Post!]!
+  client: Client!
+  sales: [Sale!]!
+}
+
+type Product {
+  id: ID! @unique
+  name: String!
+  price: Float!
+  quantity: Int!
+  client: Client!
+}
+
+type CartProduct {
+  id: ID! @unique
+  name: String!
+  price: Float!
+  quantitySold: Int!
+  sale: Sale!
+}
+
+type Sale {
+  id: ID! @unique
+  products: [CartProduct!]!
+  client: Client!
+  soldBy: User!
 }
