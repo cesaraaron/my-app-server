@@ -8,8 +8,16 @@ type Query {
 
 type Mutation {
   login(phoneNumber: String!, password: String!): AuthPayload!
-  createProduct(name: String!, price: Float!, quantity: Int!): Product
+  createProduct(name: String!, price: Float!, quantity: Int!, userId: String): Product
+  createSale(products: [CartProductInput!]!, userId: String!): Sale
   createUser(name: String!): User
+}
+
+input CartProductInput {
+  productId: ID!
+  name: String!
+  price: Float!
+  quantitySold: Int!
 }
 
 type AuthPayload {
