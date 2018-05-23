@@ -19,6 +19,8 @@ type User {
 
 type Product {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   price: Float!
   isDeleted: Boolean @default(value: false)
@@ -28,6 +30,8 @@ type Product {
 
 type Sale {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   products: [CartProduct!]!
   isDeleted: Boolean @default(value: false)
   client: Client!
