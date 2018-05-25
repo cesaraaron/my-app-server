@@ -18,6 +18,7 @@ const login = async (_, { phoneNumber, password }, ctx: Context, _1) => {
 
   return {
     token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
+    user
   }
 }
 

@@ -333,7 +333,6 @@ type Client implements Node {
   id: ID!
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -359,7 +358,6 @@ type ClientConnection {
 input ClientCreateInput {
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   users: UserCreateManyWithoutClientInput
@@ -385,7 +383,6 @@ input ClientCreateOneWithoutUsersInput {
 input ClientCreateWithoutProductsInput {
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   users: UserCreateManyWithoutClientInput
@@ -395,7 +392,6 @@ input ClientCreateWithoutProductsInput {
 input ClientCreateWithoutSalesInput {
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   users: UserCreateManyWithoutClientInput
@@ -405,7 +401,6 @@ input ClientCreateWithoutSalesInput {
 input ClientCreateWithoutUsersInput {
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   products: ProductCreateManyWithoutClientInput
@@ -433,8 +428,6 @@ enum ClientOrderByInput {
   name_DESC
   lastName_ASC
   lastName_DESC
-  password_ASC
-  password_DESC
   email_ASC
   email_DESC
   phoneNumber_ASC
@@ -449,7 +442,6 @@ type ClientPreviousValues {
   id: ID!
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
 }
@@ -496,7 +488,6 @@ input ClientSubscriptionWhereInput {
 input ClientUpdateInput {
   name: String
   lastName: String
-  password: String
   email: String
   phoneNumber: String
   users: UserUpdateManyWithoutClientInput
@@ -531,7 +522,6 @@ input ClientUpdateOneWithoutUsersInput {
 input ClientUpdateWithoutProductsDataInput {
   name: String
   lastName: String
-  password: String
   email: String
   phoneNumber: String
   users: UserUpdateManyWithoutClientInput
@@ -541,7 +531,6 @@ input ClientUpdateWithoutProductsDataInput {
 input ClientUpdateWithoutSalesDataInput {
   name: String
   lastName: String
-  password: String
   email: String
   phoneNumber: String
   users: UserUpdateManyWithoutClientInput
@@ -551,7 +540,6 @@ input ClientUpdateWithoutSalesDataInput {
 input ClientUpdateWithoutUsersDataInput {
   name: String
   lastName: String
-  password: String
   email: String
   phoneNumber: String
   products: ProductUpdateManyWithoutClientInput
@@ -745,59 +733,6 @@ input ClientWhereInput {
   All values not ending with the given string.
   """
   lastName_not_ends_with: String
-  password: String
-  """
-  All values that are not equal to given value.
-  """
-  password_not: String
-  """
-  All values that are contained in given list.
-  """
-  password_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
-  password_not_in: [String!]
-  """
-  All values less than the given value.
-  """
-  password_lt: String
-  """
-  All values less than or equal the given value.
-  """
-  password_lte: String
-  """
-  All values greater than the given value.
-  """
-  password_gt: String
-  """
-  All values greater than or equal the given value.
-  """
-  password_gte: String
-  """
-  All values containing the given string.
-  """
-  password_contains: String
-  """
-  All values not containing the given string.
-  """
-  password_not_contains: String
-  """
-  All values starting with the given string.
-  """
-  password_starts_with: String
-  """
-  All values not starting with the given string.
-  """
-  password_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
-  password_ends_with: String
-  """
-  All values not ending with the given string.
-  """
-  password_not_ends_with: String
   email: String
   """
   All values that are not equal to given value.
@@ -2269,8 +2204,6 @@ export type ClientOrderByInput =
   'name_DESC' |
   'lastName_ASC' |
   'lastName_DESC' |
-  'password_ASC' |
-  'password_DESC' |
   'email_ASC' |
   'email_DESC' |
   'phoneNumber_ASC' |
@@ -2348,7 +2281,6 @@ export type MutationType =
 export interface ClientCreateWithoutUsersInput {
   name: String
   lastName?: String
-  password: String
   email?: String
   phoneNumber: String
   products?: ProductCreateManyWithoutClientInput
@@ -2401,20 +2333,6 @@ export interface ClientWhereInput {
   lastName_not_starts_with?: String
   lastName_ends_with?: String
   lastName_not_ends_with?: String
-  password?: String
-  password_not?: String
-  password_in?: String[] | String
-  password_not_in?: String[] | String
-  password_lt?: String
-  password_lte?: String
-  password_gt?: String
-  password_gte?: String
-  password_contains?: String
-  password_not_contains?: String
-  password_starts_with?: String
-  password_not_starts_with?: String
-  password_ends_with?: String
-  password_not_ends_with?: String
   email?: String
   email_not?: String
   email_in?: String[] | String
@@ -2477,7 +2395,6 @@ export interface UserCreateWithoutClientInput {
 export interface ClientCreateWithoutProductsInput {
   name: String
   lastName?: String
-  password: String
   email?: String
   phoneNumber: String
   users?: UserCreateManyWithoutClientInput
@@ -2600,7 +2517,6 @@ export interface SaleUpdateInput {
 export interface ClientCreateWithoutSalesInput {
   name: String
   lastName?: String
-  password: String
   email?: String
   phoneNumber: String
   users?: UserCreateManyWithoutClientInput
@@ -2631,7 +2547,6 @@ export interface ProductCreateWithoutClientInput {
 export interface ClientUpdateWithoutProductsDataInput {
   name?: String
   lastName?: String
-  password?: String
   email?: String
   phoneNumber?: String
   users?: UserUpdateManyWithoutClientInput
@@ -2855,7 +2770,6 @@ export interface ClientWhereUniqueInput {
 export interface ClientUpdateInput {
   name?: String
   lastName?: String
-  password?: String
   email?: String
   phoneNumber?: String
   users?: UserUpdateManyWithoutClientInput
@@ -2895,7 +2809,6 @@ export interface UserUpdateWithWhereUniqueWithoutClientInput {
 export interface ClientUpdateWithoutUsersDataInput {
   name?: String
   lastName?: String
-  password?: String
   email?: String
   phoneNumber?: String
   products?: ProductUpdateManyWithoutClientInput
@@ -2929,7 +2842,6 @@ export interface SaleUpdateManyWithoutSoldByInput {
 export interface ClientCreateInput {
   name: String
   lastName?: String
-  password: String
   email?: String
   phoneNumber: String
   users?: UserCreateManyWithoutClientInput
@@ -3045,7 +2957,6 @@ export interface ProductUpdateManyWithoutClientInput {
 export interface ClientUpdateWithoutSalesDataInput {
   name?: String
   lastName?: String
-  password?: String
   email?: String
   phoneNumber?: String
   users?: UserUpdateManyWithoutClientInput
@@ -3247,7 +3158,6 @@ export interface Client extends Node {
   id: ID_Output
   name: String
   lastName?: String
-  password: String
   email?: String
   phoneNumber: String
   users?: User[]
@@ -3329,7 +3239,6 @@ export interface ClientPreviousValues {
   id: ID_Output
   name: String
   lastName?: String
-  password: String
   email?: String
   phoneNumber: String
 }

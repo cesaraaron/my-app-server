@@ -2,7 +2,6 @@ type Client {
   id: ID! @unique
   name: String!
   lastName: String
-  password: String!
   email: String @unique
   phoneNumber: String! @unique
   users: [User!]!

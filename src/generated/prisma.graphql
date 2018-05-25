@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-candlelion-41/my-app-server/dev
-# timestamp: Thu May 24 2018 21:57:34 GMT-0600 (CST)
+# timestamp: Fri May 25 2018 09:24:26 GMT-0600 (CST)
 
 type AggregateCartProduct {
   count: Int!
@@ -276,7 +276,6 @@ type Client implements Node {
   id: ID!
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -297,7 +296,6 @@ type ClientConnection {
 input ClientCreateInput {
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   users: UserCreateManyWithoutClientInput
@@ -323,7 +321,6 @@ input ClientCreateOneWithoutUsersInput {
 input ClientCreateWithoutProductsInput {
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   users: UserCreateManyWithoutClientInput
@@ -333,7 +330,6 @@ input ClientCreateWithoutProductsInput {
 input ClientCreateWithoutSalesInput {
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   users: UserCreateManyWithoutClientInput
@@ -343,7 +339,6 @@ input ClientCreateWithoutSalesInput {
 input ClientCreateWithoutUsersInput {
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
   products: ProductCreateManyWithoutClientInput
@@ -366,8 +361,6 @@ enum ClientOrderByInput {
   name_DESC
   lastName_ASC
   lastName_DESC
-  password_ASC
-  password_DESC
   email_ASC
   email_DESC
   phoneNumber_ASC
@@ -382,7 +375,6 @@ type ClientPreviousValues {
   id: ID!
   name: String!
   lastName: String
-  password: String!
   email: String
   phoneNumber: String!
 }
@@ -429,7 +421,6 @@ input ClientSubscriptionWhereInput {
 input ClientUpdateInput {
   name: String
   lastName: String
-  password: String
   email: String
   phoneNumber: String
   users: UserUpdateManyWithoutClientInput
@@ -464,7 +455,6 @@ input ClientUpdateOneWithoutUsersInput {
 input ClientUpdateWithoutProductsDataInput {
   name: String
   lastName: String
-  password: String
   email: String
   phoneNumber: String
   users: UserUpdateManyWithoutClientInput
@@ -474,7 +464,6 @@ input ClientUpdateWithoutProductsDataInput {
 input ClientUpdateWithoutSalesDataInput {
   name: String
   lastName: String
-  password: String
   email: String
   phoneNumber: String
   users: UserUpdateManyWithoutClientInput
@@ -484,7 +473,6 @@ input ClientUpdateWithoutSalesDataInput {
 input ClientUpdateWithoutUsersDataInput {
   name: String
   lastName: String
-  password: String
   email: String
   phoneNumber: String
   products: ProductUpdateManyWithoutClientInput
@@ -635,46 +623,6 @@ input ClientWhereInput {
 
   """All values not ending with the given string."""
   lastName_not_ends_with: String
-  password: String
-
-  """All values that are not equal to given value."""
-  password_not: String
-
-  """All values that are contained in given list."""
-  password_in: [String!]
-
-  """All values that are not contained in given list."""
-  password_not_in: [String!]
-
-  """All values less than the given value."""
-  password_lt: String
-
-  """All values less than or equal the given value."""
-  password_lte: String
-
-  """All values greater than the given value."""
-  password_gt: String
-
-  """All values greater than or equal the given value."""
-  password_gte: String
-
-  """All values containing the given string."""
-  password_contains: String
-
-  """All values not containing the given string."""
-  password_not_contains: String
-
-  """All values starting with the given string."""
-  password_starts_with: String
-
-  """All values not starting with the given string."""
-  password_not_starts_with: String
-
-  """All values ending with the given string."""
-  password_ends_with: String
-
-  """All values not ending with the given string."""
-  password_not_ends_with: String
   email: String
 
   """All values that are not equal to given value."""
