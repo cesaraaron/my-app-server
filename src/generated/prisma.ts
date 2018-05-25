@@ -1702,6 +1702,10 @@ input SaleWhereUniqueInput {
 type User implements Node {
   id: ID!
   name: String!
+  lastName: String
+  phoneNumber: String!
+  password: String!
+  isAdmin: Boolean
   client(where: ClientWhereInput): Client!
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale!]
 }
@@ -1723,6 +1727,10 @@ type UserConnection {
 
 input UserCreateInput {
   name: String!
+  lastName: String
+  phoneNumber: String!
+  password: String!
+  isAdmin: Boolean
   client: ClientCreateOneWithoutUsersInput!
   sales: SaleCreateManyWithoutSoldByInput
 }
@@ -1739,11 +1747,19 @@ input UserCreateOneWithoutSalesInput {
 
 input UserCreateWithoutClientInput {
   name: String!
+  lastName: String
+  phoneNumber: String!
+  password: String!
+  isAdmin: Boolean
   sales: SaleCreateManyWithoutSoldByInput
 }
 
 input UserCreateWithoutSalesInput {
   name: String!
+  lastName: String
+  phoneNumber: String!
+  password: String!
+  isAdmin: Boolean
   client: ClientCreateOneWithoutUsersInput!
 }
 
@@ -1766,6 +1782,14 @@ enum UserOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  lastName_ASC
+  lastName_DESC
+  phoneNumber_ASC
+  phoneNumber_DESC
+  password_ASC
+  password_DESC
+  isAdmin_ASC
+  isAdmin_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1775,6 +1799,10 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   name: String!
+  lastName: String
+  phoneNumber: String!
+  password: String!
+  isAdmin: Boolean
 }
 
 type UserSubscriptionPayload {
@@ -1818,6 +1846,10 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   name: String
+  lastName: String
+  phoneNumber: String
+  password: String
+  isAdmin: Boolean
   client: ClientUpdateOneWithoutUsersInput
   sales: SaleUpdateManyWithoutSoldByInput
 }
@@ -1841,11 +1873,19 @@ input UserUpdateOneWithoutSalesInput {
 
 input UserUpdateWithoutClientDataInput {
   name: String
+  lastName: String
+  phoneNumber: String
+  password: String
+  isAdmin: Boolean
   sales: SaleUpdateManyWithoutSoldByInput
 }
 
 input UserUpdateWithoutSalesDataInput {
   name: String
+  lastName: String
+  phoneNumber: String
+  password: String
+  isAdmin: Boolean
   client: ClientUpdateOneWithoutUsersInput
 }
 
@@ -1984,6 +2024,170 @@ input UserWhereInput {
   All values not ending with the given string.
   """
   name_not_ends_with: String
+  lastName: String
+  """
+  All values that are not equal to given value.
+  """
+  lastName_not: String
+  """
+  All values that are contained in given list.
+  """
+  lastName_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  lastName_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  lastName_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  lastName_lte: String
+  """
+  All values greater than the given value.
+  """
+  lastName_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  lastName_gte: String
+  """
+  All values containing the given string.
+  """
+  lastName_contains: String
+  """
+  All values not containing the given string.
+  """
+  lastName_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  lastName_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  lastName_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  lastName_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  lastName_not_ends_with: String
+  phoneNumber: String
+  """
+  All values that are not equal to given value.
+  """
+  phoneNumber_not: String
+  """
+  All values that are contained in given list.
+  """
+  phoneNumber_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  phoneNumber_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  phoneNumber_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  phoneNumber_lte: String
+  """
+  All values greater than the given value.
+  """
+  phoneNumber_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  phoneNumber_gte: String
+  """
+  All values containing the given string.
+  """
+  phoneNumber_contains: String
+  """
+  All values not containing the given string.
+  """
+  phoneNumber_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  phoneNumber_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  phoneNumber_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  phoneNumber_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  phoneNumber_not_ends_with: String
+  password: String
+  """
+  All values that are not equal to given value.
+  """
+  password_not: String
+  """
+  All values that are contained in given list.
+  """
+  password_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  password_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  password_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  password_lte: String
+  """
+  All values greater than the given value.
+  """
+  password_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  password_gte: String
+  """
+  All values containing the given string.
+  """
+  password_contains: String
+  """
+  All values not containing the given string.
+  """
+  password_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  password_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  password_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  password_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  password_not_ends_with: String
+  isAdmin: Boolean
+  """
+  All values that are not equal to given value.
+  """
+  isAdmin_not: Boolean
   client: ClientWhereInput
   sales_every: SaleWhereInput
   sales_some: SaleWhereInput
@@ -1992,6 +2196,7 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
+  phoneNumber: String
 }
 
 type Mutation {
@@ -2080,6 +2285,14 @@ export type UserOrderByInput =
   'id_DESC' |
   'name_ASC' |
   'name_DESC' |
+  'lastName_ASC' |
+  'lastName_DESC' |
+  'phoneNumber_ASC' |
+  'phoneNumber_DESC' |
+  'password_ASC' |
+  'password_DESC' |
+  'isAdmin_ASC' |
+  'isAdmin_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC' |
   'createdAt_ASC' |
@@ -2254,6 +2467,10 @@ export interface ProductUpsertWithWhereUniqueWithoutClientInput {
 
 export interface UserCreateWithoutClientInput {
   name: String
+  lastName?: String
+  phoneNumber: String
+  password: String
+  isAdmin?: Boolean
   sales?: SaleCreateManyWithoutSoldByInput
 }
 
@@ -2343,15 +2560,15 @@ export interface CartProductCreateManyInput {
   create?: CartProductCreateInput[] | CartProductCreateInput
 }
 
-export interface ClientSubscriptionWhereInput {
-  AND?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
-  OR?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
-  NOT?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
+export interface UserSubscriptionWhereInput {
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
   mutation_in?: MutationType[] | MutationType
   updatedFields_contains?: String
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
-  node?: ClientWhereInput
+  node?: UserWhereInput
 }
 
 export interface CartProductCreateInput {
@@ -2392,6 +2609,7 @@ export interface ClientCreateWithoutSalesInput {
 
 export interface UserWhereUniqueInput {
   id?: ID_Input
+  phoneNumber?: String
 }
 
 export interface ProductCreateManyWithoutClientInput {
@@ -2457,6 +2675,10 @@ export interface ClientUpsertWithoutUsersInput {
 
 export interface UserCreateWithoutSalesInput {
   name: String
+  lastName?: String
+  phoneNumber: String
+  password: String
+  isAdmin?: Boolean
   client: ClientCreateOneWithoutUsersInput
 }
 
@@ -2494,6 +2716,10 @@ export interface SaleUpdateWithWhereUniqueWithoutClientInput {
 
 export interface UserCreateInput {
   name: String
+  lastName?: String
+  phoneNumber: String
+  password: String
+  isAdmin?: Boolean
   client: ClientCreateOneWithoutUsersInput
   sales?: SaleCreateManyWithoutSoldByInput
 }
@@ -2602,47 +2828,15 @@ export interface ClientUpsertWithoutSalesInput {
   create: ClientCreateWithoutSalesInput
 }
 
-export interface SaleWhereInput {
-  AND?: SaleWhereInput[] | SaleWhereInput
-  OR?: SaleWhereInput[] | SaleWhereInput
-  NOT?: SaleWhereInput[] | SaleWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  isDeleted?: Boolean
-  isDeleted_not?: Boolean
-  products_every?: CartProductWhereInput
-  products_some?: CartProductWhereInput
-  products_none?: CartProductWhereInput
-  client?: ClientWhereInput
-  soldBy?: UserWhereInput
+export interface ClientSubscriptionWhereInput {
+  AND?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
+  OR?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
+  NOT?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ClientWhereInput
 }
 
 export interface SaleCreateInput {
@@ -2685,6 +2879,10 @@ export interface UserUpdateManyWithoutClientInput {
 
 export interface UserUpdateInput {
   name?: String
+  lastName?: String
+  phoneNumber?: String
+  password?: String
+  isAdmin?: Boolean
   client?: ClientUpdateOneWithoutUsersInput
   sales?: SaleUpdateManyWithoutSoldByInput
 }
@@ -2706,6 +2904,10 @@ export interface ClientUpdateWithoutUsersDataInput {
 
 export interface UserUpdateWithoutClientDataInput {
   name?: String
+  lastName?: String
+  phoneNumber?: String
+  password?: String
+  isAdmin?: Boolean
   sales?: SaleUpdateManyWithoutSoldByInput
 }
 
@@ -2740,15 +2942,47 @@ export interface SaleUpdateWithWhereUniqueWithoutSoldByInput {
   data: SaleUpdateWithoutSoldByDataInput
 }
 
-export interface UserSubscriptionWhereInput {
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: UserWhereInput
+export interface SaleWhereInput {
+  AND?: SaleWhereInput[] | SaleWhereInput
+  OR?: SaleWhereInput[] | SaleWhereInput
+  NOT?: SaleWhereInput[] | SaleWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  isDeleted?: Boolean
+  isDeleted_not?: Boolean
+  products_every?: CartProductWhereInput
+  products_some?: CartProductWhereInput
+  products_none?: CartProductWhereInput
+  client?: ClientWhereInput
+  soldBy?: UserWhereInput
 }
 
 export interface SaleUpdateWithoutSoldByDataInput {
@@ -2831,6 +3065,10 @@ export interface CartProductSubscriptionWhereInput {
 
 export interface UserUpdateWithoutSalesDataInput {
   name?: String
+  lastName?: String
+  phoneNumber?: String
+  password?: String
+  isAdmin?: Boolean
   client?: ClientUpdateOneWithoutUsersInput
 }
 
@@ -2874,6 +3112,50 @@ export interface UserWhereInput {
   name_not_starts_with?: String
   name_ends_with?: String
   name_not_ends_with?: String
+  lastName?: String
+  lastName_not?: String
+  lastName_in?: String[] | String
+  lastName_not_in?: String[] | String
+  lastName_lt?: String
+  lastName_lte?: String
+  lastName_gt?: String
+  lastName_gte?: String
+  lastName_contains?: String
+  lastName_not_contains?: String
+  lastName_starts_with?: String
+  lastName_not_starts_with?: String
+  lastName_ends_with?: String
+  lastName_not_ends_with?: String
+  phoneNumber?: String
+  phoneNumber_not?: String
+  phoneNumber_in?: String[] | String
+  phoneNumber_not_in?: String[] | String
+  phoneNumber_lt?: String
+  phoneNumber_lte?: String
+  phoneNumber_gt?: String
+  phoneNumber_gte?: String
+  phoneNumber_contains?: String
+  phoneNumber_not_contains?: String
+  phoneNumber_starts_with?: String
+  phoneNumber_not_starts_with?: String
+  phoneNumber_ends_with?: String
+  phoneNumber_not_ends_with?: String
+  password?: String
+  password_not?: String
+  password_in?: String[] | String
+  password_not_in?: String[] | String
+  password_lt?: String
+  password_lte?: String
+  password_gt?: String
+  password_gte?: String
+  password_contains?: String
+  password_not_contains?: String
+  password_starts_with?: String
+  password_not_starts_with?: String
+  password_ends_with?: String
+  password_not_ends_with?: String
+  isAdmin?: Boolean
+  isAdmin_not?: Boolean
   client?: ClientWhereInput
   sales_every?: SaleWhereInput
   sales_some?: SaleWhereInput
@@ -2999,25 +3281,22 @@ export interface ProductEdge {
   cursor: String
 }
 
-export interface Sale extends Node {
+export interface SalePreviousValues {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  products?: CartProduct[]
   isDeleted?: Boolean
-  client: Client
-  soldBy: User
 }
 
 export interface AggregateUser {
   count: Int
 }
 
-export interface SalePreviousValues {
-  id: ID_Output
-  createdAt: DateTime
-  updatedAt: DateTime
-  isDeleted?: Boolean
+export interface SaleSubscriptionPayload {
+  mutation: MutationType
+  node?: Sale
+  updatedFields?: String[]
+  previousValues?: SalePreviousValues
 }
 
 /*
@@ -3065,11 +3344,14 @@ export interface CartProductConnection {
   aggregate: AggregateCartProduct
 }
 
-export interface SaleSubscriptionPayload {
-  mutation: MutationType
-  node?: Sale
-  updatedFields?: String[]
-  previousValues?: SalePreviousValues
+export interface Sale extends Node {
+  id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
+  products?: CartProduct[]
+  isDeleted?: Boolean
+  client: Client
+  soldBy: User
 }
 
 export interface AggregateProduct {
@@ -3095,6 +3377,10 @@ export interface ProductSubscriptionPayload {
 export interface User extends Node {
   id: ID_Output
   name: String
+  lastName?: String
+  phoneNumber: String
+  password: String
+  isAdmin?: Boolean
   client: Client
   sales?: Sale[]
 }
@@ -3102,6 +3388,10 @@ export interface User extends Node {
 export interface UserPreviousValues {
   id: ID_Output
   name: String
+  lastName?: String
+  phoneNumber: String
+  password: String
+  isAdmin?: Boolean
 }
 
 export interface UserSubscriptionPayload {
@@ -3161,16 +3451,16 @@ Long can represent values between -(2^63) and 2^63 - 1.
 export type Long = string
 
 /*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean
+
+/*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string
 
 export type DateTime = string
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean
 
 export interface Schema {
   query: Query

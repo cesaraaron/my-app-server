@@ -1,33 +1,42 @@
 import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
-import { Context, getClientId } from '../utils'
+import { Context, getUserFromHeader } from '../utils'
 
 const login = async (_, { phoneNumber, password }, ctx: Context, _1) => {
-  const client = await ctx.db.query.client({ where: { phoneNumber } })
+  const user = await ctx.db.query.user({ where: { phoneNumber } })
 
-  if (!client) {
+  if (!user) {
     throw new Error(
       `La cuenta con el numero: ${phoneNumber} no existe. Por favor verifica el numero y vuelve a intentarlo`
     )
   }
 
-  const valid = await bcrypt.compare(password, client.password)
+  const valid = await bcrypt.compare(password, user.password)
   if (!valid) {
     throw new Error('La contraseña que ingresaste es incorrecta')
   }
 
   return {
-    token: jwt.sign({ clientId: client.id }, process.env.APP_SECRET),
+    token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
   }
 }
 
-const createUser = async (_, { name }, ctx: Context, info) => {
-  const clientId = getClientId(ctx)
+const createUser = async (_, { name, phoneNumber, password }, ctx: Context, info) => {
+  const user = await getUserFromHeader(ctx)
+  const {id: clientId} = user.client
+
+  if (!user.isAdmin) {
+    throw new Error('Acceso denegado')
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10)
 
   return ctx.db.mutation.createUser(
     {
       data: {
+        phoneNumber,
         name,
+        password: hashedPassword,
         client: { connect: { id: clientId } },
       },
     },
@@ -35,9 +44,10 @@ const createUser = async (_, { name }, ctx: Context, info) => {
   )
 }
 
-const createProduct = (_, args, ctx: Context, info) => {
+const createProduct = async (_, args, ctx: Context, info) => {
   const { name, price, quantity } = args
-  const clientId = getClientId(ctx)
+  const user = await getUserFromHeader(ctx)
+  const {id: clientId} = user.client
 
   return ctx.db.mutation.createProduct(
     {
@@ -53,7 +63,8 @@ const createProduct = (_, args, ctx: Context, info) => {
 }
 
 const createSale = async (_, { products, userId }, ctx: Context, info) => {
-  const clientId = getClientId(ctx)
+  const user = await getUserFromHeader(ctx)
+  const {id: clientId} = user.client
 
   const newSale = await ctx.db.mutation.createSale({
     data: {

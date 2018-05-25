@@ -6,13 +6,13 @@ export interface Context {
   request: any
 }
 
-export function getClientId(ctx: Context) {
+export function getUserFromHeader(ctx: Context) {
   const Authorization = ctx.request.get('Authorization')
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
-    const { clientId } = jwt.verify(token, process.env.APP_SECRET) as { clientId: string }
+    const { userId } = jwt.verify(token, process.env.APP_SECRET) as { userId: string }
 
-    return clientId
+    return ctx.db.query.user({ where: {id: userId}})
   }
 
   throw new AuthError()

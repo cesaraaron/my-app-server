@@ -13,6 +13,10 @@ type Client {
 type User {
   id: ID! @unique
   name: String!
+  lastName: String
+  phoneNumber: String! @unique
+  password: String!
+  isAdmin: Boolean @default(value: false)
   client: Client!
   sales: [Sale!]!
 }
