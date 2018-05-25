@@ -2,6 +2,12 @@ import { GraphQLServer } from 'graphql-yoga'
 import { Prisma } from './generated/prisma'
 import resolvers from './resolvers'
 
+const { PRISMA_ENDPOINT, PRISMA_SECRET, APP_SECRET } = process.env
+
+if (!PRISMA_ENDPOINT || !PRISMA_SECRET || !APP_SECRET) {
+  throw new Error('One or more of the three required env variables is missing')
+}
+
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
