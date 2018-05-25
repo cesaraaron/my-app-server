@@ -7,13 +7,13 @@ const login = async (_, { phoneNumber, password }, ctx: Context, _1) => {
 
   if (!client) {
     throw new Error(
-      `Ningun usuario fue encontrado con el numero: ${phoneNumber}`
+      `La cuenta con el numero: ${phoneNumber} no existe. Por favor verifica el numero y vuelve a intentarlo`
     )
   }
 
   const valid = await bcrypt.compare(password, client.password)
   if (!valid) {
-    throw new Error('Contraseña invalida')
+    throw new Error('La contraseña que ingresaste es incorrecta')
   }
 
   return {
