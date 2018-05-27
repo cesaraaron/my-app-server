@@ -11,6 +11,7 @@ type Mutation {
   createProduct(name: String!, price: Float!, quantity: Int!, userId: String): Product
   createSale(products: [CartProductInput!]!, userId: String!): Sale
   createUser(name: String!, phoneNumber: String!, password: String!): User
+  updateUser(userId: String!, name: String, phoneNumber: String, password: String): User
 }
 
 input CartProductInput {

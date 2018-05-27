@@ -34,3 +34,9 @@ export class AuthError extends Error {
     super('Acceso denegado')
   }
 }
+
+export class UserPermission extends Error {
+  constructor() {
+    super('Este usuario no tiene permisos para realizar esta operacion')
+  }
+}
