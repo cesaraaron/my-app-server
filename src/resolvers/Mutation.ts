@@ -24,7 +24,7 @@ const login = async (_, { phoneNumber, password }, ctx: Context, _1) => {
 
 const createUser = async (
   _,
-  { name, phoneNumber, password },
+  { name, phoneNumber, password, permissions },
   ctx: Context,
   info
 ) => {
@@ -42,6 +42,7 @@ const createUser = async (
       data: {
         phoneNumber,
         name,
+        permissions,
         password: hashedPassword,
         client: { connect: { id: clientId } },
       },
@@ -52,7 +53,7 @@ const createUser = async (
 
 const updateUser = async (
   _,
-  { userId, name, phoneNumber, password },
+  { userId, name, phoneNumber, password, permissions },
   ctx: Context,
   info
 ) => {
@@ -62,7 +63,7 @@ const updateUser = async (
     throw new UserPermission()
   }
 
-  if (password.length > 0 && password.length < 6) {
+  if (password && password.length < 6) {
     throw new Error('La contraseña debe tener 6 o mas caracteres.')
   }
 
@@ -78,6 +79,7 @@ const updateUser = async (
     {
       where: { id: userId },
       data: {
+        permissions: {set: permissions},
         phoneNumber: newPhone,
         name: newName,
         password: newPassword,

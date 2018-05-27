@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-candlelion-41/my-app-server/dev
-# timestamp: Fri May 25 2018 09:24:26 GMT-0600 (CST)
+# timestamp: Sun May 27 2018 15:07:27 GMT-0600 (CST)
 
 type AggregateCartProduct {
   count: Int!
@@ -1443,6 +1443,7 @@ type User implements Node {
   lastName: String
   phoneNumber: String!
   password: String!
+  permissions: [UserPermissions!]
   isAdmin: Boolean
   client(where: ClientWhereInput): Client!
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale!]
@@ -1464,6 +1465,7 @@ input UserCreateInput {
   phoneNumber: String!
   password: String!
   isAdmin: Boolean
+  permissions: UserCreatepermissionsInput
   client: ClientCreateOneWithoutUsersInput!
   sales: SaleCreateManyWithoutSoldByInput
 }
@@ -1478,12 +1480,17 @@ input UserCreateOneWithoutSalesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreatepermissionsInput {
+  set: [UserPermissions!]
+}
+
 input UserCreateWithoutClientInput {
   name: String!
   lastName: String
   phoneNumber: String!
   password: String!
   isAdmin: Boolean
+  permissions: UserCreatepermissionsInput
   sales: SaleCreateManyWithoutSoldByInput
 }
 
@@ -1493,6 +1500,7 @@ input UserCreateWithoutSalesInput {
   phoneNumber: String!
   password: String!
   isAdmin: Boolean
+  permissions: UserCreatepermissionsInput
   client: ClientCreateOneWithoutUsersInput!
 }
 
@@ -1524,12 +1532,21 @@ enum UserOrderByInput {
   createdAt_DESC
 }
 
+enum UserPermissions {
+  ADD_PRODUCTS
+  EDIT_PRODUCTS
+  DELETE_PRODUCTS
+  ADD_SALES
+  DELETE_SALES
+}
+
 type UserPreviousValues {
   id: ID!
   name: String!
   lastName: String
   phoneNumber: String!
   password: String!
+  permissions: [UserPermissions!]
   isAdmin: Boolean
 }
 
@@ -1578,6 +1595,7 @@ input UserUpdateInput {
   phoneNumber: String
   password: String
   isAdmin: Boolean
+  permissions: UserUpdatepermissionsInput
   client: ClientUpdateOneWithoutUsersInput
   sales: SaleUpdateManyWithoutSoldByInput
 }
@@ -1599,12 +1617,17 @@ input UserUpdateOneWithoutSalesInput {
   upsert: UserUpsertWithoutSalesInput
 }
 
+input UserUpdatepermissionsInput {
+  set: [UserPermissions!]
+}
+
 input UserUpdateWithoutClientDataInput {
   name: String
   lastName: String
   phoneNumber: String
   password: String
   isAdmin: Boolean
+  permissions: UserUpdatepermissionsInput
   sales: SaleUpdateManyWithoutSoldByInput
 }
 
@@ -1614,6 +1637,7 @@ input UserUpdateWithoutSalesDataInput {
   phoneNumber: String
   password: String
   isAdmin: Boolean
+  permissions: UserUpdatepermissionsInput
   client: ClientUpdateOneWithoutUsersInput
 }
 

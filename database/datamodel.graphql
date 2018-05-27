@@ -15,9 +15,18 @@ type User {
   lastName: String
   phoneNumber: String! @unique
   password: String!
+  permissions: [UserPermissions!]!
   isAdmin: Boolean @default(value: false)
   client: Client!
   sales: [Sale!]!
+}
+
+enum UserPermissions {
+  ADD_PRODUCTS
+  EDIT_PRODUCTS
+  DELETE_PRODUCTS
+  ADD_SALES
+  DELETE_SALES
 }
 
 type Product {
