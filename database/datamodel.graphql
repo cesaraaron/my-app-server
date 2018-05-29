@@ -35,7 +35,6 @@ type Product {
   updatedAt: DateTime!
   name: String!
   price: Float!
-  isDeleted: Boolean @default(value: false)
   quantity: Int!
   client: Client!
 }
@@ -45,7 +44,6 @@ type Sale {
   createdAt: DateTime!
   updatedAt: DateTime!
   products: [CartProduct!]!
-  isDeleted: Boolean @default(value: false)
   client: Client!
   soldBy: User!
 }

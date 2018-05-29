@@ -8,10 +8,26 @@ type Query {
 
 type Mutation {
   login(phoneNumber: String!, password: String!): AuthPayload!
-  createProduct(name: String!, price: Float!, quantity: Int!, userId: String): Product
+  createProduct(
+    name: String!
+    price: Float!
+    quantity: Int!
+    userId: String
+  ): Product
   createSale(products: [CartProductInput!]!, userId: String!): Sale
-  createUser(name: String!, phoneNumber: String!, password: String!, permissions: [UserPermissions]): User
-  updateUser(userId: String!, name: String, phoneNumber: String, password: String, permissions: [UserPermissions]): User
+  createUser(
+    name: String!
+    phoneNumber: String!
+    password: String!
+    permissions: [UserPermissions]
+  ): User
+  updateUser(
+    userId: String!
+    name: String
+    phoneNumber: String
+    password: String
+    permissions: [UserPermissions]
+  ): User
 }
 
 input CartProductInput {

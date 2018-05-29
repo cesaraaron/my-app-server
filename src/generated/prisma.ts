@@ -908,7 +908,6 @@ type Product implements Node {
   updatedAt: DateTime!
   name: String!
   price: Float!
-  isDeleted: Boolean
   quantity: Int!
   client(where: ClientWhereInput): Client!
 }
@@ -931,7 +930,6 @@ type ProductConnection {
 input ProductCreateInput {
   name: String!
   price: Float!
-  isDeleted: Boolean
   quantity: Int!
   client: ClientCreateOneWithoutProductsInput!
 }
@@ -944,7 +942,6 @@ input ProductCreateManyWithoutClientInput {
 input ProductCreateWithoutClientInput {
   name: String!
   price: Float!
-  isDeleted: Boolean
   quantity: Int!
 }
 
@@ -973,8 +970,6 @@ enum ProductOrderByInput {
   name_DESC
   price_ASC
   price_DESC
-  isDeleted_ASC
-  isDeleted_DESC
   quantity_ASC
   quantity_DESC
 }
@@ -985,7 +980,6 @@ type ProductPreviousValues {
   updatedAt: DateTime!
   name: String!
   price: Float!
-  isDeleted: Boolean
   quantity: Int!
 }
 
@@ -1031,7 +1025,6 @@ input ProductSubscriptionWhereInput {
 input ProductUpdateInput {
   name: String
   price: Float
-  isDeleted: Boolean
   quantity: Int
   client: ClientUpdateOneWithoutProductsInput
 }
@@ -1048,7 +1041,6 @@ input ProductUpdateManyWithoutClientInput {
 input ProductUpdateWithoutClientDataInput {
   name: String
   price: Float
-  isDeleted: Boolean
   quantity: Int
 }
 
@@ -1269,11 +1261,6 @@ input ProductWhereInput {
   All values greater than or equal the given value.
   """
   price_gte: Float
-  isDeleted: Boolean
-  """
-  All values that are not equal to given value.
-  """
-  isDeleted_not: Boolean
   quantity: Int
   """
   All values that are not equal to given value.
@@ -1315,7 +1302,6 @@ type Sale implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   products(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct!]
-  isDeleted: Boolean
   client(where: ClientWhereInput): Client!
   soldBy(where: UserWhereInput): User!
 }
@@ -1336,7 +1322,6 @@ type SaleConnection {
 }
 
 input SaleCreateInput {
-  isDeleted: Boolean
   products: CartProductCreateManyInput
   client: ClientCreateOneWithoutSalesInput!
   soldBy: UserCreateOneWithoutSalesInput!
@@ -1353,13 +1338,11 @@ input SaleCreateManyWithoutSoldByInput {
 }
 
 input SaleCreateWithoutClientInput {
-  isDeleted: Boolean
   products: CartProductCreateManyInput
   soldBy: UserCreateOneWithoutSalesInput!
 }
 
 input SaleCreateWithoutSoldByInput {
-  isDeleted: Boolean
   products: CartProductCreateManyInput
   client: ClientCreateOneWithoutSalesInput!
 }
@@ -1385,15 +1368,12 @@ enum SaleOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
-  isDeleted_ASC
-  isDeleted_DESC
 }
 
 type SalePreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  isDeleted: Boolean
 }
 
 type SaleSubscriptionPayload {
@@ -1436,7 +1416,6 @@ input SaleSubscriptionWhereInput {
 }
 
 input SaleUpdateInput {
-  isDeleted: Boolean
   products: CartProductUpdateManyInput
   client: ClientUpdateOneWithoutSalesInput
   soldBy: UserUpdateOneWithoutSalesInput
@@ -1461,13 +1440,11 @@ input SaleUpdateManyWithoutSoldByInput {
 }
 
 input SaleUpdateWithoutClientDataInput {
-  isDeleted: Boolean
   products: CartProductUpdateManyInput
   soldBy: UserUpdateOneWithoutSalesInput
 }
 
 input SaleUpdateWithoutSoldByDataInput {
-  isDeleted: Boolean
   products: CartProductUpdateManyInput
   client: ClientUpdateOneWithoutSalesInput
 }
@@ -1618,11 +1595,6 @@ input SaleWhereInput {
   All values greater than or equal the given value.
   """
   updatedAt_gte: DateTime
-  isDeleted: Boolean
-  """
-  All values that are not equal to given value.
-  """
-  isDeleted_not: Boolean
   products_every: CartProductWhereInput
   products_some: CartProductWhereInput
   products_none: CartProductWhereInput
@@ -2268,9 +2240,7 @@ export type SaleOrderByInput =
   'createdAt_ASC' |
   'createdAt_DESC' |
   'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'isDeleted_ASC' |
-  'isDeleted_DESC'
+  'updatedAt_DESC'
 
 export type CartProductOrderByInput = 
   'productId_ASC' |
@@ -2299,8 +2269,6 @@ export type ProductOrderByInput =
   'name_DESC' |
   'price_ASC' |
   'price_DESC' |
-  'isDeleted_ASC' |
-  'isDeleted_DESC' |
   'quantity_ASC' |
   'quantity_DESC'
 
@@ -2445,7 +2413,6 @@ export interface SaleSubscriptionWhereInput {
 }
 
 export interface SaleCreateWithoutSoldByInput {
-  isDeleted?: Boolean
   products?: CartProductCreateManyInput
   client: ClientCreateOneWithoutSalesInput
 }
@@ -2539,7 +2506,6 @@ export interface ClientCreateOneWithoutSalesInput {
 }
 
 export interface SaleUpdateInput {
-  isDeleted?: Boolean
   products?: CartProductUpdateManyInput
   client?: ClientUpdateOneWithoutSalesInput
   soldBy?: UserUpdateOneWithoutSalesInput
@@ -2572,7 +2538,6 @@ export interface UserWhereUniqueInput {
 export interface ProductCreateWithoutClientInput {
   name: String
   price: Float
-  isDeleted?: Boolean
   quantity: Int
 }
 
@@ -2594,7 +2559,6 @@ export interface ClientUpdateOneWithoutProductsInput {
 }
 
 export interface SaleCreateWithoutClientInput {
-  isDeleted?: Boolean
   products?: CartProductCreateManyInput
   soldBy: UserCreateOneWithoutSalesInput
 }
@@ -2664,7 +2628,6 @@ export interface ClientCreateWithoutUsersInput {
 }
 
 export interface SaleUpdateWithoutClientDataInput {
-  isDeleted?: Boolean
   products?: CartProductUpdateManyInput
   soldBy?: UserUpdateOneWithoutSalesInput
 }
@@ -2692,7 +2655,6 @@ export interface SaleUpdateManyWithoutClientInput {
 export interface ProductCreateInput {
   name: String
   price: Float
-  isDeleted?: Boolean
   quantity: Int
   client: ClientCreateOneWithoutProductsInput
 }
@@ -2769,8 +2731,6 @@ export interface ProductWhereInput {
   price_lte?: Float
   price_gt?: Float
   price_gte?: Float
-  isDeleted?: Boolean
-  isDeleted_not?: Boolean
   quantity?: Int
   quantity_not?: Int
   quantity_in?: Int[] | Int
@@ -2816,8 +2776,6 @@ export interface SaleWhereInput {
   updatedAt_lte?: DateTime
   updatedAt_gt?: DateTime
   updatedAt_gte?: DateTime
-  isDeleted?: Boolean
-  isDeleted_not?: Boolean
   products_every?: CartProductWhereInput
   products_some?: CartProductWhereInput
   products_none?: CartProductWhereInput
@@ -2826,7 +2784,6 @@ export interface SaleWhereInput {
 }
 
 export interface SaleCreateInput {
-  isDeleted?: Boolean
   products?: CartProductCreateManyInput
   client: ClientCreateOneWithoutSalesInput
   soldBy: UserCreateOneWithoutSalesInput
@@ -2940,7 +2897,6 @@ export interface UserUpdateManyWithoutClientInput {
 export interface ProductUpdateInput {
   name?: String
   price?: Float
-  isDeleted?: Boolean
   quantity?: Int
   client?: ClientUpdateOneWithoutProductsInput
 }
@@ -3016,7 +2972,6 @@ export interface CartProductUpdateInput {
 }
 
 export interface SaleUpdateWithoutSoldByDataInput {
-  isDeleted?: Boolean
   products?: CartProductUpdateManyInput
   client?: ClientUpdateOneWithoutSalesInput
 }
@@ -3063,7 +3018,6 @@ export interface ClientCreateInput {
 export interface ProductUpdateWithoutClientDataInput {
   name?: String
   price?: Float
-  isDeleted?: Boolean
   quantity?: Int
 }
 
@@ -3149,7 +3103,6 @@ export interface ProductPreviousValues {
   updatedAt: DateTime
   name: String
   price: Float
-  isDeleted?: Boolean
   quantity: Int
 }
 
@@ -3159,7 +3112,6 @@ export interface Product extends Node {
   updatedAt: DateTime
   name: String
   price: Float
-  isDeleted?: Boolean
   quantity: Int
   client: Client
 }
@@ -3213,7 +3165,6 @@ export interface SalePreviousValues {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  isDeleted?: Boolean
 }
 
 /*
@@ -3231,7 +3182,6 @@ export interface Sale extends Node {
   createdAt: DateTime
   updatedAt: DateTime
   products?: CartProduct[]
-  isDeleted?: Boolean
   client: Client
   soldBy: User
 }

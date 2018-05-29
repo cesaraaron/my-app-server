@@ -24,10 +24,11 @@ const login = async (_, { phoneNumber, password }, ctx: Context, _1) => {
 
 const createUser = async (
   _,
-  { name, phoneNumber, password, permissions },
+  args,
   ctx: Context,
   info
 ) => {
+  const { name, phoneNumber, password, permissions } = args
   const user = await getUserFromHeader(ctx)
   const { id: clientId } = user.client
 
@@ -51,12 +52,8 @@ const createUser = async (
   )
 }
 
-const updateUser = async (
-  _,
-  { userId, name, phoneNumber, password, permissions },
-  ctx: Context,
-  info
-) => {
+const updateUser = async (_, args, ctx: Context, info) => {
+  const { userId, name, phoneNumber, password, permissions } = args
   const user = await getUserFromHeader(ctx)
 
   if (!user.isAdmin) {
@@ -79,7 +76,7 @@ const updateUser = async (
     {
       where: { id: userId },
       data: {
-        permissions: {set: permissions},
+        permissions: { set: permissions },
         phoneNumber: newPhone,
         name: newName,
         password: newPassword,

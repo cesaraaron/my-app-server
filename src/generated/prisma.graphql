@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-candlelion-41/my-app-server/dev
-# timestamp: Sun May 27 2018 15:07:27 GMT-0600 (CST)
+# timestamp: Tue May 29 2018 10:59:49 GMT-0600 (CST)
 
 type AggregateCartProduct {
   count: Int!
@@ -791,7 +791,6 @@ type Product implements Node {
   updatedAt: DateTime!
   name: String!
   price: Float!
-  isDeleted: Boolean
   quantity: Int!
   client(where: ClientWhereInput): Client!
 }
@@ -809,7 +808,6 @@ type ProductConnection {
 input ProductCreateInput {
   name: String!
   price: Float!
-  isDeleted: Boolean
   quantity: Int!
   client: ClientCreateOneWithoutProductsInput!
 }
@@ -822,7 +820,6 @@ input ProductCreateManyWithoutClientInput {
 input ProductCreateWithoutClientInput {
   name: String!
   price: Float!
-  isDeleted: Boolean
   quantity: Int!
 }
 
@@ -846,8 +843,6 @@ enum ProductOrderByInput {
   name_DESC
   price_ASC
   price_DESC
-  isDeleted_ASC
-  isDeleted_DESC
   quantity_ASC
   quantity_DESC
 }
@@ -858,7 +853,6 @@ type ProductPreviousValues {
   updatedAt: DateTime!
   name: String!
   price: Float!
-  isDeleted: Boolean
   quantity: Int!
 }
 
@@ -904,7 +898,6 @@ input ProductSubscriptionWhereInput {
 input ProductUpdateInput {
   name: String
   price: Float
-  isDeleted: Boolean
   quantity: Int
   client: ClientUpdateOneWithoutProductsInput
 }
@@ -921,7 +914,6 @@ input ProductUpdateManyWithoutClientInput {
 input ProductUpdateWithoutClientDataInput {
   name: String
   price: Float
-  isDeleted: Boolean
   quantity: Int
 }
 
@@ -1091,10 +1083,6 @@ input ProductWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
-  isDeleted: Boolean
-
-  """All values that are not equal to given value."""
-  isDeleted_not: Boolean
   quantity: Int
 
   """All values that are not equal to given value."""
@@ -1152,7 +1140,6 @@ type Sale implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   products(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct!]
-  isDeleted: Boolean
   client(where: ClientWhereInput): Client!
   soldBy(where: UserWhereInput): User!
 }
@@ -1168,7 +1155,6 @@ type SaleConnection {
 }
 
 input SaleCreateInput {
-  isDeleted: Boolean
   products: CartProductCreateManyInput
   client: ClientCreateOneWithoutSalesInput!
   soldBy: UserCreateOneWithoutSalesInput!
@@ -1185,13 +1171,11 @@ input SaleCreateManyWithoutSoldByInput {
 }
 
 input SaleCreateWithoutClientInput {
-  isDeleted: Boolean
   products: CartProductCreateManyInput
   soldBy: UserCreateOneWithoutSalesInput!
 }
 
 input SaleCreateWithoutSoldByInput {
-  isDeleted: Boolean
   products: CartProductCreateManyInput
   client: ClientCreateOneWithoutSalesInput!
 }
@@ -1212,15 +1196,12 @@ enum SaleOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
-  isDeleted_ASC
-  isDeleted_DESC
 }
 
 type SalePreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  isDeleted: Boolean
 }
 
 type SaleSubscriptionPayload {
@@ -1263,7 +1244,6 @@ input SaleSubscriptionWhereInput {
 }
 
 input SaleUpdateInput {
-  isDeleted: Boolean
   products: CartProductUpdateManyInput
   client: ClientUpdateOneWithoutSalesInput
   soldBy: UserUpdateOneWithoutSalesInput
@@ -1288,13 +1268,11 @@ input SaleUpdateManyWithoutSoldByInput {
 }
 
 input SaleUpdateWithoutClientDataInput {
-  isDeleted: Boolean
   products: CartProductUpdateManyInput
   soldBy: UserUpdateOneWithoutSalesInput
 }
 
 input SaleUpdateWithoutSoldByDataInput {
-  isDeleted: Boolean
   products: CartProductUpdateManyInput
   client: ClientUpdateOneWithoutSalesInput
 }
@@ -1414,10 +1392,6 @@ input SaleWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
-  isDeleted: Boolean
-
-  """All values that are not equal to given value."""
-  isDeleted_not: Boolean
   products_every: CartProductWhereInput
   products_some: CartProductWhereInput
   products_none: CartProductWhereInput
