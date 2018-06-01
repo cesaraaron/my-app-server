@@ -6,6 +6,7 @@ export interface Context {
   request: any
 }
 
+// TODO: Just return the userId from here
 export function getUserFromHeader(ctx: Context) {
   const Authorization = ctx.request.get('Authorization')
 
@@ -25,7 +26,7 @@ export function getUserFromHeader(ctx: Context) {
 
   return ctx.db.query.user(
     { where: { id: userId } },
-    `{id name isAdmin client {id}}`
+    `{id name isAdmin permissions client {id}}`
   )
 }
 

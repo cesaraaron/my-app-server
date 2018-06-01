@@ -12,7 +12,15 @@ type Mutation {
     name: String!
     price: Float!
     quantity: Int!
-    userId: String
+  ): Product
+  updateProduct(
+    productId: String!
+    name: String
+    price: Float
+    quantity: Int
+  ): Product
+  deleteProduct(
+    productId: String!
   ): Product
   createSale(products: [CartProductInput!]!, userId: String!): Sale
   createUser(

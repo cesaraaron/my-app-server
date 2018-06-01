@@ -109,6 +109,36 @@ const createProduct = async (_, args, ctx: Context, info) => {
   )
 }
 
+const updateProduct = async (_, args, ctx: Context, info) => {
+  const { name, price, quantity, productId } = args
+  const user = await getUserFromHeader(ctx)
+
+  if (!user.isAdmin && !user.permissions.includes('EDIT_PRODUCTS')) {
+    throw new Error('Este usuario no tiene permisos para editar productos.')
+  }
+
+  return ctx.db.mutation.updateProduct({
+    where: { id: productId },
+    data: {
+      name,
+      price,
+      quantity,
+    },
+  }, info)
+}
+
+const deleteProduct = async (_, {productId}, ctx: Context, info) => {
+  const user = await getUserFromHeader(ctx)
+
+  if (!user.isAdmin && !user.permissions.includes('DELETE_PRODUCTS')) {
+    throw new Error('Este usuario no tiene permisos para eliminar productos')
+  }
+
+  return ctx.db.mutation.deleteProduct({
+    where: { id: productId }
+  }, info)
+}
+
 const createSale = async (_, { products, userId }, ctx: Context, info) => {
   const user = await getUserFromHeader(ctx)
   const { id: clientId } = user.client
@@ -129,9 +159,11 @@ const createSale = async (_, { products, userId }, ctx: Context, info) => {
 
 export const Mutation = {
   login,
-  createUser,
   createProduct,
+  updateProduct,
+  deleteProduct,
   createSale,
+  createUser,
   updateUser,
   deleteUser,
 }
