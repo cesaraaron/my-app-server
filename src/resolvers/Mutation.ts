@@ -22,12 +22,7 @@ const login = async (_, { phoneNumber, password }, ctx: Context, _1) => {
   }
 }
 
-const createUser = async (
-  _,
-  args,
-  ctx: Context,
-  info
-) => {
+const createUser = async (_, args, ctx: Context, info) => {
   const { name, phoneNumber, password, permissions } = args
   const user = await getUserFromHeader(ctx)
   const { id: clientId } = user.client
@@ -86,6 +81,16 @@ const updateUser = async (_, args, ctx: Context, info) => {
   )
 }
 
+const deleteUser = async (_, { userId }, ctx: Context, info) => {
+  const user = await getUserFromHeader(ctx)
+
+  if (!user.isAdmin) {
+    throw new UserPermission()
+  }
+
+  return ctx.db.mutation.deleteUser({ where: { id: userId } }, info)
+}
+
 const createProduct = async (_, args, ctx: Context, info) => {
   const { name, price, quantity } = args
   const user = await getUserFromHeader(ctx)
@@ -128,4 +133,5 @@ export const Mutation = {
   createProduct,
   createSale,
   updateUser,
+  deleteUser,
 }
