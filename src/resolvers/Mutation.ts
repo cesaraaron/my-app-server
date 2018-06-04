@@ -206,12 +206,14 @@ const deleteSale = async (_, { saleId }, ctx: Context, info) => {
     throw new Error('Este usuario no tiene permisos para eliminar ventas')
   }
 
-  return ctx.db.mutation.deleteSale(
+  const sale = await ctx.db.mutation.deleteSale(
     {
       where: { id: saleId },
     },
-    info
+    `{ id }`
   )
+
+  return ctx.db.query.sale({ where: { id: sale.id } }, info)
 }
 
 export const Mutation = {
