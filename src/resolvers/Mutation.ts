@@ -216,6 +216,21 @@ const deleteSale = async (_, { saleId }, ctx: Context, info) => {
   return ctx.db.query.sale({ where: { id: sale.id } }, info)
 }
 
+const createLog = async (_, args, ctx: Context, info) => {
+  const user = await getUserFromHeader(ctx)
+
+  return ctx.db.mutation.createLog(
+    {
+      data: {
+        message: args.message,
+        type: args.type,
+        client: { connect: { id: user.client.id } },
+      },
+    },
+    info
+  )
+}
+
 export const Mutation = {
   login,
   createProduct,
@@ -226,4 +241,5 @@ export const Mutation = {
   createUser,
   updateUser,
   deleteUser,
+  createLog,
 }

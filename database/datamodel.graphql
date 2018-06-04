@@ -7,6 +7,7 @@ type Client {
   users: [User!]!
   products: [Product!]!
   sales: [Sale!]!
+  logs: [Log!]!
 }
 
 type User {
@@ -53,4 +54,16 @@ type CartProduct {
   name: String!
   price: Float!
   quantitySold: Int!
+}
+
+type Log {
+  id: ID! @unique
+  message: String!
+  type: LogType!
+  createdAt: DateTime!
+  client: Client!
+}
+
+enum LogType {
+  ERROR
 }

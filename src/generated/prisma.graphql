@@ -1,11 +1,15 @@
 # source: https://us1.prisma.sh/public-candlelion-41/my-app-server/dev
-# timestamp: Tue May 29 2018 10:59:49 GMT-0600 (CST)
+# timestamp: Mon Jun 04 2018 14:07:44 GMT-0600 (CST)
 
 type AggregateCartProduct {
   count: Int!
 }
 
 type AggregateClient {
+  count: Int!
+}
+
+type AggregateLog {
   count: Int!
 }
 
@@ -281,6 +285,7 @@ type Client implements Node {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale!]
+  logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log!]
 }
 
 """A connection to a list of items."""
@@ -301,6 +306,12 @@ input ClientCreateInput {
   users: UserCreateManyWithoutClientInput
   products: ProductCreateManyWithoutClientInput
   sales: SaleCreateManyWithoutClientInput
+  logs: LogCreateManyWithoutClientInput
+}
+
+input ClientCreateOneWithoutLogsInput {
+  create: ClientCreateWithoutLogsInput
+  connect: ClientWhereUniqueInput
 }
 
 input ClientCreateOneWithoutProductsInput {
@@ -318,6 +329,16 @@ input ClientCreateOneWithoutUsersInput {
   connect: ClientWhereUniqueInput
 }
 
+input ClientCreateWithoutLogsInput {
+  name: String!
+  lastName: String
+  email: String
+  phoneNumber: String!
+  users: UserCreateManyWithoutClientInput
+  products: ProductCreateManyWithoutClientInput
+  sales: SaleCreateManyWithoutClientInput
+}
+
 input ClientCreateWithoutProductsInput {
   name: String!
   lastName: String
@@ -325,6 +346,7 @@ input ClientCreateWithoutProductsInput {
   phoneNumber: String!
   users: UserCreateManyWithoutClientInput
   sales: SaleCreateManyWithoutClientInput
+  logs: LogCreateManyWithoutClientInput
 }
 
 input ClientCreateWithoutSalesInput {
@@ -334,6 +356,7 @@ input ClientCreateWithoutSalesInput {
   phoneNumber: String!
   users: UserCreateManyWithoutClientInput
   products: ProductCreateManyWithoutClientInput
+  logs: LogCreateManyWithoutClientInput
 }
 
 input ClientCreateWithoutUsersInput {
@@ -343,6 +366,7 @@ input ClientCreateWithoutUsersInput {
   phoneNumber: String!
   products: ProductCreateManyWithoutClientInput
   sales: SaleCreateManyWithoutClientInput
+  logs: LogCreateManyWithoutClientInput
 }
 
 """An edge in a connection."""
@@ -426,6 +450,15 @@ input ClientUpdateInput {
   users: UserUpdateManyWithoutClientInput
   products: ProductUpdateManyWithoutClientInput
   sales: SaleUpdateManyWithoutClientInput
+  logs: LogUpdateManyWithoutClientInput
+}
+
+input ClientUpdateOneWithoutLogsInput {
+  create: ClientCreateWithoutLogsInput
+  connect: ClientWhereUniqueInput
+  delete: Boolean
+  update: ClientUpdateWithoutLogsDataInput
+  upsert: ClientUpsertWithoutLogsInput
 }
 
 input ClientUpdateOneWithoutProductsInput {
@@ -452,6 +485,16 @@ input ClientUpdateOneWithoutUsersInput {
   upsert: ClientUpsertWithoutUsersInput
 }
 
+input ClientUpdateWithoutLogsDataInput {
+  name: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  users: UserUpdateManyWithoutClientInput
+  products: ProductUpdateManyWithoutClientInput
+  sales: SaleUpdateManyWithoutClientInput
+}
+
 input ClientUpdateWithoutProductsDataInput {
   name: String
   lastName: String
@@ -459,6 +502,7 @@ input ClientUpdateWithoutProductsDataInput {
   phoneNumber: String
   users: UserUpdateManyWithoutClientInput
   sales: SaleUpdateManyWithoutClientInput
+  logs: LogUpdateManyWithoutClientInput
 }
 
 input ClientUpdateWithoutSalesDataInput {
@@ -468,6 +512,7 @@ input ClientUpdateWithoutSalesDataInput {
   phoneNumber: String
   users: UserUpdateManyWithoutClientInput
   products: ProductUpdateManyWithoutClientInput
+  logs: LogUpdateManyWithoutClientInput
 }
 
 input ClientUpdateWithoutUsersDataInput {
@@ -477,6 +522,12 @@ input ClientUpdateWithoutUsersDataInput {
   phoneNumber: String
   products: ProductUpdateManyWithoutClientInput
   sales: SaleUpdateManyWithoutClientInput
+  logs: LogUpdateManyWithoutClientInput
+}
+
+input ClientUpsertWithoutLogsInput {
+  update: ClientUpdateWithoutLogsDataInput!
+  create: ClientCreateWithoutLogsInput!
 }
 
 input ClientUpsertWithoutProductsInput {
@@ -712,6 +763,9 @@ input ClientWhereInput {
   sales_every: SaleWhereInput
   sales_some: SaleWhereInput
   sales_none: SaleWhereInput
+  logs_every: LogWhereInput
+  logs_some: LogWhereInput
+  logs_none: LogWhereInput
 }
 
 input ClientWhereUniqueInput {
@@ -721,6 +775,271 @@ input ClientWhereUniqueInput {
 }
 
 scalar DateTime
+
+type Log implements Node {
+  id: ID!
+  message: String!
+  type: LogType!
+  createdAt: DateTime!
+  client(where: ClientWhereInput): Client!
+}
+
+"""A connection to a list of items."""
+type LogConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [LogEdge]!
+  aggregate: AggregateLog!
+}
+
+input LogCreateInput {
+  message: String!
+  type: LogType!
+  client: ClientCreateOneWithoutLogsInput!
+}
+
+input LogCreateManyWithoutClientInput {
+  create: [LogCreateWithoutClientInput!]
+  connect: [LogWhereUniqueInput!]
+}
+
+input LogCreateWithoutClientInput {
+  message: String!
+  type: LogType!
+}
+
+"""An edge in a connection."""
+type LogEdge {
+  """The item at the end of the edge."""
+  node: Log!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum LogOrderByInput {
+  id_ASC
+  id_DESC
+  message_ASC
+  message_DESC
+  type_ASC
+  type_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type LogPreviousValues {
+  id: ID!
+  message: String!
+  type: LogType!
+  createdAt: DateTime!
+}
+
+type LogSubscriptionPayload {
+  mutation: MutationType!
+  node: Log
+  updatedFields: [String!]
+  previousValues: LogPreviousValues
+}
+
+input LogSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [LogSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [LogSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [LogSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: LogWhereInput
+}
+
+enum LogType {
+  ERROR
+}
+
+input LogUpdateInput {
+  message: String
+  type: LogType
+  client: ClientUpdateOneWithoutLogsInput
+}
+
+input LogUpdateManyWithoutClientInput {
+  create: [LogCreateWithoutClientInput!]
+  connect: [LogWhereUniqueInput!]
+  disconnect: [LogWhereUniqueInput!]
+  delete: [LogWhereUniqueInput!]
+  update: [LogUpdateWithWhereUniqueWithoutClientInput!]
+  upsert: [LogUpsertWithWhereUniqueWithoutClientInput!]
+}
+
+input LogUpdateWithoutClientDataInput {
+  message: String
+  type: LogType
+}
+
+input LogUpdateWithWhereUniqueWithoutClientInput {
+  where: LogWhereUniqueInput!
+  data: LogUpdateWithoutClientDataInput!
+}
+
+input LogUpsertWithWhereUniqueWithoutClientInput {
+  where: LogWhereUniqueInput!
+  update: LogUpdateWithoutClientDataInput!
+  create: LogCreateWithoutClientInput!
+}
+
+input LogWhereInput {
+  """Logical AND on all given filters."""
+  AND: [LogWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [LogWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [LogWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  message: String
+
+  """All values that are not equal to given value."""
+  message_not: String
+
+  """All values that are contained in given list."""
+  message_in: [String!]
+
+  """All values that are not contained in given list."""
+  message_not_in: [String!]
+
+  """All values less than the given value."""
+  message_lt: String
+
+  """All values less than or equal the given value."""
+  message_lte: String
+
+  """All values greater than the given value."""
+  message_gt: String
+
+  """All values greater than or equal the given value."""
+  message_gte: String
+
+  """All values containing the given string."""
+  message_contains: String
+
+  """All values not containing the given string."""
+  message_not_contains: String
+
+  """All values starting with the given string."""
+  message_starts_with: String
+
+  """All values not starting with the given string."""
+  message_not_starts_with: String
+
+  """All values ending with the given string."""
+  message_ends_with: String
+
+  """All values not ending with the given string."""
+  message_not_ends_with: String
+  type: LogType
+
+  """All values that are not equal to given value."""
+  type_not: LogType
+
+  """All values that are contained in given list."""
+  type_in: [LogType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [LogType!]
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  client: ClientWhereInput
+}
+
+input LogWhereUniqueInput {
+  id: ID
+}
 
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
@@ -734,28 +1053,34 @@ type Mutation {
   createProduct(data: ProductCreateInput!): Product!
   createSale(data: SaleCreateInput!): Sale!
   createCartProduct(data: CartProductCreateInput!): CartProduct!
+  createLog(data: LogCreateInput!): Log!
   updateClient(data: ClientUpdateInput!, where: ClientWhereUniqueInput!): Client
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
   updateSale(data: SaleUpdateInput!, where: SaleWhereUniqueInput!): Sale
+  updateLog(data: LogUpdateInput!, where: LogWhereUniqueInput!): Log
   deleteClient(where: ClientWhereUniqueInput!): Client
   deleteUser(where: UserWhereUniqueInput!): User
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteSale(where: SaleWhereUniqueInput!): Sale
+  deleteLog(where: LogWhereUniqueInput!): Log
   upsertClient(where: ClientWhereUniqueInput!, create: ClientCreateInput!, update: ClientUpdateInput!): Client!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
   upsertSale(where: SaleWhereUniqueInput!, create: SaleCreateInput!, update: SaleUpdateInput!): Sale!
+  upsertLog(where: LogWhereUniqueInput!, create: LogCreateInput!, update: LogUpdateInput!): Log!
   updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
   updateManySales(data: SaleUpdateInput!, where: SaleWhereInput): BatchPayload!
   updateManyCartProducts(data: CartProductUpdateInput!, where: CartProductWhereInput): BatchPayload!
+  updateManyLogs(data: LogUpdateInput!, where: LogWhereInput): BatchPayload!
   deleteManyClients(where: ClientWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
   deleteManySales(where: SaleWhereInput): BatchPayload!
   deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
+  deleteManyLogs(where: LogWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -1118,15 +1443,18 @@ type Query {
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale]!
   cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
+  logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log]!
   client(where: ClientWhereUniqueInput!): Client
   user(where: UserWhereUniqueInput!): User
   product(where: ProductWhereUniqueInput!): Product
   sale(where: SaleWhereUniqueInput!): Sale
+  log(where: LogWhereUniqueInput!): Log
   clientsConnection(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClientConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
   salesConnection(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SaleConnection!
   cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
+  logsConnection(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LogConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1409,6 +1737,7 @@ type Subscription {
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
   sale(where: SaleSubscriptionWhereInput): SaleSubscriptionPayload
   cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
+  log(where: LogSubscriptionWhereInput): LogSubscriptionPayload
 }
 
 type User implements Node {
