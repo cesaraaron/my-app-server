@@ -8,21 +8,16 @@ type Query {
 
 type Mutation {
   login(phoneNumber: String!, password: String!): AuthPayload!
-  createProduct(
-    name: String!
-    price: Float!
-    quantity: Int!
-  ): Product
+  createProduct(name: String!, price: Float!, quantity: Int!): Product
   updateProduct(
     productId: String!
     name: String
     price: Float
     quantity: Int
   ): Product
-  deleteProduct(
-    productId: String!
-  ): Product
-  createSale(products: [CartProductInput!]!, userId: String!): Sale
+  deleteProduct(productId: String!): Product
+  createSale(cartProducts: [CartProductInput!]!): Sale
+  deleteSale(saleId: String!): Sale
   createUser(
     name: String!
     phoneNumber: String!
@@ -36,9 +31,7 @@ type Mutation {
     password: String
     permissions: [UserPermissions]
   ): User
-  deleteUser(
-    userId: String!
-  ): User
+  deleteUser(userId: String!): User
 }
 
 input CartProductInput {

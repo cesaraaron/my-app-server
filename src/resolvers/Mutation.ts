@@ -109,6 +109,7 @@ const createProduct = async (_, args, ctx: Context, info) => {
   )
 }
 
+// TODO: validate the fields of the product before trying to update it
 const updateProduct = async (_, args, ctx: Context, info) => {
   const { name, price, quantity, productId } = args
   const user = await getUserFromHeader(ctx)
@@ -117,44 +118,100 @@ const updateProduct = async (_, args, ctx: Context, info) => {
     throw new Error('Este usuario no tiene permisos para editar productos.')
   }
 
-  return ctx.db.mutation.updateProduct({
-    where: { id: productId },
-    data: {
-      name,
-      price,
-      quantity,
+  return ctx.db.mutation.updateProduct(
+    {
+      where: { id: productId },
+      data: {
+        name,
+        price,
+        quantity,
+      },
     },
-  }, info)
+    info
+  )
 }
 
-const deleteProduct = async (_, {productId}, ctx: Context, info) => {
+const deleteProduct = async (_, { productId }, ctx: Context, info) => {
   const user = await getUserFromHeader(ctx)
 
   if (!user.isAdmin && !user.permissions.includes('DELETE_PRODUCTS')) {
     throw new Error('Este usuario no tiene permisos para eliminar productos')
   }
 
-  return ctx.db.mutation.deleteProduct({
-    where: { id: productId }
-  }, info)
-}
-
-const createSale = async (_, { products, userId }, ctx: Context, info) => {
-  const user = await getUserFromHeader(ctx)
-  const { id: clientId } = user.client
-
-  const newSale = await ctx.db.mutation.createSale(
+  return ctx.db.mutation.deleteProduct(
     {
-      data: {
-        products: { create: products },
-        client: { connect: { id: clientId } },
-        soldBy: { connect: { id: userId } },
-      },
+      where: { id: productId },
     },
     info
   )
+}
 
-  return newSale
+type CartProduct = {
+  productId: string
+  name: string
+  price: number
+  quantitySold: number
+}
+
+const createSale = async (_, args, ctx: Context, info) => {
+  const { cartProducts } = args as {
+    cartProducts: CartProduct[]
+  }
+  const user = await getUserFromHeader(ctx)
+  const { id: clientId } = user.client
+
+  if (!user.isAdmin && !user.permissions.includes('ADD_SALES')) {
+    throw new Error('Este usuario no tiene permisos para añadir ventas')
+  }
+
+  const cartProductIds = cartProducts.map(p => p.productId)
+
+  const products = await ctx.db.query.products({
+    where: { id_in: cartProductIds },
+  })
+
+  let updateManyProductPromises = []
+
+  products.forEach(({ id, quantity }) => {
+    const [cartProduct] = cartProducts.filter(p => p.productId === id)
+
+    updateManyProductPromises.push(
+      ctx.db.mutation.updateProduct({
+        where: { id },
+        data: {
+          quantity: quantity - cartProduct.quantitySold,
+        },
+      })
+    )
+  })
+
+  return Promise.all(updateManyProductPromises).then(() =>
+    ctx.db.mutation.createSale(
+      {
+        data: {
+          products: { create: cartProducts },
+          client: { connect: { id: clientId } },
+          soldBy: { connect: { id: user.id } },
+        },
+      },
+      info
+    )
+  )
+}
+
+const deleteSale = async (_, { saleId }, ctx: Context, info) => {
+  const user = await getUserFromHeader(ctx)
+
+  if (!user.isAdmin && !user.permissions.includes('DELETE_SALES')) {
+    throw new Error('Este usuario no tiene permisos para eliminar ventas')
+  }
+
+  return ctx.db.mutation.deleteSale(
+    {
+      where: { id: saleId },
+    },
+    info
+  )
 }
 
 export const Mutation = {
@@ -163,6 +220,7 @@ export const Mutation = {
   updateProduct,
   deleteProduct,
   createSale,
+  deleteSale,
   createUser,
   updateUser,
   deleteUser,
