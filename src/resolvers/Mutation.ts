@@ -173,13 +173,24 @@ const createSale = async (_, args, ctx: Context, info) => {
   let updateManyProductPromises = []
 
   products.forEach(({ id, quantity }) => {
-    const [cartProduct] = cartProducts.filter(p => p.productId === id)
+    const cartProduct = cartProducts.find(p => p.productId === id)
+
+    const newQuantity = quantity - cartProduct.quantitySold
+    if (newQuantity < 0) {
+      throw new Error(
+        `El producto: ${
+          cartProduct.name
+        } solo tiene ${quantity} disponible. Usted esta intentado agregar ${
+          cartProduct.quantitySold
+        }`
+      )
+    }
 
     updateManyProductPromises.push(
       ctx.db.mutation.updateProduct({
         where: { id },
         data: {
-          quantity: quantity - cartProduct.quantitySold,
+          quantity: newQuantity,
         },
       })
     )

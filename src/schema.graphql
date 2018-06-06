@@ -1,4 +1,4 @@
-# import Product, Sale, UserPermissions, Log, LogType from "./generated/prisma.graphql"
+# import Product, Sale, UserPermissions, Log, LogType, SaleSubscriptionPayload from "./generated/prisma.graphql"
 
 type Query {
   users: [User!]!
@@ -67,4 +67,8 @@ type Client {
   users: [User!]!
   products: [Product!]!
   sales: [Sale!]!
+}
+
+type Subscription {
+  newSale: SaleSubscriptionPayload
 }
