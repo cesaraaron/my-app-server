@@ -1977,6 +1977,8 @@ input SaleWhereUniqueInput {
 
 type User implements Node {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   lastName: String
   phoneNumber: String!
@@ -2064,6 +2066,10 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   name_ASC
   name_DESC
   lastName_ASC
@@ -2074,10 +2080,6 @@ enum UserOrderByInput {
   password_DESC
   isAdmin_ASC
   isAdmin_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 enum UserPermissions {
@@ -2090,6 +2092,8 @@ enum UserPermissions {
 
 type UserPreviousValues {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   lastName: String
   phoneNumber: String!
@@ -2271,6 +2275,64 @@ input UserWhereInput {
   All values not ending with the given string.
   """
   id_not_ends_with: ID
+  createdAt: DateTime
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
   name: String
   """
   All values that are not equal to given value.
@@ -2594,6 +2656,10 @@ export type ClientOrderByInput =
 export type UserOrderByInput = 
   'id_ASC' |
   'id_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
   'name_ASC' |
   'name_DESC' |
   'lastName_ASC' |
@@ -2603,11 +2669,7 @@ export type UserOrderByInput =
   'password_ASC' |
   'password_DESC' |
   'isAdmin_ASC' |
-  'isAdmin_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC'
+  'isAdmin_DESC'
 
 export type UserPermissions = 
   'ADD_PRODUCTS' |
@@ -2929,15 +2991,15 @@ export interface ClientCreateWithoutSalesInput {
   logs?: LogCreateManyWithoutClientInput
 }
 
-export interface ProductSubscriptionWhereInput {
-  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+export interface SaleSubscriptionWhereInput {
+  AND?: SaleSubscriptionWhereInput[] | SaleSubscriptionWhereInput
+  OR?: SaleSubscriptionWhereInput[] | SaleSubscriptionWhereInput
+  NOT?: SaleSubscriptionWhereInput[] | SaleSubscriptionWhereInput
   mutation_in?: MutationType[] | MutationType
   updatedFields_contains?: String
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
-  node?: ProductWhereInput
+  node?: SaleWhereInput
 }
 
 export interface ProductCreateManyWithoutClientInput {
@@ -3234,15 +3296,45 @@ export interface SaleUpsertWithWhereUniqueWithoutSoldByInput {
   create: SaleCreateWithoutSoldByInput
 }
 
-export interface SaleSubscriptionWhereInput {
-  AND?: SaleSubscriptionWhereInput[] | SaleSubscriptionWhereInput
-  OR?: SaleSubscriptionWhereInput[] | SaleSubscriptionWhereInput
-  NOT?: SaleSubscriptionWhereInput[] | SaleSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: SaleWhereInput
+export interface SaleWhereInput {
+  AND?: SaleWhereInput[] | SaleWhereInput
+  OR?: SaleWhereInput[] | SaleWhereInput
+  NOT?: SaleWhereInput[] | SaleWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  products_every?: CartProductWhereInput
+  products_some?: CartProductWhereInput
+  products_none?: CartProductWhereInput
+  client?: ClientWhereInput
+  soldBy?: UserWhereInput
 }
 
 export interface ClientUpdateInput {
@@ -3378,45 +3470,15 @@ export interface ClientUpdateOneWithoutSalesInput {
   upsert?: ClientUpsertWithoutSalesInput
 }
 
-export interface SaleWhereInput {
-  AND?: SaleWhereInput[] | SaleWhereInput
-  OR?: SaleWhereInput[] | SaleWhereInput
-  NOT?: SaleWhereInput[] | SaleWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  products_every?: CartProductWhereInput
-  products_some?: CartProductWhereInput
-  products_none?: CartProductWhereInput
-  client?: ClientWhereInput
-  soldBy?: UserWhereInput
+export interface ProductSubscriptionWhereInput {
+  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ProductWhereInput
 }
 
 export interface ClientUpdateWithoutSalesDataInput {
@@ -3505,6 +3567,22 @@ export interface UserWhereInput {
   id_not_starts_with?: ID_Input
   id_ends_with?: ID_Input
   id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
   name?: String
   name_not?: String
   name_in?: String[] | String
@@ -3824,6 +3902,8 @@ export interface CartProductEdge {
 
 export interface UserPreviousValues {
   id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
   name: String
   lastName?: String
   phoneNumber: String
@@ -3842,13 +3922,18 @@ export interface SaleConnection {
   aggregate: AggregateSale
 }
 
-export interface Sale extends Node {
+export interface User extends Node {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  products?: CartProduct[]
+  name: String
+  lastName?: String
+  phoneNumber: String
+  password: String
+  permissions?: UserPermissions[]
+  isAdmin?: Boolean
   client: Client
-  soldBy: User
+  sales?: Sale[]
 }
 
 export interface AggregateUser {
@@ -3871,16 +3956,13 @@ export interface SaleSubscriptionPayload {
   previousValues?: SalePreviousValues
 }
 
-export interface User extends Node {
+export interface Sale extends Node {
   id: ID_Output
-  name: String
-  lastName?: String
-  phoneNumber: String
-  password: String
-  permissions?: UserPermissions[]
-  isAdmin?: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+  products?: CartProduct[]
   client: Client
-  sales?: Sale[]
+  soldBy: User
 }
 
 export interface ProductPreviousValues {
@@ -3954,17 +4036,17 @@ The `Float` scalar type represents signed double-precision fractional values as 
 */
 export type Float = number
 
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean
+export type DateTime = string
 
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string
 
-export type DateTime = string
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean
 
 export interface Schema {
   query: Query

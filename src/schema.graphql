@@ -1,4 +1,4 @@
-# import Product, Sale, UserPermissions, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload from "./generated/prisma.graphql"
+# import Product, Sale, UserPermissions, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload from "./generated/prisma.graphql"
 
 type Query {
   users: [User!]!
@@ -49,6 +49,8 @@ type AuthPayload {
 
 type User {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   lastName: String
   phoneNumber: String!
@@ -71,5 +73,6 @@ type Client {
 
 type Subscription {
   sale: SaleSubscriptionPayload
+  user: UserSubscriptionPayload
   product: ProductSubscriptionPayload
 }

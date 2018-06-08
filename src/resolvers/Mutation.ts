@@ -38,7 +38,9 @@ const createUser = async (_, args, ctx: Context, info) => {
       data: {
         phoneNumber,
         name,
-        permissions,
+        permissions: {
+          set: permissions
+        },
         password: hashedPassword,
         client: { connect: { id: clientId } },
       },

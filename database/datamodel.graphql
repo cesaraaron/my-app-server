@@ -12,6 +12,8 @@ type Client {
 
 type User {
   id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   lastName: String
   phoneNumber: String! @unique

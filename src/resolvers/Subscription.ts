@@ -16,7 +16,16 @@ const product = {
   },
 }
 
+const user = {
+  subscribe: (_, _1, ctx: Context, info) => {
+    return ctx.db.subscription.user({
+      where: { mutation_in: ['CREATED', 'DELETED', 'UPDATED'] },
+    }, info)
+  },
+}
+
 export const Subscription = {
   sale,
+  user,
   product
 }
