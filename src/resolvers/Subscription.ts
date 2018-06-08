@@ -1,9 +1,9 @@
 import { Context } from '../utils'
 
-const newSale = {
+const sale = {
   subscribe: (_, _1, ctx: Context, info) => {
     return ctx.db.subscription.sale({
-      where: { mutation_in: ['CREATED'] },
+      where: { mutation_in: ['CREATED', 'DELETED'] },
     }, info)
   },
 }
@@ -17,6 +17,6 @@ const product = {
 }
 
 export const Subscription = {
-  newSale,
+  sale,
   product
 }
