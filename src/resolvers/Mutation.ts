@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
-import { Context, getUserFromHeader, UserPermission } from '../utils'
+import { Context, getUserId, UserPermission, getUserWithId } from '../utils'
 
 const login = async (_, { phoneNumber, password }, ctx: Context) => {
   const user = await ctx.db.query.user({ where: { phoneNumber } })
@@ -24,7 +24,8 @@ const login = async (_, { phoneNumber, password }, ctx: Context) => {
 
 const createUser = async (_, args, ctx: Context, info) => {
   const { name, phoneNumber, password, permissions } = args
-  const user = await getUserFromHeader(ctx)
+  const userId = await getUserId(ctx)
+  const user = await getUserWithId(userId, ctx, '{ isAdmin client {id} }')
   const { id: clientId } = user.client
 
   if (!user.isAdmin) {
@@ -39,7 +40,7 @@ const createUser = async (_, args, ctx: Context, info) => {
         phoneNumber,
         name,
         permissions: {
-          set: permissions
+          set: permissions,
         },
         password: hashedPassword,
         client: { connect: { id: clientId } },
@@ -51,7 +52,8 @@ const createUser = async (_, args, ctx: Context, info) => {
 
 const updateUser = async (_, args, ctx: Context, info) => {
   const { userId, name, phoneNumber, password, permissions } = args
-  const user = await getUserFromHeader(ctx)
+  const userIdFromHeader = await getUserId(ctx)
+  const user = await getUserWithId(userIdFromHeader, ctx, '{ isAdmin }')
 
   if (!user.isAdmin) {
     throw new UserPermission()
@@ -84,7 +86,8 @@ const updateUser = async (_, args, ctx: Context, info) => {
 }
 
 const deleteUser = async (_, { userId }, ctx: Context, info) => {
-  const user = await getUserFromHeader(ctx)
+  const userIdFromHeader = await getUserId(ctx)
+  const user = await getUserWithId(userIdFromHeader, ctx, '{ isAdmin }')
 
   if (!user.isAdmin) {
     throw new UserPermission()
@@ -95,7 +98,8 @@ const deleteUser = async (_, { userId }, ctx: Context, info) => {
 
 const createProduct = async (_, args, ctx: Context, info) => {
   const { name, price, quantity } = args
-  const user = await getUserFromHeader(ctx)
+  const userId = await getUserId(ctx)
+  const user = await getUserWithId(userId, ctx, '{ client { id }}')
   const { id: clientId } = user.client
 
   return ctx.db.mutation.createProduct(
@@ -114,7 +118,8 @@ const createProduct = async (_, args, ctx: Context, info) => {
 // TODO: validate the fields of the product before trying to update it
 const updateProduct = async (_, args, ctx: Context, info) => {
   const { name, price, quantity, productId } = args
-  const user = await getUserFromHeader(ctx)
+  const userId = await getUserId(ctx)
+  const user = await getUserWithId(userId, ctx, '{ isAdmin permissions }')
 
   if (!user.isAdmin && !user.permissions.includes('EDIT_PRODUCTS')) {
     throw new Error('Este usuario no tiene permisos para editar productos.')
@@ -134,7 +139,8 @@ const updateProduct = async (_, args, ctx: Context, info) => {
 }
 
 const deleteProduct = async (_, { productId }, ctx: Context, info) => {
-  const user = await getUserFromHeader(ctx)
+  const userId = await getUserId(ctx)
+  const user = await getUserWithId(userId, ctx, '{ isAdmin permissions }')
 
   if (!user.isAdmin && !user.permissions.includes('DELETE_PRODUCTS')) {
     throw new Error('Este usuario no tiene permisos para eliminar productos')
@@ -159,7 +165,8 @@ const createSale = async (_, args, ctx: Context, info) => {
   const { cartProducts } = args as {
     cartProducts: CartProduct[]
   }
-  const user = await getUserFromHeader(ctx)
+  const userId = await getUserId(ctx)
+  const user = await getUserWithId(userId, ctx, '{ isAdmin permissions client {id} }')
   const { id: clientId } = user.client
 
   if (!user.isAdmin && !user.permissions.includes('ADD_SALES')) {
@@ -213,7 +220,8 @@ const createSale = async (_, args, ctx: Context, info) => {
 }
 
 const deleteSale = async (_, { saleId }, ctx: Context, info) => {
-  const user = await getUserFromHeader(ctx)
+  const userId = await getUserId(ctx)
+  const user = await getUserWithId(userId, ctx, '{ isAdmin permissions }')
 
   if (!user.isAdmin && !user.permissions.includes('DELETE_SALES')) {
     throw new Error('Este usuario no tiene permisos para eliminar ventas')
@@ -230,7 +238,8 @@ const deleteSale = async (_, { saleId }, ctx: Context, info) => {
 }
 
 const createLog = async (_, args, ctx: Context, info) => {
-  const user = await getUserFromHeader(ctx)
+  const userId = await getUserId(ctx)
+  const user = await getUserWithId(userId, ctx, '{ isAdmin permissions client {id} }')
 
   return ctx.db.mutation.createLog(
     {

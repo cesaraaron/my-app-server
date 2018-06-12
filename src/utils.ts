@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken'
-import { Prisma } from './generated/prisma'
+import { Prisma, User } from './generated/prisma'
 
 export interface Context {
   db: Prisma
@@ -7,7 +7,7 @@ export interface Context {
 }
 
 // TODO: Just return the userId from here
-export function getUserFromHeader(ctx: Context) {
+export function getUserId(ctx: Context): string {
   const Authorization = ctx.request.get('Authorization')
 
   if (!Authorization) {
@@ -19,15 +19,19 @@ export function getUserFromHeader(ctx: Context) {
     userId: string
   }
 
-
   if (!userId) {
     throw new AuthError()
   }
 
-  return ctx.db.query.user(
-    { where: { id: userId } },
-    `{id name isAdmin permissions client {id}}`
-  )
+  return userId
+}
+
+export function getUserWithId(
+  id: string,
+  ctx: Context,
+  info = `{id createdAt updatedAt name lastName phoneNumber permissions isAdmin client {id}}`
+): Promise<User> {
+  return ctx.db.query.user({ where: { id } }, info)
 }
 
 export class AuthError extends Error {
