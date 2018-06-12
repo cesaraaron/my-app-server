@@ -2,7 +2,7 @@ import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
 import { Context, getUserFromHeader, UserPermission } from '../utils'
 
-const login = async (_, { phoneNumber, password }, ctx: Context, _1) => {
+const login = async (_, { phoneNumber, password }, ctx: Context) => {
   const user = await ctx.db.query.user({ where: { phoneNumber } })
 
   if (!user) {
