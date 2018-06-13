@@ -5,7 +5,9 @@
     "dev": "npm-run-all --parallel start playground",
     "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
     "playground": "graphql playground",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "generate": "graphql get-schema -p database && graphql prepare",
+    "deploy": "prisma deploy && npm run gen:database"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",

@@ -1,8 +1,9 @@
 import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
 import { Context, getUserId, UserPermission, getUserWithId } from '../utils'
+import { CartProduct } from '../generated/prisma';
 
-const login = async (_, { phoneNumber, password }, ctx: Context) => {
+const login  = async (_, { phoneNumber, password }, ctx, _1) => {
   const user = await ctx.db.query.user({ where: { phoneNumber } })
 
   if (!user) {
@@ -154,12 +155,6 @@ const deleteProduct = async (_, { productId }, ctx: Context, info) => {
   )
 }
 
-type CartProduct = {
-  productId: string
-  name: string
-  price: number
-  quantitySold: number
-}
 
 const createSale = async (_, args, ctx: Context, info) => {
   const { cartProducts } = args as {
