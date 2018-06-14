@@ -1,6 +1,7 @@
 # import Product, Sale, CartProductCreateInput, UserPermissions, Notifications, NotificationsCreateInput, NotificationsUpdateInput, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload from "./generated/prisma.graphql"
 
 type Query {
+  me: User
   users: [User!]!
   products: [Product!]!
   sales: [Sale!]!

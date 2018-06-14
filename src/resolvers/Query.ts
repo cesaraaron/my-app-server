@@ -1,6 +1,11 @@
 import { getUserId, Context, getUserWithId } from '../utils'
 
 export const Query = {
+  async me(_, _1, ctx: Context, info) {
+    const userId = await getUserId(ctx)
+
+    return ctx.db.query.user({where: {id: userId}}, info)
+  },
   users: async (_, _1, ctx: Context, info) => {
     const userId = await getUserId(ctx)
     const {
