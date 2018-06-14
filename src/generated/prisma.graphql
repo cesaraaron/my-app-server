@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-candlelion-41/my-app-server/dev
-# timestamp: Wed Jun 13 2018 11:19:55 GMT-0600 (CST)
+# timestamp: Wed Jun 13 2018 18:02:00 GMT-0600 (CST)
 
 type AggregateCartProduct {
   count: Int!
@@ -10,6 +10,10 @@ type AggregateClient {
 }
 
 type AggregateLog {
+  count: Int!
+}
+
+type AggregateNotifications {
   count: Int!
 }
 
@@ -1050,6 +1054,7 @@ scalar Long
 type Mutation {
   createClient(data: ClientCreateInput!): Client!
   createUser(data: UserCreateInput!): User!
+  createNotifications(data: NotificationsCreateInput!): Notifications!
   createProduct(data: ProductCreateInput!): Product!
   createSale(data: SaleCreateInput!): Sale!
   createCartProduct(data: CartProductCreateInput!): CartProduct!
@@ -1071,12 +1076,14 @@ type Mutation {
   upsertLog(where: LogWhereUniqueInput!, create: LogCreateInput!, update: LogUpdateInput!): Log!
   updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyNotificationses(data: NotificationsUpdateInput!, where: NotificationsWhereInput): BatchPayload!
   updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
   updateManySales(data: SaleUpdateInput!, where: SaleWhereInput): BatchPayload!
   updateManyCartProducts(data: CartProductUpdateInput!, where: CartProductWhereInput): BatchPayload!
   updateManyLogs(data: LogUpdateInput!, where: LogWhereInput): BatchPayload!
   deleteManyClients(where: ClientWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyNotificationses(where: NotificationsWhereInput): BatchPayload!
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
   deleteManySales(where: SaleWhereInput): BatchPayload!
   deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
@@ -1093,6 +1100,157 @@ enum MutationType {
 interface Node {
   """The id of the object."""
   id: ID!
+}
+
+type Notifications {
+  fireWhen: Int!
+  devices: [String!]
+}
+
+"""A connection to a list of items."""
+type NotificationsConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [NotificationsEdge]!
+  aggregate: AggregateNotifications!
+}
+
+input NotificationsCreatedevicesInput {
+  set: [String!]
+}
+
+input NotificationsCreateInput {
+  fireWhen: Int
+  devices: NotificationsCreatedevicesInput
+}
+
+input NotificationsCreateOneInput {
+  create: NotificationsCreateInput
+}
+
+"""An edge in a connection."""
+type NotificationsEdge {
+  """The item at the end of the edge."""
+  node: Notifications!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum NotificationsOrderByInput {
+  fireWhen_ASC
+  fireWhen_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type NotificationsPreviousValues {
+  fireWhen: Int!
+  devices: [String!]
+}
+
+type NotificationsSubscriptionPayload {
+  mutation: MutationType!
+  node: Notifications
+  updatedFields: [String!]
+  previousValues: NotificationsPreviousValues
+}
+
+input NotificationsSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NotificationsSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NotificationsSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NotificationsSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: NotificationsWhereInput
+}
+
+input NotificationsUpdateDataInput {
+  fireWhen: Int
+  devices: NotificationsUpdatedevicesInput
+}
+
+input NotificationsUpdatedevicesInput {
+  set: [String!]
+}
+
+input NotificationsUpdateInput {
+  fireWhen: Int
+  devices: NotificationsUpdatedevicesInput
+}
+
+input NotificationsUpdateOneInput {
+  create: NotificationsCreateInput
+  delete: Boolean
+  update: NotificationsUpdateDataInput
+  upsert: NotificationsUpsertNestedInput
+}
+
+input NotificationsUpsertNestedInput {
+  update: NotificationsUpdateDataInput!
+  create: NotificationsCreateInput!
+}
+
+input NotificationsWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NotificationsWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NotificationsWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NotificationsWhereInput!]
+  fireWhen: Int
+
+  """All values that are not equal to given value."""
+  fireWhen_not: Int
+
+  """All values that are contained in given list."""
+  fireWhen_in: [Int!]
+
+  """All values that are not contained in given list."""
+  fireWhen_not_in: [Int!]
+
+  """All values less than the given value."""
+  fireWhen_lt: Int
+
+  """All values less than or equal the given value."""
+  fireWhen_lte: Int
+
+  """All values greater than the given value."""
+  fireWhen_gt: Int
+
+  """All values greater than or equal the given value."""
+  fireWhen_gte: Int
 }
 
 """Information about pagination in a connection."""
@@ -1440,6 +1598,7 @@ input ProductWhereUniqueInput {
 type Query {
   clients(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  notificationses(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifications]!
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale]!
   cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
@@ -1451,6 +1610,7 @@ type Query {
   log(where: LogWhereUniqueInput!): Log
   clientsConnection(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClientConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  notificationsesConnection(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationsConnection!
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
   salesConnection(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SaleConnection!
   cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
@@ -1734,6 +1894,7 @@ input SaleWhereUniqueInput {
 type Subscription {
   client(where: ClientSubscriptionWhereInput): ClientSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  notifications(where: NotificationsSubscriptionWhereInput): NotificationsSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
   sale(where: SaleSubscriptionWhereInput): SaleSubscriptionPayload
   cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
@@ -1746,6 +1907,7 @@ type User implements Node {
   updatedAt: DateTime!
   name: String!
   lastName: String
+  notifications(where: NotificationsWhereInput): Notifications!
   phoneNumber: String!
   password: String!
   permissions: [UserPermissions!]
@@ -1771,6 +1933,7 @@ input UserCreateInput {
   password: String!
   isAdmin: Boolean
   permissions: UserCreatepermissionsInput
+  notifications: NotificationsCreateOneInput!
   client: ClientCreateOneWithoutUsersInput!
   sales: SaleCreateManyWithoutSoldByInput
 }
@@ -1796,6 +1959,7 @@ input UserCreateWithoutClientInput {
   password: String!
   isAdmin: Boolean
   permissions: UserCreatepermissionsInput
+  notifications: NotificationsCreateOneInput!
   sales: SaleCreateManyWithoutSoldByInput
 }
 
@@ -1806,6 +1970,7 @@ input UserCreateWithoutSalesInput {
   password: String!
   isAdmin: Boolean
   permissions: UserCreatepermissionsInput
+  notifications: NotificationsCreateOneInput!
   client: ClientCreateOneWithoutUsersInput!
 }
 
@@ -1903,6 +2068,7 @@ input UserUpdateInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
+  notifications: NotificationsUpdateOneInput
   client: ClientUpdateOneWithoutUsersInput
   sales: SaleUpdateManyWithoutSoldByInput
 }
@@ -1935,6 +2101,7 @@ input UserUpdateWithoutClientDataInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
+  notifications: NotificationsUpdateOneInput
   sales: SaleUpdateManyWithoutSoldByInput
 }
 
@@ -1945,6 +2112,7 @@ input UserUpdateWithoutSalesDataInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
+  notifications: NotificationsUpdateOneInput
   client: ClientUpdateOneWithoutUsersInput
 }
 
@@ -2221,6 +2389,7 @@ input UserWhereInput {
 
   """All values that are not equal to given value."""
   isAdmin_not: Boolean
+  notifications: NotificationsWhereInput
   client: ClientWhereInput
   sales_every: SaleWhereInput
   sales_some: SaleWhereInput

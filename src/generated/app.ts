@@ -1,8 +1,12 @@
 import { Binding as BaseBinding, BindingOptions } from 'graphql-binding'
 import { GraphQLResolveInfo } from 'graphql'
 
-export type LogType = 
-  'ERROR'
+export type UserPermissions = 
+  'ADD_PRODUCTS' |
+  'EDIT_PRODUCTS' |
+  'DELETE_PRODUCTS' |
+  'ADD_SALES' |
+  'DELETE_SALES'
 
 export type CartProductOrderByInput = 
   'productId_ASC' |
@@ -20,22 +24,18 @@ export type CartProductOrderByInput =
   'createdAt_ASC' |
   'createdAt_DESC'
 
-export type UserPermissions = 
-  'ADD_PRODUCTS' |
-  'EDIT_PRODUCTS' |
-  'DELETE_PRODUCTS' |
-  'ADD_SALES' |
-  'DELETE_SALES'
-
 export type MutationType = 
   'CREATED' |
   'UPDATED' |
   'DELETED'
 
-export interface LogWhereInput {
-  AND?: LogWhereInput[] | LogWhereInput
-  OR?: LogWhereInput[] | LogWhereInput
-  NOT?: LogWhereInput[] | LogWhereInput
+export type LogType = 
+  'ERROR'
+
+export interface SaleWhereInput {
+  AND?: SaleWhereInput[] | SaleWhereInput
+  OR?: SaleWhereInput[] | SaleWhereInput
+  NOT?: SaleWhereInput[] | SaleWhereInput
   id?: ID_Input
   id_not?: ID_Input
   id_in?: ID_Input[] | ID_Input
@@ -50,24 +50,6 @@ export interface LogWhereInput {
   id_not_starts_with?: ID_Input
   id_ends_with?: ID_Input
   id_not_ends_with?: ID_Input
-  message?: String
-  message_not?: String
-  message_in?: String[] | String
-  message_not_in?: String[] | String
-  message_lt?: String
-  message_lte?: String
-  message_gt?: String
-  message_gte?: String
-  message_contains?: String
-  message_not_contains?: String
-  message_starts_with?: String
-  message_not_starts_with?: String
-  message_ends_with?: String
-  message_not_ends_with?: String
-  type?: LogType
-  type_not?: LogType
-  type_in?: LogType[] | LogType
-  type_not_in?: LogType[] | LogType
   createdAt?: DateTime
   createdAt_not?: DateTime
   createdAt_in?: DateTime[] | DateTime
@@ -76,7 +58,100 @@ export interface LogWhereInput {
   createdAt_lte?: DateTime
   createdAt_gt?: DateTime
   createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  products_every?: CartProductWhereInput
+  products_some?: CartProductWhereInput
+  products_none?: CartProductWhereInput
   client?: ClientWhereInput
+  soldBy?: UserWhereInput
+}
+
+export interface ProductWhereInput {
+  AND?: ProductWhereInput[] | ProductWhereInput
+  OR?: ProductWhereInput[] | ProductWhereInput
+  NOT?: ProductWhereInput[] | ProductWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  price?: Float
+  price_not?: Float
+  price_in?: Float[] | Float
+  price_not_in?: Float[] | Float
+  price_lt?: Float
+  price_lte?: Float
+  price_gt?: Float
+  price_gte?: Float
+  quantity?: Int
+  quantity_not?: Int
+  quantity_in?: Int[] | Int
+  quantity_not_in?: Int[] | Int
+  quantity_lt?: Int
+  quantity_lte?: Int
+  quantity_gt?: Int
+  quantity_gte?: Int
+  client?: ClientWhereInput
+}
+
+export interface NotificationsWhereInput {
+  AND?: NotificationsWhereInput[] | NotificationsWhereInput
+  OR?: NotificationsWhereInput[] | NotificationsWhereInput
+  NOT?: NotificationsWhereInput[] | NotificationsWhereInput
+  fireWhen?: Int
+  fireWhen_not?: Int
+  fireWhen_in?: Int[] | Int
+  fireWhen_not_in?: Int[] | Int
+  fireWhen_lt?: Int
+  fireWhen_lte?: Int
+  fireWhen_gt?: Int
+  fireWhen_gte?: Int
 }
 
 export interface UserWhereInput {
@@ -171,77 +246,11 @@ export interface UserWhereInput {
   password_not_ends_with?: String
   isAdmin?: Boolean
   isAdmin_not?: Boolean
+  notifications?: NotificationsWhereInput
   client?: ClientWhereInput
   sales_every?: SaleWhereInput
   sales_some?: SaleWhereInput
   sales_none?: SaleWhereInput
-}
-
-export interface ProductWhereInput {
-  AND?: ProductWhereInput[] | ProductWhereInput
-  OR?: ProductWhereInput[] | ProductWhereInput
-  NOT?: ProductWhereInput[] | ProductWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  name?: String
-  name_not?: String
-  name_in?: String[] | String
-  name_not_in?: String[] | String
-  name_lt?: String
-  name_lte?: String
-  name_gt?: String
-  name_gte?: String
-  name_contains?: String
-  name_not_contains?: String
-  name_starts_with?: String
-  name_not_starts_with?: String
-  name_ends_with?: String
-  name_not_ends_with?: String
-  price?: Float
-  price_not?: Float
-  price_in?: Float[] | Float
-  price_not_in?: Float[] | Float
-  price_lt?: Float
-  price_lte?: Float
-  price_gt?: Float
-  price_gte?: Float
-  quantity?: Int
-  quantity_not?: Int
-  quantity_in?: Int[] | Int
-  quantity_not_in?: Int[] | Int
-  quantity_lt?: Int
-  quantity_lte?: Int
-  quantity_gt?: Int
-  quantity_gte?: Int
-  client?: ClientWhereInput
 }
 
 export interface ClientWhereInput {
@@ -332,47 +341,6 @@ export interface ClientWhereInput {
   logs_none?: LogWhereInput
 }
 
-export interface SaleWhereInput {
-  AND?: SaleWhereInput[] | SaleWhereInput
-  OR?: SaleWhereInput[] | SaleWhereInput
-  NOT?: SaleWhereInput[] | SaleWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  products_every?: CartProductWhereInput
-  products_some?: CartProductWhereInput
-  products_none?: CartProductWhereInput
-  client?: ClientWhereInput
-  soldBy?: UserWhereInput
-}
-
 export interface CartProductWhereInput {
   AND?: CartProductWhereInput[] | CartProductWhereInput
   OR?: CartProductWhereInput[] | CartProductWhereInput
@@ -423,7 +391,63 @@ export interface CartProductWhereInput {
   quantitySold_gte?: Int
 }
 
-export interface CartProductInput {
+export interface LogWhereInput {
+  AND?: LogWhereInput[] | LogWhereInput
+  OR?: LogWhereInput[] | LogWhereInput
+  NOT?: LogWhereInput[] | LogWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  message?: String
+  message_not?: String
+  message_in?: String[] | String
+  message_not_in?: String[] | String
+  message_lt?: String
+  message_lte?: String
+  message_gt?: String
+  message_gte?: String
+  message_contains?: String
+  message_not_contains?: String
+  message_starts_with?: String
+  message_not_starts_with?: String
+  message_ends_with?: String
+  message_not_ends_with?: String
+  type?: LogType
+  type_not?: LogType
+  type_in?: LogType[] | LogType
+  type_not_in?: LogType[] | LogType
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  client?: ClientWhereInput
+}
+
+export interface NotificationsUpdatedevicesInput {
+  set?: String[] | String
+}
+
+export interface NotificationsUpdateInput {
+  fireWhen?: Int
+  devices?: NotificationsUpdatedevicesInput
+}
+
+export interface CartProductCreateInput {
   productId: ID_Input
   name: String
   price: Float
@@ -447,17 +471,9 @@ export interface ProductPreviousValues {
   quantity: Int
 }
 
-export interface CartProduct {
-  productId: ID_Output
-  name: String
-  price: Float
-  quantitySold: Int
-}
-
-export interface SalePreviousValues {
-  id: ID_Output
-  createdAt: DateTime
-  updatedAt: DateTime
+export interface Notifications {
+  fireWhen: Int
+  devices?: String[]
 }
 
 export interface User {
@@ -467,10 +483,39 @@ export interface User {
   name: String
   lastName?: String
   phoneNumber: String
+  notifications?: Notifications
   permissions: UserPermissions[]
   isAdmin?: Boolean
   client: Client
   sales: Sale[]
+}
+
+export interface UserPreviousValues {
+  id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
+  name: String
+  lastName?: String
+  phoneNumber: String
+  password: String
+  permissions?: UserPermissions[]
+  isAdmin?: Boolean
+}
+
+export interface SalePreviousValues {
+  id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+export interface Product extends Node {
+  id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
+  name: String
+  price: Float
+  quantity: Int
+  client: Client
 }
 
 export interface SaleSubscriptionPayload {
@@ -488,46 +533,6 @@ export interface Log extends Node {
   client: Client
 }
 
-export interface UserSubscriptionPayload {
-  mutation: MutationType
-  node?: User
-  updatedFields?: String[]
-  previousValues?: UserPreviousValues
-}
-
-export interface AuthPayload {
-  token: String
-  user?: User
-}
-
-export interface ProductSubscriptionPayload {
-  mutation: MutationType
-  node?: Product
-  updatedFields?: String[]
-  previousValues?: ProductPreviousValues
-}
-
-export interface UserPreviousValues {
-  id: ID_Output
-  createdAt: DateTime
-  updatedAt: DateTime
-  name: String
-  lastName?: String
-  phoneNumber: String
-  password: String
-  permissions?: UserPermissions[]
-  isAdmin?: Boolean
-}
-
-export interface Sale extends Node {
-  id: ID_Output
-  createdAt: DateTime
-  updatedAt: DateTime
-  products?: CartProduct[]
-  client: Client
-  soldBy: User
-}
-
 export interface Client {
   id: ID_Output
   name: String
@@ -539,20 +544,55 @@ export interface Client {
   sales: Sale[]
 }
 
-export interface Product extends Node {
+export interface UserSubscriptionPayload {
+  mutation: MutationType
+  node?: User
+  updatedFields?: String[]
+  previousValues?: UserPreviousValues
+}
+
+export interface Sale extends Node {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
+  products?: CartProduct[]
+  client: Client
+  soldBy: User
+}
+
+export interface AuthPayload {
+  token: String
+  user?: User
+}
+
+export interface CartProduct {
+  productId: ID_Output
   name: String
   price: Float
-  quantity: Int
-  client: Client
+  quantitySold: Int
+}
+
+export interface ProductSubscriptionPayload {
+  mutation: MutationType
+  node?: Product
+  updatedFields?: String[]
+  previousValues?: ProductPreviousValues
 }
 
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string
+
+/*
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
+*/
+export type Float = number
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
@@ -564,16 +604,6 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 */
 export type ID_Input = string | number
 export type ID_Output = string
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean
-
-/*
-The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
-*/
-export type Float = number
 
 export type DateTime = string
 
@@ -594,10 +624,10 @@ export type Mutation = {
   createProduct: (args: { name: String, price: Float, quantity: Int }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<Product | null>
   updateProduct: (args: { productId: String, name?: String, price?: Float, quantity?: Int }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<Product | null>
   deleteProduct: (args: { productId: String }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<Product | null>
-  createSale: (args: { cartProducts: CartProductInput[] }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<Sale | null>
+  createSale: (args: { cartProducts: CartProductCreateInput[] }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<Sale | null>
   deleteSale: (args: { saleId: String }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<Sale | null>
   createUser: (args: { name: String, phoneNumber: String, password: String, permissions?: UserPermissions[] }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<User | null>
-  updateUser: (args: { userId: String, name?: String, phoneNumber?: String, password?: String, permissions?: UserPermissions[] }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<User | null>
+  updateUser: (args: { userId: String, name?: String, phoneNumber?: String, password?: String, notifications?: NotificationsUpdateInput, permissions?: UserPermissions[] }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<User | null>
   deleteUser: (args: { userId: String }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<User | null>
   createLog: (args: { message: String, type: LogType }, context: { [key: string]: any }, info?: GraphQLResolveInfo | string) => Promise<Log | null>
 }

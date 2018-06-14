@@ -1,4 +1,4 @@
-# import Product, Sale, UserPermissions, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload from "./generated/prisma.graphql"
+# import Product, Sale, CartProductCreateInput, UserPermissions, Notifications, NotificationsCreateInput, NotificationsUpdateInput, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload from "./generated/prisma.graphql"
 
 type Query {
   users: [User!]!
@@ -16,12 +16,13 @@ type Mutation {
     quantity: Int
   ): Product
   deleteProduct(productId: String!): Product
-  createSale(cartProducts: [CartProductInput!]!): Sale
+  createSale(cartProducts: [CartProductCreateInput!]!): Sale
   deleteSale(saleId: String!): Sale
   createUser(
     name: String!
     phoneNumber: String!
     password: String!
+    notifications: NotificationsCreateInput
     permissions: [UserPermissions]
   ): User
   updateUser(
@@ -29,18 +30,13 @@ type Mutation {
     name: String
     phoneNumber: String
     password: String
+    notifications: NotificationsUpdateInput
     permissions: [UserPermissions]
   ): User
   deleteUser(userId: String!): User
   createLog(message: String!, type: LogType!): Log
 }
 
-input CartProductInput {
-  productId: ID!
-  name: String!
-  price: Float!
-  quantitySold: Int!
-}
 
 type AuthPayload {
   token: String!
@@ -54,6 +50,7 @@ type User {
   name: String!
   lastName: String
   phoneNumber: String!
+  notifications: Notifications
   permissions: [UserPermissions!]!
   isAdmin: Boolean
   client: Client!

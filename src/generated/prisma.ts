@@ -14,6 +14,10 @@ type AggregateLog {
   count: Int!
 }
 
+type AggregateNotifications {
+  count: Int!
+}
+
 type AggregateProduct {
   count: Int!
 }
@@ -1249,6 +1253,178 @@ interface Node {
   id: ID!
 }
 
+type Notifications {
+  fireWhen: Int!
+  devices: [String!]
+}
+
+"""
+A connection to a list of items.
+"""
+type NotificationsConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [NotificationsEdge]!
+  aggregate: AggregateNotifications!
+}
+
+input NotificationsCreatedevicesInput {
+  set: [String!]
+}
+
+input NotificationsCreateInput {
+  fireWhen: Int
+  devices: NotificationsCreatedevicesInput
+}
+
+input NotificationsCreateOneInput {
+  create: NotificationsCreateInput
+}
+
+"""
+An edge in a connection.
+"""
+type NotificationsEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Notifications!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum NotificationsOrderByInput {
+  fireWhen_ASC
+  fireWhen_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type NotificationsPreviousValues {
+  fireWhen: Int!
+  devices: [String!]
+}
+
+type NotificationsSubscriptionPayload {
+  mutation: MutationType!
+  node: Notifications
+  updatedFields: [String!]
+  previousValues: NotificationsPreviousValues
+}
+
+input NotificationsSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [NotificationsSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [NotificationsSubscriptionWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [NotificationsSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: NotificationsWhereInput
+}
+
+input NotificationsUpdateDataInput {
+  fireWhen: Int
+  devices: NotificationsUpdatedevicesInput
+}
+
+input NotificationsUpdatedevicesInput {
+  set: [String!]
+}
+
+input NotificationsUpdateInput {
+  fireWhen: Int
+  devices: NotificationsUpdatedevicesInput
+}
+
+input NotificationsUpdateOneInput {
+  create: NotificationsCreateInput
+  delete: Boolean
+  update: NotificationsUpdateDataInput
+  upsert: NotificationsUpsertNestedInput
+}
+
+input NotificationsUpsertNestedInput {
+  update: NotificationsUpdateDataInput!
+  create: NotificationsCreateInput!
+}
+
+input NotificationsWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [NotificationsWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [NotificationsWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [NotificationsWhereInput!]
+  fireWhen: Int
+  """
+  All values that are not equal to given value.
+  """
+  fireWhen_not: Int
+  """
+  All values that are contained in given list.
+  """
+  fireWhen_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  fireWhen_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  fireWhen_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  fireWhen_lte: Int
+  """
+  All values greater than the given value.
+  """
+  fireWhen_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  fireWhen_gte: Int
+}
+
 """
 Information about pagination in a connection.
 """
@@ -1981,6 +2157,7 @@ type User implements Node {
   updatedAt: DateTime!
   name: String!
   lastName: String
+  notifications(where: NotificationsWhereInput): Notifications!
   phoneNumber: String!
   password: String!
   permissions: [UserPermissions!]
@@ -2011,6 +2188,7 @@ input UserCreateInput {
   password: String!
   isAdmin: Boolean
   permissions: UserCreatepermissionsInput
+  notifications: NotificationsCreateOneInput!
   client: ClientCreateOneWithoutUsersInput!
   sales: SaleCreateManyWithoutSoldByInput
 }
@@ -2036,6 +2214,7 @@ input UserCreateWithoutClientInput {
   password: String!
   isAdmin: Boolean
   permissions: UserCreatepermissionsInput
+  notifications: NotificationsCreateOneInput!
   sales: SaleCreateManyWithoutSoldByInput
 }
 
@@ -2046,6 +2225,7 @@ input UserCreateWithoutSalesInput {
   password: String!
   isAdmin: Boolean
   permissions: UserCreatepermissionsInput
+  notifications: NotificationsCreateOneInput!
   client: ClientCreateOneWithoutUsersInput!
 }
 
@@ -2148,6 +2328,7 @@ input UserUpdateInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
+  notifications: NotificationsUpdateOneInput
   client: ClientUpdateOneWithoutUsersInput
   sales: SaleUpdateManyWithoutSoldByInput
 }
@@ -2180,6 +2361,7 @@ input UserUpdateWithoutClientDataInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
+  notifications: NotificationsUpdateOneInput
   sales: SaleUpdateManyWithoutSoldByInput
 }
 
@@ -2190,6 +2372,7 @@ input UserUpdateWithoutSalesDataInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
+  notifications: NotificationsUpdateOneInput
   client: ClientUpdateOneWithoutUsersInput
 }
 
@@ -2550,6 +2733,7 @@ input UserWhereInput {
   All values that are not equal to given value.
   """
   isAdmin_not: Boolean
+  notifications: NotificationsWhereInput
   client: ClientWhereInput
   sales_every: SaleWhereInput
   sales_some: SaleWhereInput
@@ -2564,6 +2748,7 @@ input UserWhereUniqueInput {
 type Mutation {
   createClient(data: ClientCreateInput!): Client!
   createUser(data: UserCreateInput!): User!
+  createNotifications(data: NotificationsCreateInput!): Notifications!
   createProduct(data: ProductCreateInput!): Product!
   createSale(data: SaleCreateInput!): Sale!
   createCartProduct(data: CartProductCreateInput!): CartProduct!
@@ -2585,12 +2770,14 @@ type Mutation {
   upsertLog(where: LogWhereUniqueInput!, create: LogCreateInput!, update: LogUpdateInput!): Log!
   updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyNotificationses(data: NotificationsUpdateInput!, where: NotificationsWhereInput): BatchPayload!
   updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
   updateManySales(data: SaleUpdateInput!, where: SaleWhereInput): BatchPayload!
   updateManyCartProducts(data: CartProductUpdateInput!, where: CartProductWhereInput): BatchPayload!
   updateManyLogs(data: LogUpdateInput!, where: LogWhereInput): BatchPayload!
   deleteManyClients(where: ClientWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyNotificationses(where: NotificationsWhereInput): BatchPayload!
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
   deleteManySales(where: SaleWhereInput): BatchPayload!
   deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
@@ -2600,6 +2787,7 @@ type Mutation {
 type Query {
   clients(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  notificationses(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifications]!
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale]!
   cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
@@ -2611,6 +2799,7 @@ type Query {
   log(where: LogWhereUniqueInput!): Log
   clientsConnection(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClientConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  notificationsesConnection(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationsConnection!
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
   salesConnection(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SaleConnection!
   cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
@@ -2627,12 +2816,29 @@ type Query {
 type Subscription {
   client(where: ClientSubscriptionWhereInput): ClientSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  notifications(where: NotificationsSubscriptionWhereInput): NotificationsSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
   sale(where: SaleSubscriptionWhereInput): SaleSubscriptionPayload
   cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
   log(where: LogSubscriptionWhereInput): LogSubscriptionPayload
 }
 `
+
+export type CartProductOrderByInput = 
+  'productId_ASC' |
+  'productId_DESC' |
+  'name_ASC' |
+  'name_DESC' |
+  'price_ASC' |
+  'price_DESC' |
+  'quantitySold_ASC' |
+  'quantitySold_DESC' |
+  'id_ASC' |
+  'id_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
 
 export type LogType = 
   'ERROR'
@@ -2686,21 +2892,10 @@ export type SaleOrderByInput =
   'updatedAt_ASC' |
   'updatedAt_DESC'
 
-export type CartProductOrderByInput = 
-  'productId_ASC' |
-  'productId_DESC' |
-  'name_ASC' |
-  'name_DESC' |
-  'price_ASC' |
-  'price_DESC' |
-  'quantitySold_ASC' |
-  'quantitySold_DESC' |
-  'id_ASC' |
-  'id_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC'
+export type MutationType = 
+  'CREATED' |
+  'UPDATED' |
+  'DELETED'
 
 export type ProductOrderByInput = 
   'id_ASC' |
@@ -2728,10 +2923,15 @@ export type LogOrderByInput =
   'updatedAt_ASC' |
   'updatedAt_DESC'
 
-export type MutationType = 
-  'CREATED' |
-  'UPDATED' |
-  'DELETED'
+export type NotificationsOrderByInput = 
+  'fireWhen_ASC' |
+  'fireWhen_DESC' |
+  'id_ASC' |
+  'id_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
 
 export interface UserCreateInput {
   name: String
@@ -2740,6 +2940,7 @@ export interface UserCreateInput {
   password: String
   isAdmin?: Boolean
   permissions?: UserCreatepermissionsInput
+  notifications: NotificationsCreateOneInput
   client: ClientCreateOneWithoutUsersInput
   sales?: SaleCreateManyWithoutSoldByInput
 }
@@ -2884,18 +3085,18 @@ export interface LogWhereInput {
   client?: ClientWhereInput
 }
 
-export interface SaleCreateWithoutSoldByInput {
-  products?: CartProductCreateManyInput
-  client: ClientCreateOneWithoutSalesInput
+export interface NotificationsCreateInput {
+  fireWhen?: Int
+  devices?: NotificationsCreatedevicesInput
 }
 
-export interface ClientUpsertWithoutSalesInput {
-  update: ClientUpdateWithoutSalesDataInput
-  create: ClientCreateWithoutSalesInput
+export interface LogUpdateWithoutClientDataInput {
+  message?: String
+  type?: LogType
 }
 
-export interface CartProductCreateManyInput {
-  create?: CartProductCreateInput[] | CartProductCreateInput
+export interface NotificationsCreatedevicesInput {
+  set?: String[] | String
 }
 
 export interface ClientCreateWithoutLogsInput {
@@ -2908,27 +3109,9 @@ export interface ClientCreateWithoutLogsInput {
   sales?: SaleCreateManyWithoutClientInput
 }
 
-export interface CartProductCreateInput {
-  productId: ID_Input
-  name: String
-  price: Float
-  quantitySold: Int
-}
-
-export interface LogSubscriptionWhereInput {
-  AND?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
-  OR?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
-  NOT?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: LogWhereInput
-}
-
-export interface ClientCreateOneWithoutSalesInput {
-  create?: ClientCreateWithoutSalesInput
-  connect?: ClientWhereUniqueInput
+export interface SaleCreateManyWithoutSoldByInput {
+  create?: SaleCreateWithoutSoldByInput[] | SaleCreateWithoutSoldByInput
+  connect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
 }
 
 export interface CartProductWhereInput {
@@ -2981,14 +3164,24 @@ export interface CartProductWhereInput {
   quantitySold_gte?: Int
 }
 
-export interface ClientCreateWithoutSalesInput {
-  name: String
-  lastName?: String
-  email?: String
-  phoneNumber: String
-  users?: UserCreateManyWithoutClientInput
-  products?: ProductCreateManyWithoutClientInput
-  logs?: LogCreateManyWithoutClientInput
+export interface SaleCreateWithoutSoldByInput {
+  products?: CartProductCreateManyInput
+  client: ClientCreateOneWithoutSalesInput
+}
+
+export interface CartProductSubscriptionWhereInput {
+  AND?: CartProductSubscriptionWhereInput[] | CartProductSubscriptionWhereInput
+  OR?: CartProductSubscriptionWhereInput[] | CartProductSubscriptionWhereInput
+  NOT?: CartProductSubscriptionWhereInput[] | CartProductSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: CartProductWhereInput
+}
+
+export interface CartProductCreateManyInput {
+  create?: CartProductCreateInput[] | CartProductCreateInput
 }
 
 export interface SaleSubscriptionWhereInput {
@@ -3002,9 +3195,30 @@ export interface SaleSubscriptionWhereInput {
   node?: SaleWhereInput
 }
 
-export interface ProductCreateManyWithoutClientInput {
-  create?: ProductCreateWithoutClientInput[] | ProductCreateWithoutClientInput
-  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+export interface CartProductCreateInput {
+  productId: ID_Input
+  name: String
+  price: Float
+  quantitySold: Int
+}
+
+export interface NotificationsWhereInput {
+  AND?: NotificationsWhereInput[] | NotificationsWhereInput
+  OR?: NotificationsWhereInput[] | NotificationsWhereInput
+  NOT?: NotificationsWhereInput[] | NotificationsWhereInput
+  fireWhen?: Int
+  fireWhen_not?: Int
+  fireWhen_in?: Int[] | Int
+  fireWhen_not_in?: Int[] | Int
+  fireWhen_lt?: Int
+  fireWhen_lte?: Int
+  fireWhen_gt?: Int
+  fireWhen_gte?: Int
+}
+
+export interface ClientCreateOneWithoutSalesInput {
+  create?: ClientCreateWithoutSalesInput
+  connect?: ClientWhereUniqueInput
 }
 
 export interface UserSubscriptionWhereInput {
@@ -3018,10 +3232,14 @@ export interface UserSubscriptionWhereInput {
   node?: UserWhereInput
 }
 
-export interface ProductCreateWithoutClientInput {
+export interface ClientCreateWithoutSalesInput {
   name: String
-  price: Float
-  quantity: Int
+  lastName?: String
+  email?: String
+  phoneNumber: String
+  users?: UserCreateManyWithoutClientInput
+  products?: ProductCreateManyWithoutClientInput
+  logs?: LogCreateManyWithoutClientInput
 }
 
 export interface CartProductUpdateInput {
@@ -3031,522 +3249,9 @@ export interface CartProductUpdateInput {
   quantitySold?: Int
 }
 
-export interface LogCreateManyWithoutClientInput {
-  create?: LogCreateWithoutClientInput[] | LogCreateWithoutClientInput
-  connect?: LogWhereUniqueInput[] | LogWhereUniqueInput
-}
-
-export interface ClientUpsertWithoutLogsInput {
-  update: ClientUpdateWithoutLogsDataInput
-  create: ClientCreateWithoutLogsInput
-}
-
-export interface LogCreateWithoutClientInput {
-  message: String
-  type: LogType
-}
-
-export interface UserWhereUniqueInput {
-  id?: ID_Input
-  phoneNumber?: String
-}
-
-export interface SaleCreateManyWithoutClientInput {
-  create?: SaleCreateWithoutClientInput[] | SaleCreateWithoutClientInput
-  connect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
-}
-
-export interface SaleWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface SaleCreateWithoutClientInput {
-  products?: CartProductCreateManyInput
-  soldBy: UserCreateOneWithoutSalesInput
-}
-
-export interface ClientUpdateWithoutLogsDataInput {
-  name?: String
-  lastName?: String
-  email?: String
-  phoneNumber?: String
-  users?: UserUpdateManyWithoutClientInput
-  products?: ProductUpdateManyWithoutClientInput
-  sales?: SaleUpdateManyWithoutClientInput
-}
-
-export interface UserCreateOneWithoutSalesInput {
-  create?: UserCreateWithoutSalesInput
-  connect?: UserWhereUniqueInput
-}
-
-export interface LogUpdateInput {
-  message?: String
-  type?: LogType
-  client?: ClientUpdateOneWithoutLogsInput
-}
-
-export interface UserCreateWithoutSalesInput {
-  name: String
-  lastName?: String
-  phoneNumber: String
-  password: String
-  isAdmin?: Boolean
-  permissions?: UserCreatepermissionsInput
-  client: ClientCreateOneWithoutUsersInput
-}
-
-export interface ClientUpsertWithoutProductsInput {
-  update: ClientUpdateWithoutProductsDataInput
-  create: ClientCreateWithoutProductsInput
-}
-
-export interface ClientCreateOneWithoutUsersInput {
-  create?: ClientCreateWithoutUsersInput
-  connect?: ClientWhereUniqueInput
-}
-
-export interface ClientUpdateOneWithoutProductsInput {
-  create?: ClientCreateWithoutProductsInput
-  connect?: ClientWhereUniqueInput
-  delete?: Boolean
-  update?: ClientUpdateWithoutProductsDataInput
-  upsert?: ClientUpsertWithoutProductsInput
-}
-
-export interface ClientCreateWithoutUsersInput {
-  name: String
-  lastName?: String
-  email?: String
-  phoneNumber: String
-  products?: ProductCreateManyWithoutClientInput
-  sales?: SaleCreateManyWithoutClientInput
-  logs?: LogCreateManyWithoutClientInput
-}
-
-export interface UserUpdateInput {
-  name?: String
-  lastName?: String
-  phoneNumber?: String
-  password?: String
-  isAdmin?: Boolean
-  permissions?: UserUpdatepermissionsInput
-  client?: ClientUpdateOneWithoutUsersInput
-  sales?: SaleUpdateManyWithoutSoldByInput
-}
-
-export interface UserUpsertWithWhereUniqueWithoutClientInput {
-  where: UserWhereUniqueInput
-  update: UserUpdateWithoutClientDataInput
-  create: UserCreateWithoutClientInput
-}
-
-export interface UserUpsertWithoutSalesInput {
-  update: UserUpdateWithoutSalesDataInput
-  create: UserCreateWithoutSalesInput
-}
-
-export interface ProductCreateInput {
-  name: String
-  price: Float
-  quantity: Int
-  client: ClientCreateOneWithoutProductsInput
-}
-
-export interface ClientUpdateWithoutUsersDataInput {
-  name?: String
-  lastName?: String
-  email?: String
-  phoneNumber?: String
-  products?: ProductUpdateManyWithoutClientInput
-  sales?: SaleUpdateManyWithoutClientInput
-  logs?: LogUpdateManyWithoutClientInput
-}
-
-export interface ClientCreateOneWithoutProductsInput {
-  create?: ClientCreateWithoutProductsInput
-  connect?: ClientWhereUniqueInput
-}
-
-export interface UserUpdateWithoutSalesDataInput {
-  name?: String
-  lastName?: String
-  phoneNumber?: String
-  password?: String
-  isAdmin?: Boolean
-  permissions?: UserUpdatepermissionsInput
-  client?: ClientUpdateOneWithoutUsersInput
-}
-
-export interface ClientCreateWithoutProductsInput {
-  name: String
-  lastName?: String
-  email?: String
-  phoneNumber: String
-  users?: UserCreateManyWithoutClientInput
-  sales?: SaleCreateManyWithoutClientInput
-  logs?: LogCreateManyWithoutClientInput
-}
-
-export interface SaleUpdateWithoutClientDataInput {
-  products?: CartProductUpdateManyInput
-  soldBy?: UserUpdateOneWithoutSalesInput
-}
-
-export interface SaleCreateInput {
-  products?: CartProductCreateManyInput
-  client: ClientCreateOneWithoutSalesInput
-  soldBy: UserCreateOneWithoutSalesInput
-}
-
-export interface SaleUpdateManyWithoutClientInput {
-  create?: SaleCreateWithoutClientInput[] | SaleCreateWithoutClientInput
-  connect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
-  disconnect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
-  delete?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
-  update?: SaleUpdateWithWhereUniqueWithoutClientInput[] | SaleUpdateWithWhereUniqueWithoutClientInput
-  upsert?: SaleUpsertWithWhereUniqueWithoutClientInput[] | SaleUpsertWithWhereUniqueWithoutClientInput
-}
-
-export interface LogCreateInput {
-  message: String
-  type: LogType
-  client: ClientCreateOneWithoutLogsInput
-}
-
-export interface UserCreateManyWithoutClientInput {
-  create?: UserCreateWithoutClientInput[] | UserCreateWithoutClientInput
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-}
-
-export interface ProductWhereInput {
-  AND?: ProductWhereInput[] | ProductWhereInput
-  OR?: ProductWhereInput[] | ProductWhereInput
-  NOT?: ProductWhereInput[] | ProductWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  name?: String
-  name_not?: String
-  name_in?: String[] | String
-  name_not_in?: String[] | String
-  name_lt?: String
-  name_lte?: String
-  name_gt?: String
-  name_gte?: String
-  name_contains?: String
-  name_not_contains?: String
-  name_starts_with?: String
-  name_not_starts_with?: String
-  name_ends_with?: String
-  name_not_ends_with?: String
-  price?: Float
-  price_not?: Float
-  price_in?: Float[] | Float
-  price_not_in?: Float[] | Float
-  price_lt?: Float
-  price_lte?: Float
-  price_gt?: Float
-  price_gte?: Float
-  quantity?: Int
-  quantity_not?: Int
-  quantity_in?: Int[] | Int
-  quantity_not_in?: Int[] | Int
-  quantity_lt?: Int
-  quantity_lte?: Int
-  quantity_gt?: Int
-  quantity_gte?: Int
-  client?: ClientWhereInput
-}
-
-export interface UserCreatepermissionsInput {
-  set?: UserPermissions[] | UserPermissions
-}
-
-export interface SaleUpsertWithWhereUniqueWithoutSoldByInput {
-  where: SaleWhereUniqueInput
-  update: SaleUpdateWithoutSoldByDataInput
-  create: SaleCreateWithoutSoldByInput
-}
-
-export interface SaleWhereInput {
-  AND?: SaleWhereInput[] | SaleWhereInput
-  OR?: SaleWhereInput[] | SaleWhereInput
-  NOT?: SaleWhereInput[] | SaleWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  products_every?: CartProductWhereInput
-  products_some?: CartProductWhereInput
-  products_none?: CartProductWhereInput
-  client?: ClientWhereInput
-  soldBy?: UserWhereInput
-}
-
-export interface ClientUpdateInput {
-  name?: String
-  lastName?: String
-  email?: String
-  phoneNumber?: String
-  users?: UserUpdateManyWithoutClientInput
-  products?: ProductUpdateManyWithoutClientInput
-  sales?: SaleUpdateManyWithoutClientInput
-  logs?: LogUpdateManyWithoutClientInput
-}
-
-export interface ClientSubscriptionWhereInput {
-  AND?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
-  OR?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
-  NOT?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ClientWhereInput
-}
-
-export interface UserUpdateManyWithoutClientInput {
-  create?: UserCreateWithoutClientInput[] | UserCreateWithoutClientInput
-  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
-  update?: UserUpdateWithWhereUniqueWithoutClientInput[] | UserUpdateWithWhereUniqueWithoutClientInput
-  upsert?: UserUpsertWithWhereUniqueWithoutClientInput[] | UserUpsertWithWhereUniqueWithoutClientInput
-}
-
-export interface ClientWhereUniqueInput {
-  id?: ID_Input
-  email?: String
-  phoneNumber?: String
-}
-
-export interface UserUpdateWithWhereUniqueWithoutClientInput {
-  where: UserWhereUniqueInput
-  data: UserUpdateWithoutClientDataInput
-}
-
-export interface LogWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface UserUpdateWithoutClientDataInput {
-  name?: String
-  lastName?: String
-  phoneNumber?: String
-  password?: String
-  isAdmin?: Boolean
-  permissions?: UserUpdatepermissionsInput
-  sales?: SaleUpdateManyWithoutSoldByInput
-}
-
-export interface SaleUpdateInput {
-  products?: CartProductUpdateManyInput
-  client?: ClientUpdateOneWithoutSalesInput
-  soldBy?: UserUpdateOneWithoutSalesInput
-}
-
-export interface UserUpdatepermissionsInput {
-  set?: UserPermissions[] | UserPermissions
-}
-
-export interface ProductUpdateInput {
-  name?: String
-  price?: Float
-  quantity?: Int
-  client?: ClientUpdateOneWithoutProductsInput
-}
-
-export interface SaleUpdateManyWithoutSoldByInput {
-  create?: SaleCreateWithoutSoldByInput[] | SaleCreateWithoutSoldByInput
-  connect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
-  disconnect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
-  delete?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
-  update?: SaleUpdateWithWhereUniqueWithoutSoldByInput[] | SaleUpdateWithWhereUniqueWithoutSoldByInput
-  upsert?: SaleUpsertWithWhereUniqueWithoutSoldByInput[] | SaleUpsertWithWhereUniqueWithoutSoldByInput
-}
-
-export interface ClientUpsertWithoutUsersInput {
-  update: ClientUpdateWithoutUsersDataInput
-  create: ClientCreateWithoutUsersInput
-}
-
-export interface SaleUpdateWithWhereUniqueWithoutSoldByInput {
-  where: SaleWhereUniqueInput
-  data: SaleUpdateWithoutSoldByDataInput
-}
-
-export interface UserUpdateOneWithoutSalesInput {
-  create?: UserCreateWithoutSalesInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutSalesDataInput
-  upsert?: UserUpsertWithoutSalesInput
-}
-
-export interface SaleUpdateWithoutSoldByDataInput {
-  products?: CartProductUpdateManyInput
-  client?: ClientUpdateOneWithoutSalesInput
-}
-
-export interface ClientCreateInput {
-  name: String
-  lastName?: String
-  email?: String
-  phoneNumber: String
-  users?: UserCreateManyWithoutClientInput
-  products?: ProductCreateManyWithoutClientInput
-  sales?: SaleCreateManyWithoutClientInput
-  logs?: LogCreateManyWithoutClientInput
-}
-
-export interface CartProductUpdateManyInput {
-  create?: CartProductCreateInput[] | CartProductCreateInput
-}
-
-export interface SaleCreateManyWithoutSoldByInput {
-  create?: SaleCreateWithoutSoldByInput[] | SaleCreateWithoutSoldByInput
-  connect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
-}
-
-export interface ClientUpdateOneWithoutSalesInput {
-  create?: ClientCreateWithoutSalesInput
-  connect?: ClientWhereUniqueInput
-  delete?: Boolean
-  update?: ClientUpdateWithoutSalesDataInput
-  upsert?: ClientUpsertWithoutSalesInput
-}
-
-export interface ProductSubscriptionWhereInput {
-  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: ProductWhereInput
-}
-
-export interface ClientUpdateWithoutSalesDataInput {
-  name?: String
-  lastName?: String
-  email?: String
-  phoneNumber?: String
-  users?: UserUpdateManyWithoutClientInput
-  products?: ProductUpdateManyWithoutClientInput
-  logs?: LogUpdateManyWithoutClientInput
-}
-
-export interface ProductWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface ProductUpdateManyWithoutClientInput {
+export interface ProductCreateManyWithoutClientInput {
   create?: ProductCreateWithoutClientInput[] | ProductCreateWithoutClientInput
   connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
-  update?: ProductUpdateWithWhereUniqueWithoutClientInput[] | ProductUpdateWithWhereUniqueWithoutClientInput
-  upsert?: ProductUpsertWithWhereUniqueWithoutClientInput[] | ProductUpsertWithWhereUniqueWithoutClientInput
-}
-
-export interface ClientUpdateWithoutProductsDataInput {
-  name?: String
-  lastName?: String
-  email?: String
-  phoneNumber?: String
-  users?: UserUpdateManyWithoutClientInput
-  sales?: SaleUpdateManyWithoutClientInput
-  logs?: LogUpdateManyWithoutClientInput
-}
-
-export interface ProductUpdateWithWhereUniqueWithoutClientInput {
-  where: ProductWhereUniqueInput
-  data: ProductUpdateWithoutClientDataInput
-}
-
-export interface ClientUpdateOneWithoutUsersInput {
-  create?: ClientCreateWithoutUsersInput
-  connect?: ClientWhereUniqueInput
-  delete?: Boolean
-  update?: ClientUpdateWithoutUsersDataInput
-  upsert?: ClientUpsertWithoutUsersInput
-}
-
-export interface ProductUpdateWithoutClientDataInput {
-  name?: String
-  price?: Float
-  quantity?: Int
-}
-
-export interface UserCreateWithoutClientInput {
-  name: String
-  lastName?: String
-  phoneNumber: String
-  password: String
-  isAdmin?: Boolean
-  permissions?: UserCreatepermissionsInput
-  sales?: SaleCreateManyWithoutSoldByInput
-}
-
-export interface ProductUpsertWithWhereUniqueWithoutClientInput {
-  where: ProductWhereUniqueInput
-  update: ProductUpdateWithoutClientDataInput
-  create: ProductCreateWithoutClientInput
 }
 
 export interface UserWhereInput {
@@ -3641,10 +3346,283 @@ export interface UserWhereInput {
   password_not_ends_with?: String
   isAdmin?: Boolean
   isAdmin_not?: Boolean
+  notifications?: NotificationsWhereInput
   client?: ClientWhereInput
   sales_every?: SaleWhereInput
   sales_some?: SaleWhereInput
   sales_none?: SaleWhereInput
+}
+
+export interface ProductCreateWithoutClientInput {
+  name: String
+  price: Float
+  quantity: Int
+}
+
+export interface UserWhereUniqueInput {
+  id?: ID_Input
+  phoneNumber?: String
+}
+
+export interface LogCreateManyWithoutClientInput {
+  create?: LogCreateWithoutClientInput[] | LogCreateWithoutClientInput
+  connect?: LogWhereUniqueInput[] | LogWhereUniqueInput
+}
+
+export interface SaleWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface LogCreateWithoutClientInput {
+  message: String
+  type: LogType
+}
+
+export interface ClientUpsertWithoutLogsInput {
+  update: ClientUpdateWithoutLogsDataInput
+  create: ClientCreateWithoutLogsInput
+}
+
+export interface SaleCreateManyWithoutClientInput {
+  create?: SaleCreateWithoutClientInput[] | SaleCreateWithoutClientInput
+  connect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
+}
+
+export interface ClientUpdateOneWithoutLogsInput {
+  create?: ClientCreateWithoutLogsInput
+  connect?: ClientWhereUniqueInput
+  delete?: Boolean
+  update?: ClientUpdateWithoutLogsDataInput
+  upsert?: ClientUpsertWithoutLogsInput
+}
+
+export interface SaleCreateWithoutClientInput {
+  products?: CartProductCreateManyInput
+  soldBy: UserCreateOneWithoutSalesInput
+}
+
+export interface SaleUpdateInput {
+  products?: CartProductUpdateManyInput
+  client?: ClientUpdateOneWithoutSalesInput
+  soldBy?: UserUpdateOneWithoutSalesInput
+}
+
+export interface UserCreateOneWithoutSalesInput {
+  create?: UserCreateWithoutSalesInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface ClientUpdateWithoutProductsDataInput {
+  name?: String
+  lastName?: String
+  email?: String
+  phoneNumber?: String
+  users?: UserUpdateManyWithoutClientInput
+  sales?: SaleUpdateManyWithoutClientInput
+  logs?: LogUpdateManyWithoutClientInput
+}
+
+export interface UserCreateWithoutSalesInput {
+  name: String
+  lastName?: String
+  phoneNumber: String
+  password: String
+  isAdmin?: Boolean
+  permissions?: UserCreatepermissionsInput
+  notifications: NotificationsCreateOneInput
+  client: ClientCreateOneWithoutUsersInput
+}
+
+export interface ProductUpdateInput {
+  name?: String
+  price?: Float
+  quantity?: Int
+  client?: ClientUpdateOneWithoutProductsInput
+}
+
+export interface ClientCreateOneWithoutUsersInput {
+  create?: ClientCreateWithoutUsersInput
+  connect?: ClientWhereUniqueInput
+}
+
+export interface SaleUpsertWithWhereUniqueWithoutClientInput {
+  where: SaleWhereUniqueInput
+  update: SaleUpdateWithoutClientDataInput
+  create: SaleCreateWithoutClientInput
+}
+
+export interface ClientCreateWithoutUsersInput {
+  name: String
+  lastName?: String
+  email?: String
+  phoneNumber: String
+  products?: ProductCreateManyWithoutClientInput
+  sales?: SaleCreateManyWithoutClientInput
+  logs?: LogCreateManyWithoutClientInput
+}
+
+export interface ClientUpsertWithoutUsersInput {
+  update: ClientUpdateWithoutUsersDataInput
+  create: ClientCreateWithoutUsersInput
+}
+
+export interface ClientUpsertWithoutSalesInput {
+  update: ClientUpdateWithoutSalesDataInput
+  create: ClientCreateWithoutSalesInput
+}
+
+export interface ClientUpdateOneWithoutUsersInput {
+  create?: ClientCreateWithoutUsersInput
+  connect?: ClientWhereUniqueInput
+  delete?: Boolean
+  update?: ClientUpdateWithoutUsersDataInput
+  upsert?: ClientUpsertWithoutUsersInput
+}
+
+export interface ProductCreateInput {
+  name: String
+  price: Float
+  quantity: Int
+  client: ClientCreateOneWithoutProductsInput
+}
+
+export interface UserUpdateOneWithoutSalesInput {
+  create?: UserCreateWithoutSalesInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutSalesDataInput
+  upsert?: UserUpsertWithoutSalesInput
+}
+
+export interface ClientCreateOneWithoutProductsInput {
+  create?: ClientCreateWithoutProductsInput
+  connect?: ClientWhereUniqueInput
+}
+
+export interface SaleUpdateWithWhereUniqueWithoutClientInput {
+  where: SaleWhereUniqueInput
+  data: SaleUpdateWithoutClientDataInput
+}
+
+export interface ClientCreateWithoutProductsInput {
+  name: String
+  lastName?: String
+  email?: String
+  phoneNumber: String
+  users?: UserCreateManyWithoutClientInput
+  sales?: SaleCreateManyWithoutClientInput
+  logs?: LogCreateManyWithoutClientInput
+}
+
+export interface UserUpsertWithWhereUniqueWithoutClientInput {
+  where: UserWhereUniqueInput
+  update: UserUpdateWithoutClientDataInput
+  create: UserCreateWithoutClientInput
+}
+
+export interface SaleCreateInput {
+  products?: CartProductCreateManyInput
+  client: ClientCreateOneWithoutSalesInput
+  soldBy: UserCreateOneWithoutSalesInput
+}
+
+export interface ClientCreateInput {
+  name: String
+  lastName?: String
+  email?: String
+  phoneNumber: String
+  users?: UserCreateManyWithoutClientInput
+  products?: ProductCreateManyWithoutClientInput
+  sales?: SaleCreateManyWithoutClientInput
+  logs?: LogCreateManyWithoutClientInput
+}
+
+export interface LogCreateInput {
+  message: String
+  type: LogType
+  client: ClientCreateOneWithoutLogsInput
+}
+
+export interface UserCreateWithoutClientInput {
+  name: String
+  lastName?: String
+  phoneNumber: String
+  password: String
+  isAdmin?: Boolean
+  permissions?: UserCreatepermissionsInput
+  notifications: NotificationsCreateOneInput
+  sales?: SaleCreateManyWithoutSoldByInput
+}
+
+export interface ProductWhereInput {
+  AND?: ProductWhereInput[] | ProductWhereInput
+  OR?: ProductWhereInput[] | ProductWhereInput
+  NOT?: ProductWhereInput[] | ProductWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  price?: Float
+  price_not?: Float
+  price_in?: Float[] | Float
+  price_not_in?: Float[] | Float
+  price_lt?: Float
+  price_lte?: Float
+  price_gt?: Float
+  price_gte?: Float
+  quantity?: Int
+  quantity_not?: Int
+  quantity_in?: Int[] | Int
+  quantity_not_in?: Int[] | Int
+  quantity_lt?: Int
+  quantity_lte?: Int
+  quantity_gt?: Int
+  quantity_gte?: Int
+  client?: ClientWhereInput
+}
+
+export interface NotificationsCreateOneInput {
+  create?: NotificationsCreateInput
 }
 
 export interface LogUpsertWithWhereUniqueWithoutClientInput {
@@ -3653,9 +3631,294 @@ export interface LogUpsertWithWhereUniqueWithoutClientInput {
   create: LogCreateWithoutClientInput
 }
 
-export interface LogUpdateWithoutClientDataInput {
+export interface LogSubscriptionWhereInput {
+  AND?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
+  OR?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
+  NOT?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: LogWhereInput
+}
+
+export interface ClientUpdateInput {
+  name?: String
+  lastName?: String
+  email?: String
+  phoneNumber?: String
+  users?: UserUpdateManyWithoutClientInput
+  products?: ProductUpdateManyWithoutClientInput
+  sales?: SaleUpdateManyWithoutClientInput
+  logs?: LogUpdateManyWithoutClientInput
+}
+
+export interface ProductSubscriptionWhereInput {
+  AND?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  OR?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  NOT?: ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ProductWhereInput
+}
+
+export interface UserUpdateManyWithoutClientInput {
+  create?: UserCreateWithoutClientInput[] | UserCreateWithoutClientInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
+  update?: UserUpdateWithWhereUniqueWithoutClientInput[] | UserUpdateWithWhereUniqueWithoutClientInput
+  upsert?: UserUpsertWithWhereUniqueWithoutClientInput[] | UserUpsertWithWhereUniqueWithoutClientInput
+}
+
+export interface ClientSubscriptionWhereInput {
+  AND?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
+  OR?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
+  NOT?: ClientSubscriptionWhereInput[] | ClientSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ClientWhereInput
+}
+
+export interface UserUpdateWithWhereUniqueWithoutClientInput {
+  where: UserWhereUniqueInput
+  data: UserUpdateWithoutClientDataInput
+}
+
+export interface ClientWhereUniqueInput {
+  id?: ID_Input
+  email?: String
+  phoneNumber?: String
+}
+
+export interface UserUpdateWithoutClientDataInput {
+  name?: String
+  lastName?: String
+  phoneNumber?: String
+  password?: String
+  isAdmin?: Boolean
+  permissions?: UserUpdatepermissionsInput
+  notifications?: NotificationsUpdateOneInput
+  sales?: SaleUpdateManyWithoutSoldByInput
+}
+
+export interface LogWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface UserUpdatepermissionsInput {
+  set?: UserPermissions[] | UserPermissions
+}
+
+export interface LogUpdateInput {
   message?: String
   type?: LogType
+  client?: ClientUpdateOneWithoutLogsInput
+}
+
+export interface NotificationsUpdateOneInput {
+  create?: NotificationsCreateInput
+  delete?: Boolean
+  update?: NotificationsUpdateDataInput
+  upsert?: NotificationsUpsertNestedInput
+}
+
+export interface ClientUpdateOneWithoutProductsInput {
+  create?: ClientCreateWithoutProductsInput
+  connect?: ClientWhereUniqueInput
+  delete?: Boolean
+  update?: ClientUpdateWithoutProductsDataInput
+  upsert?: ClientUpsertWithoutProductsInput
+}
+
+export interface NotificationsUpdateDataInput {
+  fireWhen?: Int
+  devices?: NotificationsUpdatedevicesInput
+}
+
+export interface UserUpsertWithoutSalesInput {
+  update: UserUpdateWithoutSalesDataInput
+  create: UserCreateWithoutSalesInput
+}
+
+export interface NotificationsUpdatedevicesInput {
+  set?: String[] | String
+}
+
+export interface UserUpdateWithoutSalesDataInput {
+  name?: String
+  lastName?: String
+  phoneNumber?: String
+  password?: String
+  isAdmin?: Boolean
+  permissions?: UserUpdatepermissionsInput
+  notifications?: NotificationsUpdateOneInput
+  client?: ClientUpdateOneWithoutUsersInput
+}
+
+export interface NotificationsUpsertNestedInput {
+  update: NotificationsUpdateDataInput
+  create: NotificationsCreateInput
+}
+
+export interface SaleUpdateManyWithoutClientInput {
+  create?: SaleCreateWithoutClientInput[] | SaleCreateWithoutClientInput
+  connect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
+  disconnect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
+  delete?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
+  update?: SaleUpdateWithWhereUniqueWithoutClientInput[] | SaleUpdateWithWhereUniqueWithoutClientInput
+  upsert?: SaleUpsertWithWhereUniqueWithoutClientInput[] | SaleUpsertWithWhereUniqueWithoutClientInput
+}
+
+export interface SaleUpdateManyWithoutSoldByInput {
+  create?: SaleCreateWithoutSoldByInput[] | SaleCreateWithoutSoldByInput
+  connect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
+  disconnect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
+  delete?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
+  update?: SaleUpdateWithWhereUniqueWithoutSoldByInput[] | SaleUpdateWithWhereUniqueWithoutSoldByInput
+  upsert?: SaleUpsertWithWhereUniqueWithoutSoldByInput[] | SaleUpsertWithWhereUniqueWithoutSoldByInput
+}
+
+export interface UserCreateManyWithoutClientInput {
+  create?: UserCreateWithoutClientInput[] | UserCreateWithoutClientInput
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput
+}
+
+export interface SaleUpdateWithWhereUniqueWithoutSoldByInput {
+  where: SaleWhereUniqueInput
+  data: SaleUpdateWithoutSoldByDataInput
+}
+
+export interface NotificationsSubscriptionWhereInput {
+  AND?: NotificationsSubscriptionWhereInput[] | NotificationsSubscriptionWhereInput
+  OR?: NotificationsSubscriptionWhereInput[] | NotificationsSubscriptionWhereInput
+  NOT?: NotificationsSubscriptionWhereInput[] | NotificationsSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: NotificationsWhereInput
+}
+
+export interface SaleUpdateWithoutSoldByDataInput {
+  products?: CartProductUpdateManyInput
+  client?: ClientUpdateOneWithoutSalesInput
+}
+
+export interface ProductWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface CartProductUpdateManyInput {
+  create?: CartProductCreateInput[] | CartProductCreateInput
+}
+
+export interface ClientUpsertWithoutProductsInput {
+  update: ClientUpdateWithoutProductsDataInput
+  create: ClientCreateWithoutProductsInput
+}
+
+export interface ClientUpdateOneWithoutSalesInput {
+  create?: ClientCreateWithoutSalesInput
+  connect?: ClientWhereUniqueInput
+  delete?: Boolean
+  update?: ClientUpdateWithoutSalesDataInput
+  upsert?: ClientUpsertWithoutSalesInput
+}
+
+export interface ClientUpdateWithoutUsersDataInput {
+  name?: String
+  lastName?: String
+  email?: String
+  phoneNumber?: String
+  products?: ProductUpdateManyWithoutClientInput
+  sales?: SaleUpdateManyWithoutClientInput
+  logs?: LogUpdateManyWithoutClientInput
+}
+
+export interface ClientUpdateWithoutSalesDataInput {
+  name?: String
+  lastName?: String
+  email?: String
+  phoneNumber?: String
+  users?: UserUpdateManyWithoutClientInput
+  products?: ProductUpdateManyWithoutClientInput
+  logs?: LogUpdateManyWithoutClientInput
+}
+
+export interface SaleUpsertWithWhereUniqueWithoutSoldByInput {
+  where: SaleWhereUniqueInput
+  update: SaleUpdateWithoutSoldByDataInput
+  create: SaleCreateWithoutSoldByInput
+}
+
+export interface ProductUpdateManyWithoutClientInput {
+  create?: ProductCreateWithoutClientInput[] | ProductCreateWithoutClientInput
+  connect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  disconnect?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  delete?: ProductWhereUniqueInput[] | ProductWhereUniqueInput
+  update?: ProductUpdateWithWhereUniqueWithoutClientInput[] | ProductUpdateWithWhereUniqueWithoutClientInput
+  upsert?: ProductUpsertWithWhereUniqueWithoutClientInput[] | ProductUpsertWithWhereUniqueWithoutClientInput
+}
+
+export interface SaleWhereInput {
+  AND?: SaleWhereInput[] | SaleWhereInput
+  OR?: SaleWhereInput[] | SaleWhereInput
+  NOT?: SaleWhereInput[] | SaleWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  products_every?: CartProductWhereInput
+  products_some?: CartProductWhereInput
+  products_none?: CartProductWhereInput
+  client?: ClientWhereInput
+  soldBy?: UserWhereInput
+}
+
+export interface ProductUpdateWithWhereUniqueWithoutClientInput {
+  where: ProductWhereUniqueInput
+  data: ProductUpdateWithoutClientDataInput
+}
+
+export interface ClientUpdateWithoutLogsDataInput {
+  name?: String
+  lastName?: String
+  email?: String
+  phoneNumber?: String
+  users?: UserUpdateManyWithoutClientInput
+  products?: ProductUpdateManyWithoutClientInput
+  sales?: SaleUpdateManyWithoutClientInput
 }
 
 export interface LogUpdateWithWhereUniqueWithoutClientInput {
@@ -3672,34 +3935,42 @@ export interface LogUpdateManyWithoutClientInput {
   upsert?: LogUpsertWithWhereUniqueWithoutClientInput[] | LogUpsertWithWhereUniqueWithoutClientInput
 }
 
-export interface ClientUpdateOneWithoutLogsInput {
-  create?: ClientCreateWithoutLogsInput
-  connect?: ClientWhereUniqueInput
-  delete?: Boolean
-  update?: ClientUpdateWithoutLogsDataInput
-  upsert?: ClientUpsertWithoutLogsInput
+export interface ProductUpsertWithWhereUniqueWithoutClientInput {
+  where: ProductWhereUniqueInput
+  update: ProductUpdateWithoutClientDataInput
+  create: ProductCreateWithoutClientInput
 }
 
-export interface CartProductSubscriptionWhereInput {
-  AND?: CartProductSubscriptionWhereInput[] | CartProductSubscriptionWhereInput
-  OR?: CartProductSubscriptionWhereInput[] | CartProductSubscriptionWhereInput
-  NOT?: CartProductSubscriptionWhereInput[] | CartProductSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: CartProductWhereInput
+export interface ProductUpdateWithoutClientDataInput {
+  name?: String
+  price?: Float
+  quantity?: Int
 }
 
-export interface SaleUpdateWithWhereUniqueWithoutClientInput {
-  where: SaleWhereUniqueInput
-  data: SaleUpdateWithoutClientDataInput
+export interface UserUpdateInput {
+  name?: String
+  lastName?: String
+  phoneNumber?: String
+  password?: String
+  isAdmin?: Boolean
+  permissions?: UserUpdatepermissionsInput
+  notifications?: NotificationsUpdateOneInput
+  client?: ClientUpdateOneWithoutUsersInput
+  sales?: SaleUpdateManyWithoutSoldByInput
 }
 
-export interface SaleUpsertWithWhereUniqueWithoutClientInput {
-  where: SaleWhereUniqueInput
-  update: SaleUpdateWithoutClientDataInput
-  create: SaleCreateWithoutClientInput
+export interface NotificationsUpdateInput {
+  fireWhen?: Int
+  devices?: NotificationsUpdatedevicesInput
+}
+
+export interface UserCreatepermissionsInput {
+  set?: UserPermissions[] | UserPermissions
+}
+
+export interface SaleUpdateWithoutClientDataInput {
+  products?: CartProductUpdateManyInput
+  soldBy?: UserUpdateOneWithoutSalesInput
 }
 
 /*
@@ -3717,8 +3988,31 @@ export interface LogPreviousValues {
   createdAt: DateTime
 }
 
-export interface BatchPayload {
-  count: Long
+/*
+ * Information about pagination in a connection.
+
+ */
+export interface PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor?: String
+  endCursor?: String
+}
+
+export interface SalePreviousValues {
+  id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface ClientConnection {
+  pageInfo: PageInfo
+  edges: ClientEdge[]
+  aggregate: AggregateClient
 }
 
 export interface Client extends Node {
@@ -3733,32 +4027,17 @@ export interface Client extends Node {
   logs?: Log[]
 }
 
+export interface BatchPayload {
+  count: Long
+}
+
 /*
- * A connection to a list of items.
+ * An edge in a connection.
 
  */
-export interface ClientConnection {
-  pageInfo: PageInfo
-  edges: ClientEdge[]
-  aggregate: AggregateClient
-}
-
-export interface SalePreviousValues {
-  id: ID_Output
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-export interface Log extends Node {
-  id: ID_Output
-  message: String
-  type: LogType
-  createdAt: DateTime
-  client: Client
-}
-
-export interface AggregateLog {
-  count: Int
+export interface LogEdge {
+  node: Log
+  cursor: String
 }
 
 export interface LogSubscriptionPayload {
@@ -3772,13 +4051,12 @@ export interface AggregateCartProduct {
   count: Int
 }
 
-/*
- * An edge in a connection.
-
- */
-export interface LogEdge {
-  node: Log
-  cursor: String
+export interface Log extends Node {
+  id: ID_Output
+  message: String
+  type: LogType
+  createdAt: DateTime
+  client: Client
 }
 
 /*
@@ -3791,14 +4069,19 @@ export interface CartProductConnection {
   aggregate: AggregateCartProduct
 }
 
-export interface Product extends Node {
+export interface User extends Node {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
   name: String
-  price: Float
-  quantity: Int
+  lastName?: String
+  notifications: Notifications
+  phoneNumber: String
+  password: String
+  permissions?: UserPermissions[]
+  isAdmin?: Boolean
   client: Client
+  sales?: Sale[]
 }
 
 /*
@@ -3810,22 +4093,25 @@ export interface SaleEdge {
   cursor: String
 }
 
-export interface CartProductPreviousValues {
-  productId: ID_Output
+export interface Product extends Node {
+  id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
   name: String
   price: Float
-  quantitySold: Int
+  quantity: Int
+  client: Client
 }
 
 export interface AggregateProduct {
   count: Int
 }
 
-export interface CartProductSubscriptionPayload {
-  mutation: MutationType
-  node?: CartProduct
-  updatedFields?: String[]
-  previousValues?: CartProductPreviousValues
+export interface CartProductPreviousValues {
+  productId: ID_Output
+  name: String
+  price: Float
+  quantitySold: Int
 }
 
 /*
@@ -3849,8 +4135,8 @@ export interface ClientSubscriptionPayload {
  * An edge in a connection.
 
  */
-export interface UserEdge {
-  node: User
+export interface NotificationsEdge {
+  node: Notifications
   cursor: String
 }
 
@@ -3862,26 +4148,25 @@ export interface ClientPreviousValues {
   phoneNumber: String
 }
 
-export interface AggregateClient {
+export interface AggregateUser {
   count: Int
 }
 
-export interface CartProduct {
-  productId: ID_Output
-  name: String
-  price: Float
-  quantitySold: Int
+export interface CartProductSubscriptionPayload {
+  mutation: MutationType
+  node?: CartProduct
+  updatedFields?: String[]
+  previousValues?: CartProductPreviousValues
 }
 
 /*
- * Information about pagination in a connection.
+ * A connection to a list of items.
 
  */
-export interface PageInfo {
-  hasNextPage: Boolean
-  hasPreviousPage: Boolean
-  startCursor?: String
-  endCursor?: String
+export interface UserConnection {
+  pageInfo: PageInfo
+  edges: UserEdge[]
+  aggregate: AggregateUser
 }
 
 export interface UserSubscriptionPayload {
@@ -3895,8 +4180,8 @@ export interface UserSubscriptionPayload {
  * An edge in a connection.
 
  */
-export interface CartProductEdge {
-  node: CartProduct
+export interface ClientEdge {
+  node: Client
   cursor: String
 }
 
@@ -3916,27 +4201,64 @@ export interface UserPreviousValues {
  * A connection to a list of items.
 
  */
-export interface SaleConnection {
+export interface LogConnection {
   pageInfo: PageInfo
-  edges: SaleEdge[]
-  aggregate: AggregateSale
+  edges: LogEdge[]
+  aggregate: AggregateLog
 }
 
-export interface User extends Node {
+export interface CartProduct {
+  productId: ID_Output
+  name: String
+  price: Float
+  quantitySold: Int
+}
+
+export interface AggregateSale {
+  count: Int
+}
+
+export interface NotificationsSubscriptionPayload {
+  mutation: MutationType
+  node?: Notifications
+  updatedFields?: String[]
+  previousValues?: NotificationsPreviousValues
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface ProductEdge {
+  node: Product
+  cursor: String
+}
+
+export interface NotificationsPreviousValues {
+  fireWhen: Int
+  devices?: String[]
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface NotificationsConnection {
+  pageInfo: PageInfo
+  edges: NotificationsEdge[]
+  aggregate: AggregateNotifications
+}
+
+export interface Sale extends Node {
   id: ID_Output
   createdAt: DateTime
   updatedAt: DateTime
-  name: String
-  lastName?: String
-  phoneNumber: String
-  password: String
-  permissions?: UserPermissions[]
-  isAdmin?: Boolean
+  products?: CartProduct[]
   client: Client
-  sales?: Sale[]
+  soldBy: User
 }
 
-export interface AggregateUser {
+export interface AggregateClient {
   count: Int
 }
 
@@ -3944,8 +4266,8 @@ export interface AggregateUser {
  * An edge in a connection.
 
  */
-export interface ClientEdge {
-  node: Client
+export interface CartProductEdge {
+  node: CartProduct
   cursor: String
 }
 
@@ -3956,13 +4278,9 @@ export interface SaleSubscriptionPayload {
   previousValues?: SalePreviousValues
 }
 
-export interface Sale extends Node {
-  id: ID_Output
-  createdAt: DateTime
-  updatedAt: DateTime
-  products?: CartProduct[]
-  client: Client
-  soldBy: User
+export interface Notifications {
+  fireWhen: Int
+  devices?: String[]
 }
 
 export interface ProductPreviousValues {
@@ -3985,32 +4303,26 @@ export interface ProductSubscriptionPayload {
  * A connection to a list of items.
 
  */
-export interface LogConnection {
+export interface SaleConnection {
   pageInfo: PageInfo
-  edges: LogEdge[]
-  aggregate: AggregateLog
+  edges: SaleEdge[]
+  aggregate: AggregateSale
 }
 
-/*
- * A connection to a list of items.
-
- */
-export interface UserConnection {
-  pageInfo: PageInfo
-  edges: UserEdge[]
-  aggregate: AggregateUser
+export interface AggregateLog {
+  count: Int
 }
 
 /*
  * An edge in a connection.
 
  */
-export interface ProductEdge {
-  node: Product
+export interface UserEdge {
+  node: User
   cursor: String
 }
 
-export interface AggregateSale {
+export interface AggregateNotifications {
   count: Int
 }
 
@@ -4021,20 +4333,15 @@ Long can represent values between -(2^63) and 2^63 - 1.
 export type Long = string
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
-export type Int = number
+export type Float = number
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
 export type ID_Input = string | number
 export type ID_Output = string
-
-/*
-The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
-*/
-export type Float = number
 
 export type DateTime = string
 
@@ -4048,6 +4355,11 @@ The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean
 
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number
+
 export interface Schema {
   query: Query
   mutation: Mutation
@@ -4057,6 +4369,7 @@ export interface Schema {
 export type Query = {
   clients: (args: { where?: ClientWhereInput, orderBy?: ClientOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Client[]>
   users: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<User[]>
+  notificationses: (args: { where?: NotificationsWhereInput, orderBy?: NotificationsOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Notifications[]>
   products: (args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Product[]>
   sales: (args: { where?: SaleWhereInput, orderBy?: SaleOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Sale[]>
   cartProducts: (args: { where?: CartProductWhereInput, orderBy?: CartProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<CartProduct[]>
@@ -4068,6 +4381,7 @@ export type Query = {
   log: (args: { where: LogWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Log | null>
   clientsConnection: (args: { where?: ClientWhereInput, orderBy?: ClientOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<ClientConnection>
   usersConnection: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<UserConnection>
+  notificationsesConnection: (args: { where?: NotificationsWhereInput, orderBy?: NotificationsOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<NotificationsConnection>
   productsConnection: (args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<ProductConnection>
   salesConnection: (args: { where?: SaleWhereInput, orderBy?: SaleOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<SaleConnection>
   cartProductsConnection: (args: { where?: CartProductWhereInput, orderBy?: CartProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<CartProductConnection>
@@ -4078,6 +4392,7 @@ export type Query = {
 export type Mutation = {
   createClient: (args: { data: ClientCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Client>
   createUser: (args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string) => Promise<User>
+  createNotifications: (args: { data: NotificationsCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Notifications>
   createProduct: (args: { data: ProductCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Product>
   createSale: (args: { data: SaleCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Sale>
   createCartProduct: (args: { data: CartProductCreateInput }, info?: GraphQLResolveInfo | string) => Promise<CartProduct>
@@ -4099,12 +4414,14 @@ export type Mutation = {
   upsertLog: (args: { where: LogWhereUniqueInput, create: LogCreateInput, update: LogUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Log>
   updateManyClients: (args: { data: ClientUpdateInput, where?: ClientWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   updateManyUsers: (args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
+  updateManyNotificationses: (args: { data: NotificationsUpdateInput, where?: NotificationsWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   updateManyProducts: (args: { data: ProductUpdateInput, where?: ProductWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   updateManySales: (args: { data: SaleUpdateInput, where?: SaleWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   updateManyCartProducts: (args: { data: CartProductUpdateInput, where?: CartProductWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   updateManyLogs: (args: { data: LogUpdateInput, where?: LogWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManyClients: (args: { where?: ClientWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManyUsers: (args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
+  deleteManyNotificationses: (args: { where?: NotificationsWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManyProducts: (args: { where?: ProductWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManySales: (args: { where?: SaleWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManyCartProducts: (args: { where?: CartProductWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
@@ -4114,6 +4431,7 @@ export type Mutation = {
 export type Subscription = {
   client: (args: { where?: ClientSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<ClientSubscriptionPayload>>
   user: (args: { where?: UserSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<UserSubscriptionPayload>>
+  notifications: (args: { where?: NotificationsSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<NotificationsSubscriptionPayload>>
   product: (args: { where?: ProductSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<ProductSubscriptionPayload>>
   sale: (args: { where?: SaleSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<SaleSubscriptionPayload>>
   cartProduct: (args: { where?: CartProductSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<CartProductSubscriptionPayload>>
@@ -4129,6 +4447,7 @@ export class Prisma extends BasePrisma {
   exists = {
     Client: (where: ClientWhereInput): Promise<boolean> => super.existsDelegate('query', 'clients', { where }, {}, '{ id }'),
     User: (where: UserWhereInput): Promise<boolean> => super.existsDelegate('query', 'users', { where }, {}, '{ id }'),
+    Notifications: (where: NotificationsWhereInput): Promise<boolean> => super.existsDelegate('query', 'notificationses', { where }, {}, '{ id }'),
     Product: (where: ProductWhereInput): Promise<boolean> => super.existsDelegate('query', 'products', { where }, {}, '{ id }'),
     Sale: (where: SaleWhereInput): Promise<boolean> => super.existsDelegate('query', 'sales', { where }, {}, '{ id }'),
     CartProduct: (where: CartProductWhereInput): Promise<boolean> => super.existsDelegate('query', 'cartProducts', { where }, {}, '{ id }'),
@@ -4138,6 +4457,7 @@ export class Prisma extends BasePrisma {
   query: Query = {
     clients: (args, info): Promise<Client[]> => super.delegate('query', 'clients', args, {}, info),
     users: (args, info): Promise<User[]> => super.delegate('query', 'users', args, {}, info),
+    notificationses: (args, info): Promise<Notifications[]> => super.delegate('query', 'notificationses', args, {}, info),
     products: (args, info): Promise<Product[]> => super.delegate('query', 'products', args, {}, info),
     sales: (args, info): Promise<Sale[]> => super.delegate('query', 'sales', args, {}, info),
     cartProducts: (args, info): Promise<CartProduct[]> => super.delegate('query', 'cartProducts', args, {}, info),
@@ -4149,6 +4469,7 @@ export class Prisma extends BasePrisma {
     log: (args, info): Promise<Log | null> => super.delegate('query', 'log', args, {}, info),
     clientsConnection: (args, info): Promise<ClientConnection> => super.delegate('query', 'clientsConnection', args, {}, info),
     usersConnection: (args, info): Promise<UserConnection> => super.delegate('query', 'usersConnection', args, {}, info),
+    notificationsesConnection: (args, info): Promise<NotificationsConnection> => super.delegate('query', 'notificationsesConnection', args, {}, info),
     productsConnection: (args, info): Promise<ProductConnection> => super.delegate('query', 'productsConnection', args, {}, info),
     salesConnection: (args, info): Promise<SaleConnection> => super.delegate('query', 'salesConnection', args, {}, info),
     cartProductsConnection: (args, info): Promise<CartProductConnection> => super.delegate('query', 'cartProductsConnection', args, {}, info),
@@ -4159,6 +4480,7 @@ export class Prisma extends BasePrisma {
   mutation: Mutation = {
     createClient: (args, info): Promise<Client> => super.delegate('mutation', 'createClient', args, {}, info),
     createUser: (args, info): Promise<User> => super.delegate('mutation', 'createUser', args, {}, info),
+    createNotifications: (args, info): Promise<Notifications> => super.delegate('mutation', 'createNotifications', args, {}, info),
     createProduct: (args, info): Promise<Product> => super.delegate('mutation', 'createProduct', args, {}, info),
     createSale: (args, info): Promise<Sale> => super.delegate('mutation', 'createSale', args, {}, info),
     createCartProduct: (args, info): Promise<CartProduct> => super.delegate('mutation', 'createCartProduct', args, {}, info),
@@ -4180,12 +4502,14 @@ export class Prisma extends BasePrisma {
     upsertLog: (args, info): Promise<Log> => super.delegate('mutation', 'upsertLog', args, {}, info),
     updateManyClients: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyClients', args, {}, info),
     updateManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyUsers', args, {}, info),
+    updateManyNotificationses: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyNotificationses', args, {}, info),
     updateManyProducts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyProducts', args, {}, info),
     updateManySales: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManySales', args, {}, info),
     updateManyCartProducts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyCartProducts', args, {}, info),
     updateManyLogs: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyLogs', args, {}, info),
     deleteManyClients: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyClients', args, {}, info),
     deleteManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyUsers', args, {}, info),
+    deleteManyNotificationses: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyNotificationses', args, {}, info),
     deleteManyProducts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyProducts', args, {}, info),
     deleteManySales: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManySales', args, {}, info),
     deleteManyCartProducts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyCartProducts', args, {}, info),
@@ -4195,6 +4519,7 @@ export class Prisma extends BasePrisma {
   subscription: Subscription = {
     client: (args, infoOrQuery): Promise<AsyncIterator<ClientSubscriptionPayload>> => super.delegateSubscription('client', args, {}, infoOrQuery),
     user: (args, infoOrQuery): Promise<AsyncIterator<UserSubscriptionPayload>> => super.delegateSubscription('user', args, {}, infoOrQuery),
+    notifications: (args, infoOrQuery): Promise<AsyncIterator<NotificationsSubscriptionPayload>> => super.delegateSubscription('notifications', args, {}, infoOrQuery),
     product: (args, infoOrQuery): Promise<AsyncIterator<ProductSubscriptionPayload>> => super.delegateSubscription('product', args, {}, infoOrQuery),
     sale: (args, infoOrQuery): Promise<AsyncIterator<SaleSubscriptionPayload>> => super.delegateSubscription('sale', args, {}, infoOrQuery),
     cartProduct: (args, infoOrQuery): Promise<AsyncIterator<CartProductSubscriptionPayload>> => super.delegateSubscription('cartProduct', args, {}, infoOrQuery),

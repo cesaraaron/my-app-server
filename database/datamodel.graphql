@@ -16,12 +16,18 @@ type User {
   updatedAt: DateTime!
   name: String!
   lastName: String
+  notifications: Notifications! @default(value: { fireWhen: 5 })
   phoneNumber: String! @unique
   password: String!
   permissions: [UserPermissions!]!
   isAdmin: Boolean @default(value: false)
   client: Client!
   sales: [Sale!]!
+}
+
+type Notifications {
+  fireWhen: Int! @default(value: 5)
+  devices: [String!]!
 }
 
 enum UserPermissions {

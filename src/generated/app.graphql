@@ -1,10 +1,3 @@
-input CartProductInput {
-  productId: ID!
-  name: String!
-  price: Float!
-  quantitySold: Int!
-}
-
 type AuthPayload {
   token: String!
   user: User
@@ -17,6 +10,7 @@ type User {
   name: String!
   lastName: String
   phoneNumber: String!
+  notifications: Notifications
   permissions: [UserPermissions!]!
   isAdmin: Boolean
   client: Client!
@@ -45,10 +39,10 @@ type Mutation {
   createProduct(name: String!, price: Float!, quantity: Int!): Product
   updateProduct(productId: String!, name: String, price: Float, quantity: Int): Product
   deleteProduct(productId: String!): Product
-  createSale(cartProducts: [CartProductInput!]!): Sale
+  createSale(cartProducts: [CartProductCreateInput!]!): Sale
   deleteSale(saleId: String!): Sale
   createUser(name: String!, phoneNumber: String!, password: String!, permissions: [UserPermissions]): User
-  updateUser(userId: String!, name: String, phoneNumber: String, password: String, permissions: [UserPermissions]): User
+  updateUser(userId: String!, name: String, phoneNumber: String, password: String, notifications: NotificationsUpdateInput, permissions: [UserPermissions]): User
   deleteUser(userId: String!): User
   createLog(message: String!, type: LogType!): Log
 }
@@ -78,12 +72,24 @@ type Sale implements Node {
   soldBy(where: UserWhereInput): User!
 }
 
+input CartProductCreateInput {
+  productId: ID!
+  name: String!
+  price: Float!
+  quantitySold: Int!
+}
+
 enum UserPermissions {
   ADD_PRODUCTS
   EDIT_PRODUCTS
   DELETE_PRODUCTS
   ADD_SALES
   DELETE_SALES
+}
+
+input NotificationsUpdateInput {
+  fireWhen: Int
+  devices: NotificationsUpdatedevicesInput
 }
 
 type Log implements Node {
@@ -99,6 +105,11 @@ enum LogType {
 }
 
 scalar DateTime
+
+type Notifications {
+  fireWhen: Int!
+  devices: [String!]
+}
 
 type SaleSubscriptionPayload {
   mutation: MutationType!
@@ -421,6 +432,10 @@ input ClientWhereInput {
   logs_every: LogWhereInput
   logs_some: LogWhereInput
   logs_none: LogWhereInput
+}
+
+input NotificationsUpdatedevicesInput {
+  set: [String!]
 }
 
 enum MutationType {
@@ -982,6 +997,7 @@ input UserWhereInput {
   All values that are not equal to given value.
   """
   isAdmin_not: Boolean
+  notifications: NotificationsWhereInput
   client: ClientWhereInput
   sales_every: SaleWhereInput
   sales_some: SaleWhereInput
@@ -1537,4 +1553,48 @@ input LogWhereInput {
   """
   createdAt_gte: DateTime
   client: ClientWhereInput
+}
+
+input NotificationsWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [NotificationsWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [NotificationsWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [NotificationsWhereInput!]
+  fireWhen: Int
+  """
+  All values that are not equal to given value.
+  """
+  fireWhen_not: Int
+  """
+  All values that are contained in given list.
+  """
+  fireWhen_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  fireWhen_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  fireWhen_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  fireWhen_lte: Int
+  """
+  All values greater than the given value.
+  """
+  fireWhen_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  fireWhen_gte: Int
 }
