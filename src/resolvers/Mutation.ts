@@ -248,6 +248,46 @@ const createLog = async (_, args, ctx: Context, info) => {
   )
 }
 
+const saveDeviceToken = async (_, {token}, ctx: Context, info) => {
+  const userId = await getUserId(ctx)
+
+  const {notifications: {devices}} = await getUserWithId(
+    userId,
+    ctx,
+    '{ notifications {devices} }'
+  )
+
+  return ctx.db.mutation.updateUser({where: {id: userId}, data: {
+    notifications: {
+      update: {
+        devices: {
+          set: [...devices.filter(t => t !== token), token]
+        }
+      }
+    }
+  }}, info)
+}
+
+const removeDeviceToken = async (_, {token}, ctx: Context, info) => {
+  const userId = await getUserId(ctx)
+
+  const {notifications: {devices}} = await getUserWithId(
+    userId,
+    ctx,
+    '{ notifications {devices} }'
+  )
+
+  return ctx.db.mutation.updateUser({where: {id: userId}, data: {
+    notifications: {
+      update: {
+        devices: {
+          set: devices.filter(t => t !== token)
+        }
+      }
+    }
+  }}, info)
+}
+
 export const Mutation = {
   login,
   createProduct,
@@ -259,4 +299,6 @@ export const Mutation = {
   updateUser,
   deleteUser,
   createLog,
+  saveDeviceToken,
+  removeDeviceToken
 }

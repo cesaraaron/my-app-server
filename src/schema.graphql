@@ -36,6 +36,8 @@ type Mutation {
   ): User
   deleteUser(userId: String!): User
   createLog(message: String!, type: LogType!): Log
+  saveDeviceToken(token: String!): User
+  removeDeviceToken(token: String!): User
 }
 
 
