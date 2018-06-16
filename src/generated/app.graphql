@@ -29,6 +29,7 @@ type Client {
 }
 
 type Query {
+  me: User
   users: [User!]!
   products: [Product!]!
   sales: [Sale!]!
@@ -41,7 +42,7 @@ type Mutation {
   deleteProduct(productId: String!): Product
   createSale(cartProducts: [CartProductCreateInput!]!): Sale
   deleteSale(saleId: String!): Sale
-  createUser(name: String!, phoneNumber: String!, password: String!, permissions: [UserPermissions]): User
+  createUser(name: String!, phoneNumber: String!, password: String!, notifications: NotificationsCreateInput, permissions: [UserPermissions]): User
   updateUser(userId: String!, name: String, phoneNumber: String, password: String, notifications: NotificationsUpdateInput, permissions: [UserPermissions]): User
   deleteUser(userId: String!): User
   createLog(message: String!, type: LogType!): Log
@@ -77,6 +78,11 @@ input CartProductCreateInput {
   name: String!
   price: Float!
   quantitySold: Int!
+}
+
+input NotificationsCreateInput {
+  fireWhen: Int
+  devices: NotificationsCreatedevicesInput
 }
 
 enum UserPermissions {
@@ -432,6 +438,10 @@ input ClientWhereInput {
   logs_every: LogWhereInput
   logs_some: LogWhereInput
   logs_none: LogWhereInput
+}
+
+input NotificationsCreatedevicesInput {
+  set: [String!]
 }
 
 input NotificationsUpdatedevicesInput {

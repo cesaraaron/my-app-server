@@ -1,9 +1,16 @@
 import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
-import { Context, getUserId, UserPermission, getUserWithId } from '../utils'
-import { CartProduct } from '../generated/prisma';
+import {
+  Context,
+  getUserId,
+  UserPermission,
+  getUserWithId,
+  updateProductsQuantity,
+  sendNotifications,
+} from '../utils'
+import { CartProduct } from '../generated/prisma'
 
-const login  = async (_, { phoneNumber, password }, ctx, _1) => {
+const login = async (_, { phoneNumber, password }, ctx, _1) => {
   const user = await ctx.db.query.user({ where: { phoneNumber } })
 
   if (!user) {
@@ -42,8 +49,8 @@ const createUser = async (_, args, ctx: Context, info) => {
         name,
         notifications: notifications || {
           create: {
-            fireWhen: 5
-          }
+            fireWhen: 5,
+          },
         },
         permissions: {
           set: permissions,
@@ -57,7 +64,14 @@ const createUser = async (_, args, ctx: Context, info) => {
 }
 
 const updateUser = async (_, args, ctx: Context, info) => {
-  const { userId, name, phoneNumber, password, permissions, notifications } = args
+  const {
+    userId,
+    name,
+    phoneNumber,
+    password,
+    permissions,
+    notifications,
+  } = args
   const userIdFromHeader = await getUserId(ctx)
   const user = await getUserWithId(userIdFromHeader, ctx, '{ isAdmin }')
 
@@ -83,7 +97,7 @@ const updateUser = async (_, args, ctx: Context, info) => {
       data: {
         permissions: { set: permissions },
         notifications: {
-          update: notifications
+          update: notifications,
         },
         phoneNumber: newPhone,
         name: newName,
@@ -163,62 +177,36 @@ const deleteProduct = async (_, { productId }, ctx: Context, info) => {
   )
 }
 
-
 const createSale = async (_, args, ctx: Context, info) => {
   const { cartProducts } = args as {
     cartProducts: CartProduct[]
   }
   const userId = await getUserId(ctx)
-  const user = await getUserWithId(userId, ctx, '{ isAdmin permissions client {id} }')
+  const user = await getUserWithId(
+    userId,
+    ctx,
+    '{ isAdmin permissions client {id} }'
+  )
   const { id: clientId } = user.client
 
   if (!user.isAdmin && !user.permissions.includes('ADD_SALES')) {
     throw new Error('Este usuario no tiene permisos para añadir ventas')
   }
 
-  const cartProductIds = cartProducts.map(p => p.productId)
-
-  const products = await ctx.db.query.products({
-    where: { id_in: cartProductIds },
+  const updateProducts = await updateProductsQuantity(cartProducts, ctx)
+  await Promise.all(updateProducts).then(products => {
+    sendNotifications(products, ctx)
   })
 
-  let updateManyProductPromises = []
-
-  products.forEach(({ id, quantity }) => {
-    const cartProduct = cartProducts.find(p => p.productId === id)
-
-    const newQuantity = quantity - cartProduct.quantitySold
-    if (newQuantity < 0) {
-      throw new Error(
-        `El producto: ${
-          cartProduct.name
-        } solo tiene ${quantity} disponible. Usted esta intentado agregar ${
-          cartProduct.quantitySold
-        }`
-      )
-    }
-
-    updateManyProductPromises.push(
-      ctx.db.mutation.updateProduct({
-        where: { id },
-        data: {
-          quantity: newQuantity,
-        },
-      })
-    )
-  })
-
-  return Promise.all(updateManyProductPromises).then(() =>
-    ctx.db.mutation.createSale(
-      {
-        data: {
-          products: { create: cartProducts },
-          client: { connect: { id: clientId } },
-          soldBy: { connect: { id: user.id } },
-        },
+  return ctx.db.mutation.createSale(
+    {
+      data: {
+        products: { create: cartProducts },
+        client: { connect: { id: clientId } },
+        soldBy: { connect: { id: user.id } },
       },
-      info
-    )
+    },
+    info
   )
 }
 
@@ -242,7 +230,11 @@ const deleteSale = async (_, { saleId }, ctx: Context, info) => {
 
 const createLog = async (_, args, ctx: Context, info) => {
   const userId = await getUserId(ctx)
-  const user = await getUserWithId(userId, ctx, '{ isAdmin permissions client {id} }')
+  const user = await getUserWithId(
+    userId,
+    ctx,
+    '{ isAdmin permissions client {id} }'
+  )
 
   return ctx.db.mutation.createLog(
     {
