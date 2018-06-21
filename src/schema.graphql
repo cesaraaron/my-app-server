@@ -1,4 +1,4 @@
-# import Product, Sale, CartProductCreateInput, UserPermissions, Notifications, NotificationsCreateInput, NotificationsUpdateInput, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload from "./generated/prisma.graphql"
+# import Product, Sale, CartProductCreateInput, UserPermissions, Notifications, NotificationsCreateInput, NotificationsUpdateInput, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload, Service from "./generated/prisma.graphql"
 
 type Query {
   me: User
@@ -38,6 +38,9 @@ type Mutation {
   createLog(message: String!, type: LogType!): Log
   saveDeviceToken(token: String!): User
   removeDeviceToken(token: String!): User
+  # createService(name: String!, price: Float!): Service
+  # updateService(serviceId: ID!, name: String, price: Float): Service
+  # deleteService(serviceId: ID!): Service
 }
 
 

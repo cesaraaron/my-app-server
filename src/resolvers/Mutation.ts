@@ -36,6 +36,10 @@ const createUser = async (_, args, ctx: Context, info) => {
   const user = await getUserWithId(userId, ctx, '{ isAdmin client {id} }')
   const { id: clientId } = user.client
 
+  if (!clientId) {
+    throw new Error('Invalid client id')
+  }
+
   if (!user.isAdmin) {
     throw new UserPermission()
   }
@@ -119,11 +123,13 @@ const deleteUser = async (_, { userId }, ctx: Context, info) => {
   return ctx.db.mutation.deleteUser({ where: { id: userId } }, info)
 }
 
-const createProduct = async (_, args, ctx: Context, info) => {
-  const { name, price, quantity } = args
-  const userId = await getUserId(ctx)
-  const user = await getUserWithId(userId, ctx, '{ client { id }}')
-  const { id: clientId } = user.client
+const createProduct = async (
+  _,
+  { name, price, quantity },
+  ctx: Context,
+  info
+) => {
+  const id = await getUserId(ctx)
 
   return ctx.db.mutation.createProduct(
     {
@@ -131,7 +137,7 @@ const createProduct = async (_, args, ctx: Context, info) => {
         name,
         price,
         quantity,
-        client: { connect: { id: clientId } },
+        user: { connect: { id } },
       },
     },
     info
@@ -139,8 +145,7 @@ const createProduct = async (_, args, ctx: Context, info) => {
 }
 
 // TODO: validate the fields of the product before trying to update it
-const updateProduct = async (_, args, ctx: Context, info) => {
-  const { name, price, quantity, productId } = args
+const updateProduct = async (_, { name, price, quantity, productId }, ctx: Context, info) => {
   const userId = await getUserId(ctx)
   const user = await getUserWithId(userId, ctx, '{ isAdmin permissions }')
 
@@ -182,12 +187,7 @@ const createSale = async (_, args, ctx: Context, info) => {
     cartProducts: CartProduct[]
   }
   const userId = await getUserId(ctx)
-  const user = await getUserWithId(
-    userId,
-    ctx,
-    '{ isAdmin permissions client {id} }'
-  )
-  const { id: clientId } = user.client
+  const user = await getUserWithId(userId, ctx, '{ isAdmin permissions }')
 
   if (!user.isAdmin && !user.permissions.includes('ADD_SALES')) {
     throw new Error('Este usuario no tiene permisos para añadir ventas')
@@ -202,8 +202,7 @@ const createSale = async (_, args, ctx: Context, info) => {
     {
       data: {
         products: { create: cartProducts },
-        client: { connect: { id: clientId } },
-        soldBy: { connect: { id: user.id } },
+        soldBy: { connect: { id: userId } },
       },
     },
     info
@@ -230,63 +229,101 @@ const deleteSale = async (_, { saleId }, ctx: Context, info) => {
 
 const createLog = async (_, args, ctx: Context, info) => {
   const userId = await getUserId(ctx)
-  const user = await getUserWithId(
-    userId,
-    ctx,
-    '{ isAdmin permissions client {id} }'
-  )
 
   return ctx.db.mutation.createLog(
     {
       data: {
         message: args.message,
         type: args.type,
-        client: { connect: { id: user.client.id } },
+        user: { connect: { id: userId } },
       },
     },
     info
   )
 }
 
-const saveDeviceToken = async (_, {token}, ctx: Context, info) => {
+const saveDeviceToken = async (_, { token }, ctx: Context, info) => {
   const userId = await getUserId(ctx)
 
-  const {notifications: {devices}} = await getUserWithId(
-    userId,
-    ctx,
-    '{ notifications {devices} }'
-  )
+  const {
+    notifications: { devices },
+  } = await getUserWithId(userId, ctx, '{ notifications {devices} }')
 
-  return ctx.db.mutation.updateUser({where: {id: userId}, data: {
-    notifications: {
-      update: {
-        devices: {
-          set: [...devices.filter(t => t !== token), token]
-        }
-      }
-    }
-  }}, info)
+  return ctx.db.mutation.updateUser(
+    {
+      where: { id: userId },
+      data: {
+        notifications: {
+          update: {
+            devices: {
+              set: [...devices.filter(t => t !== token), token],
+            },
+          },
+        },
+      },
+    },
+    info
+  )
 }
 
-const removeDeviceToken = async (_, {token}, ctx: Context, info) => {
+const removeDeviceToken = async (_, { token }, ctx: Context, info) => {
   const userId = await getUserId(ctx)
 
-  const {notifications: {devices}} = await getUserWithId(
-    userId,
-    ctx,
-    '{ notifications {devices} }'
-  )
+  const {
+    notifications: { devices },
+  } = await getUserWithId(userId, ctx, '{ notifications {devices} }')
 
-  return ctx.db.mutation.updateUser({where: {id: userId}, data: {
-    notifications: {
-      update: {
-        devices: {
-          set: devices.filter(t => t !== token)
-        }
-      }
-    }
-  }}, info)
+  return ctx.db.mutation.updateUser(
+    {
+      where: { id: userId },
+      data: {
+        notifications: {
+          update: {
+            devices: {
+              set: devices.filter(t => t !== token),
+            },
+          },
+        },
+      },
+    },
+    info
+  )
 }
+
+// const createService = async (_, { name, price }, ctx: Context, info) => {
+//   const userId = await getUserId(ctx)
+
+//   return ctx.db.mutation.createService(
+//     {
+//       data: {
+//         name,
+//         price,
+//         user: { connect: { id: userId } },
+//       },
+//     },
+//     info
+//   )
+// }
+
+// const updateService = async (_, { serviceId, name, price }, ctx: Context, info) => {
+//   const userId = await getUserId(ctx)
+//   const user = await getUserWithId(userId, ctx, '{ isAdmin permissions }')
+
+//   if (!user.isAdmin && !user.permissions.includes('EDIT_SERVICE')) {
+//     throw new Error('Este usuario no tiene permisos para editar servicios.')
+//   }
+
+//   return ctx.db.mutation.updateService(
+//     {
+//       where: { id: serviceId },
+//       data: {
+//         name,
+//         price,
+//       },
+//     },
+//     info
+//   )
+// }
 
 export const Mutation = {
   login,
@@ -300,5 +337,6 @@ export const Mutation = {
   deleteUser,
   createLog,
   saveDeviceToken,
-  removeDeviceToken
+  removeDeviceToken,
+  // createService,
 }

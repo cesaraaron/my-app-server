@@ -46,6 +46,8 @@ type Mutation {
   updateUser(userId: String!, name: String, phoneNumber: String, password: String, notifications: NotificationsUpdateInput, permissions: [UserPermissions]): User
   deleteUser(userId: String!): User
   createLog(message: String!, type: LogType!): Log
+  saveDeviceToken(token: String!): User
+  removeDeviceToken(token: String!): User
 }
 
 type Subscription {
@@ -61,7 +63,7 @@ type Product implements Node {
   name: String!
   price: Float!
   quantity: Int!
-  client(where: ClientWhereInput): Client!
+  user(where: UserWhereInput): User!
 }
 
 type Sale implements Node {
@@ -69,7 +71,6 @@ type Sale implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   products(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct!]
-  client(where: ClientWhereInput): Client!
   soldBy(where: UserWhereInput): User!
 }
 
@@ -103,7 +104,7 @@ type Log implements Node {
   message: String!
   type: LogType!
   createdAt: DateTime!
-  client(where: ClientWhereInput): Client!
+  user(where: UserWhereInput): User!
 }
 
 enum LogType {
@@ -114,7 +115,7 @@ scalar DateTime
 
 type Notifications {
   fireWhen: Int!
-  devices: [String!]
+  devices: [String!]!
 }
 
 type SaleSubscriptionPayload {
@@ -146,524 +147,6 @@ interface Node {
   The id of the object.
   """
   id: ID!
-}
-
-input ClientWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [ClientWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
-  OR: [ClientWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [ClientWhereInput!]
-  id: ID
-  """
-  All values that are not equal to given value.
-  """
-  id_not: ID
-  """
-  All values that are contained in given list.
-  """
-  id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
-  id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
-  id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
-  id_lte: ID
-  """
-  All values greater than the given value.
-  """
-  id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
-  id_gte: ID
-  """
-  All values containing the given string.
-  """
-  id_contains: ID
-  """
-  All values not containing the given string.
-  """
-  id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
-  id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
-  id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
-  id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
-  id_not_ends_with: ID
-  name: String
-  """
-  All values that are not equal to given value.
-  """
-  name_not: String
-  """
-  All values that are contained in given list.
-  """
-  name_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
-  name_not_in: [String!]
-  """
-  All values less than the given value.
-  """
-  name_lt: String
-  """
-  All values less than or equal the given value.
-  """
-  name_lte: String
-  """
-  All values greater than the given value.
-  """
-  name_gt: String
-  """
-  All values greater than or equal the given value.
-  """
-  name_gte: String
-  """
-  All values containing the given string.
-  """
-  name_contains: String
-  """
-  All values not containing the given string.
-  """
-  name_not_contains: String
-  """
-  All values starting with the given string.
-  """
-  name_starts_with: String
-  """
-  All values not starting with the given string.
-  """
-  name_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
-  name_ends_with: String
-  """
-  All values not ending with the given string.
-  """
-  name_not_ends_with: String
-  lastName: String
-  """
-  All values that are not equal to given value.
-  """
-  lastName_not: String
-  """
-  All values that are contained in given list.
-  """
-  lastName_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
-  lastName_not_in: [String!]
-  """
-  All values less than the given value.
-  """
-  lastName_lt: String
-  """
-  All values less than or equal the given value.
-  """
-  lastName_lte: String
-  """
-  All values greater than the given value.
-  """
-  lastName_gt: String
-  """
-  All values greater than or equal the given value.
-  """
-  lastName_gte: String
-  """
-  All values containing the given string.
-  """
-  lastName_contains: String
-  """
-  All values not containing the given string.
-  """
-  lastName_not_contains: String
-  """
-  All values starting with the given string.
-  """
-  lastName_starts_with: String
-  """
-  All values not starting with the given string.
-  """
-  lastName_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
-  lastName_ends_with: String
-  """
-  All values not ending with the given string.
-  """
-  lastName_not_ends_with: String
-  email: String
-  """
-  All values that are not equal to given value.
-  """
-  email_not: String
-  """
-  All values that are contained in given list.
-  """
-  email_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
-  email_not_in: [String!]
-  """
-  All values less than the given value.
-  """
-  email_lt: String
-  """
-  All values less than or equal the given value.
-  """
-  email_lte: String
-  """
-  All values greater than the given value.
-  """
-  email_gt: String
-  """
-  All values greater than or equal the given value.
-  """
-  email_gte: String
-  """
-  All values containing the given string.
-  """
-  email_contains: String
-  """
-  All values not containing the given string.
-  """
-  email_not_contains: String
-  """
-  All values starting with the given string.
-  """
-  email_starts_with: String
-  """
-  All values not starting with the given string.
-  """
-  email_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
-  email_ends_with: String
-  """
-  All values not ending with the given string.
-  """
-  email_not_ends_with: String
-  phoneNumber: String
-  """
-  All values that are not equal to given value.
-  """
-  phoneNumber_not: String
-  """
-  All values that are contained in given list.
-  """
-  phoneNumber_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
-  phoneNumber_not_in: [String!]
-  """
-  All values less than the given value.
-  """
-  phoneNumber_lt: String
-  """
-  All values less than or equal the given value.
-  """
-  phoneNumber_lte: String
-  """
-  All values greater than the given value.
-  """
-  phoneNumber_gt: String
-  """
-  All values greater than or equal the given value.
-  """
-  phoneNumber_gte: String
-  """
-  All values containing the given string.
-  """
-  phoneNumber_contains: String
-  """
-  All values not containing the given string.
-  """
-  phoneNumber_not_contains: String
-  """
-  All values starting with the given string.
-  """
-  phoneNumber_starts_with: String
-  """
-  All values not starting with the given string.
-  """
-  phoneNumber_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
-  phoneNumber_ends_with: String
-  """
-  All values not ending with the given string.
-  """
-  phoneNumber_not_ends_with: String
-  users_every: UserWhereInput
-  users_some: UserWhereInput
-  users_none: UserWhereInput
-  products_every: ProductWhereInput
-  products_some: ProductWhereInput
-  products_none: ProductWhereInput
-  sales_every: SaleWhereInput
-  sales_some: SaleWhereInput
-  sales_none: SaleWhereInput
-  logs_every: LogWhereInput
-  logs_some: LogWhereInput
-  logs_none: LogWhereInput
-}
-
-input NotificationsCreatedevicesInput {
-  set: [String!]
-}
-
-input NotificationsUpdatedevicesInput {
-  set: [String!]
-}
-
-enum MutationType {
-  CREATED
-  UPDATED
-  DELETED
-}
-
-type ProductPreviousValues {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String!
-  price: Float!
-  quantity: Int!
-}
-
-type CartProduct {
-  productId: ID!
-  name: String!
-  price: Float!
-  quantitySold: Int!
-}
-
-input CartProductWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [CartProductWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
-  OR: [CartProductWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [CartProductWhereInput!]
-  productId: ID
-  """
-  All values that are not equal to given value.
-  """
-  productId_not: ID
-  """
-  All values that are contained in given list.
-  """
-  productId_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
-  productId_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
-  productId_lt: ID
-  """
-  All values less than or equal the given value.
-  """
-  productId_lte: ID
-  """
-  All values greater than the given value.
-  """
-  productId_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
-  productId_gte: ID
-  """
-  All values containing the given string.
-  """
-  productId_contains: ID
-  """
-  All values not containing the given string.
-  """
-  productId_not_contains: ID
-  """
-  All values starting with the given string.
-  """
-  productId_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
-  productId_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
-  productId_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
-  productId_not_ends_with: ID
-  name: String
-  """
-  All values that are not equal to given value.
-  """
-  name_not: String
-  """
-  All values that are contained in given list.
-  """
-  name_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
-  name_not_in: [String!]
-  """
-  All values less than the given value.
-  """
-  name_lt: String
-  """
-  All values less than or equal the given value.
-  """
-  name_lte: String
-  """
-  All values greater than the given value.
-  """
-  name_gt: String
-  """
-  All values greater than or equal the given value.
-  """
-  name_gte: String
-  """
-  All values containing the given string.
-  """
-  name_contains: String
-  """
-  All values not containing the given string.
-  """
-  name_not_contains: String
-  """
-  All values starting with the given string.
-  """
-  name_starts_with: String
-  """
-  All values not starting with the given string.
-  """
-  name_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
-  name_ends_with: String
-  """
-  All values not ending with the given string.
-  """
-  name_not_ends_with: String
-  price: Float
-  """
-  All values that are not equal to given value.
-  """
-  price_not: Float
-  """
-  All values that are contained in given list.
-  """
-  price_in: [Float!]
-  """
-  All values that are not contained in given list.
-  """
-  price_not_in: [Float!]
-  """
-  All values less than the given value.
-  """
-  price_lt: Float
-  """
-  All values less than or equal the given value.
-  """
-  price_lte: Float
-  """
-  All values greater than the given value.
-  """
-  price_gt: Float
-  """
-  All values greater than or equal the given value.
-  """
-  price_gte: Float
-  quantitySold: Int
-  """
-  All values that are not equal to given value.
-  """
-  quantitySold_not: Int
-  """
-  All values that are contained in given list.
-  """
-  quantitySold_in: [Int!]
-  """
-  All values that are not contained in given list.
-  """
-  quantitySold_not_in: [Int!]
-  """
-  All values less than the given value.
-  """
-  quantitySold_lt: Int
-  """
-  All values less than or equal the given value.
-  """
-  quantitySold_lte: Int
-  """
-  All values greater than the given value.
-  """
-  quantitySold_gt: Int
-  """
-  All values greater than or equal the given value.
-  """
-  quantitySold_gte: Int
-}
-
-enum CartProductOrderByInput {
-  productId_ASC
-  productId_DESC
-  name_ASC
-  name_DESC
-  price_ASC
-  price_DESC
-  quantitySold_ASC
-  quantitySold_DESC
-  id_ASC
-  id_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 input UserWhereInput {
@@ -1012,6 +495,244 @@ input UserWhereInput {
   sales_every: SaleWhereInput
   sales_some: SaleWhereInput
   sales_none: SaleWhereInput
+  _MagicalBackRelation_ProductToUser_every: ProductWhereInput
+  _MagicalBackRelation_ProductToUser_some: ProductWhereInput
+  _MagicalBackRelation_ProductToUser_none: ProductWhereInput
+  _MagicalBackRelation_LogToUser_every: LogWhereInput
+  _MagicalBackRelation_LogToUser_some: LogWhereInput
+  _MagicalBackRelation_LogToUser_none: LogWhereInput
+  _MagicalBackRelation_ServiceToUser_every: ServiceWhereInput
+  _MagicalBackRelation_ServiceToUser_some: ServiceWhereInput
+  _MagicalBackRelation_ServiceToUser_none: ServiceWhereInput
+}
+
+input NotificationsCreatedevicesInput {
+  set: [String!]
+}
+
+input NotificationsUpdatedevicesInput {
+  set: [String!]
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+type ProductPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  price: Float!
+  quantity: Int!
+}
+
+type CartProduct {
+  productId: ID!
+  name: String!
+  price: Float!
+  quantitySold: Int!
+}
+
+input CartProductWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [CartProductWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [CartProductWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [CartProductWhereInput!]
+  productId: ID
+  """
+  All values that are not equal to given value.
+  """
+  productId_not: ID
+  """
+  All values that are contained in given list.
+  """
+  productId_in: [ID!]
+  """
+  All values that are not contained in given list.
+  """
+  productId_not_in: [ID!]
+  """
+  All values less than the given value.
+  """
+  productId_lt: ID
+  """
+  All values less than or equal the given value.
+  """
+  productId_lte: ID
+  """
+  All values greater than the given value.
+  """
+  productId_gt: ID
+  """
+  All values greater than or equal the given value.
+  """
+  productId_gte: ID
+  """
+  All values containing the given string.
+  """
+  productId_contains: ID
+  """
+  All values not containing the given string.
+  """
+  productId_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  productId_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  productId_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  productId_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  productId_not_ends_with: ID
+  name: String
+  """
+  All values that are not equal to given value.
+  """
+  name_not: String
+  """
+  All values that are contained in given list.
+  """
+  name_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  name_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  name_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  name_lte: String
+  """
+  All values greater than the given value.
+  """
+  name_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  name_gte: String
+  """
+  All values containing the given string.
+  """
+  name_contains: String
+  """
+  All values not containing the given string.
+  """
+  name_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  name_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  name_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  name_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  name_not_ends_with: String
+  price: Float
+  """
+  All values that are not equal to given value.
+  """
+  price_not: Float
+  """
+  All values that are contained in given list.
+  """
+  price_in: [Float!]
+  """
+  All values that are not contained in given list.
+  """
+  price_not_in: [Float!]
+  """
+  All values less than the given value.
+  """
+  price_lt: Float
+  """
+  All values less than or equal the given value.
+  """
+  price_lte: Float
+  """
+  All values greater than the given value.
+  """
+  price_gt: Float
+  """
+  All values greater than or equal the given value.
+  """
+  price_gte: Float
+  quantitySold: Int
+  """
+  All values that are not equal to given value.
+  """
+  quantitySold_not: Int
+  """
+  All values that are contained in given list.
+  """
+  quantitySold_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  quantitySold_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  quantitySold_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  quantitySold_lte: Int
+  """
+  All values greater than the given value.
+  """
+  quantitySold_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  quantitySold_gte: Int
+  _MagicalBackRelation_CartProductToSale_every: SaleWhereInput
+  _MagicalBackRelation_CartProductToSale_some: SaleWhereInput
+  _MagicalBackRelation_CartProductToSale_none: SaleWhereInput
+}
+
+enum CartProductOrderByInput {
+  productId_ASC
+  productId_DESC
+  name_ASC
+  name_DESC
+  price_ASC
+  price_DESC
+  quantitySold_ASC
+  quantitySold_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
 }
 
 type SalePreviousValues {
@@ -1028,8 +749,489 @@ type UserPreviousValues {
   lastName: String
   phoneNumber: String!
   password: String!
-  permissions: [UserPermissions!]
+  permissions: [UserPermissions!]!
   isAdmin: Boolean
+}
+
+type Service implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  price: Float!
+  user(where: UserWhereInput): User!
+}
+
+input NotificationsWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [NotificationsWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [NotificationsWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [NotificationsWhereInput!]
+  fireWhen: Int
+  """
+  All values that are not equal to given value.
+  """
+  fireWhen_not: Int
+  """
+  All values that are contained in given list.
+  """
+  fireWhen_in: [Int!]
+  """
+  All values that are not contained in given list.
+  """
+  fireWhen_not_in: [Int!]
+  """
+  All values less than the given value.
+  """
+  fireWhen_lt: Int
+  """
+  All values less than or equal the given value.
+  """
+  fireWhen_lte: Int
+  """
+  All values greater than the given value.
+  """
+  fireWhen_gt: Int
+  """
+  All values greater than or equal the given value.
+  """
+  fireWhen_gte: Int
+  _MagicalBackRelation_NotificationsToUser_every: UserWhereInput
+  _MagicalBackRelation_NotificationsToUser_some: UserWhereInput
+  _MagicalBackRelation_NotificationsToUser_none: UserWhereInput
+}
+
+input ClientWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [ClientWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [ClientWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [ClientWhereInput!]
+  id: ID
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  name: String
+  """
+  All values that are not equal to given value.
+  """
+  name_not: String
+  """
+  All values that are contained in given list.
+  """
+  name_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  name_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  name_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  name_lte: String
+  """
+  All values greater than the given value.
+  """
+  name_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  name_gte: String
+  """
+  All values containing the given string.
+  """
+  name_contains: String
+  """
+  All values not containing the given string.
+  """
+  name_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  name_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  name_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  name_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  name_not_ends_with: String
+  lastName: String
+  """
+  All values that are not equal to given value.
+  """
+  lastName_not: String
+  """
+  All values that are contained in given list.
+  """
+  lastName_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  lastName_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  lastName_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  lastName_lte: String
+  """
+  All values greater than the given value.
+  """
+  lastName_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  lastName_gte: String
+  """
+  All values containing the given string.
+  """
+  lastName_contains: String
+  """
+  All values not containing the given string.
+  """
+  lastName_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  lastName_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  lastName_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  lastName_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  lastName_not_ends_with: String
+  email: String
+  """
+  All values that are not equal to given value.
+  """
+  email_not: String
+  """
+  All values that are contained in given list.
+  """
+  email_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  email_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  email_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  email_lte: String
+  """
+  All values greater than the given value.
+  """
+  email_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  email_gte: String
+  """
+  All values containing the given string.
+  """
+  email_contains: String
+  """
+  All values not containing the given string.
+  """
+  email_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  email_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  email_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  email_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  email_not_ends_with: String
+  phoneNumber: String
+  """
+  All values that are not equal to given value.
+  """
+  phoneNumber_not: String
+  """
+  All values that are contained in given list.
+  """
+  phoneNumber_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  phoneNumber_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  phoneNumber_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  phoneNumber_lte: String
+  """
+  All values greater than the given value.
+  """
+  phoneNumber_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  phoneNumber_gte: String
+  """
+  All values containing the given string.
+  """
+  phoneNumber_contains: String
+  """
+  All values not containing the given string.
+  """
+  phoneNumber_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  phoneNumber_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  phoneNumber_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  phoneNumber_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  phoneNumber_not_ends_with: String
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+  products_every: ProductWhereInput
+  products_some: ProductWhereInput
+  products_none: ProductWhereInput
+  sales_every: SaleWhereInput
+  sales_some: SaleWhereInput
+  sales_none: SaleWhereInput
+  logs_every: LogWhereInput
+  logs_some: LogWhereInput
+  logs_none: LogWhereInput
+}
+
+input SaleWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [SaleWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [SaleWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [SaleWhereInput!]
+  id: ID
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  createdAt: DateTime
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  products_every: CartProductWhereInput
+  products_some: CartProductWhereInput
+  products_none: CartProductWhereInput
+  soldBy: UserWhereInput
+  _MagicalBackRelation_ClientToSale_every: ClientWhereInput
+  _MagicalBackRelation_ClientToSale_some: ClientWhereInput
+  _MagicalBackRelation_ClientToSale_none: ClientWhereInput
 }
 
 input ProductWhereInput {
@@ -1267,138 +1469,10 @@ input ProductWhereInput {
   All values greater than or equal the given value.
   """
   quantity_gte: Int
-  client: ClientWhereInput
-}
-
-input SaleWhereInput {
-  """
-  Logical AND on all given filters.
-  """
-  AND: [SaleWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
-  OR: [SaleWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
-  NOT: [SaleWhereInput!]
-  id: ID
-  """
-  All values that are not equal to given value.
-  """
-  id_not: ID
-  """
-  All values that are contained in given list.
-  """
-  id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
-  id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
-  id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
-  id_lte: ID
-  """
-  All values greater than the given value.
-  """
-  id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
-  id_gte: ID
-  """
-  All values containing the given string.
-  """
-  id_contains: ID
-  """
-  All values not containing the given string.
-  """
-  id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
-  id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
-  id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
-  id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
-  id_not_ends_with: ID
-  createdAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
-  createdAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
-  createdAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
-  createdAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
-  createdAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
-  createdAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
-  createdAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
-  updatedAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
-  updatedAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
-  updatedAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
-  updatedAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
-  updatedAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
-  updatedAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
-  updatedAt_gte: DateTime
-  products_every: CartProductWhereInput
-  products_some: CartProductWhereInput
-  products_none: CartProductWhereInput
-  client: ClientWhereInput
-  soldBy: UserWhereInput
+  user: UserWhereInput
+  _MagicalBackRelation_ClientToProduct_every: ClientWhereInput
+  _MagicalBackRelation_ClientToProduct_some: ClientWhereInput
+  _MagicalBackRelation_ClientToProduct_none: ClientWhereInput
 }
 
 input LogWhereInput {
@@ -1562,49 +1636,217 @@ input LogWhereInput {
   All values greater than or equal the given value.
   """
   createdAt_gte: DateTime
-  client: ClientWhereInput
+  user: UserWhereInput
+  _MagicalBackRelation_ClientToLog_every: ClientWhereInput
+  _MagicalBackRelation_ClientToLog_some: ClientWhereInput
+  _MagicalBackRelation_ClientToLog_none: ClientWhereInput
 }
 
-input NotificationsWhereInput {
+input ServiceWhereInput {
   """
   Logical AND on all given filters.
   """
-  AND: [NotificationsWhereInput!]
+  AND: [ServiceWhereInput!]
   """
   Logical OR on all given filters.
   """
-  OR: [NotificationsWhereInput!]
+  OR: [ServiceWhereInput!]
   """
   Logical NOT on all given filters combined by AND.
   """
-  NOT: [NotificationsWhereInput!]
-  fireWhen: Int
+  NOT: [ServiceWhereInput!]
+  id: ID
   """
   All values that are not equal to given value.
   """
-  fireWhen_not: Int
+  id_not: ID
   """
   All values that are contained in given list.
   """
-  fireWhen_in: [Int!]
+  id_in: [ID!]
   """
   All values that are not contained in given list.
   """
-  fireWhen_not_in: [Int!]
+  id_not_in: [ID!]
   """
   All values less than the given value.
   """
-  fireWhen_lt: Int
+  id_lt: ID
   """
   All values less than or equal the given value.
   """
-  fireWhen_lte: Int
+  id_lte: ID
   """
   All values greater than the given value.
   """
-  fireWhen_gt: Int
+  id_gt: ID
   """
   All values greater than or equal the given value.
   """
-  fireWhen_gte: Int
+  id_gte: ID
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  createdAt: DateTime
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  name: String
+  """
+  All values that are not equal to given value.
+  """
+  name_not: String
+  """
+  All values that are contained in given list.
+  """
+  name_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  name_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  name_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  name_lte: String
+  """
+  All values greater than the given value.
+  """
+  name_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  name_gte: String
+  """
+  All values containing the given string.
+  """
+  name_contains: String
+  """
+  All values not containing the given string.
+  """
+  name_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  name_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  name_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  name_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  name_not_ends_with: String
+  price: Float
+  """
+  All values that are not equal to given value.
+  """
+  price_not: Float
+  """
+  All values that are contained in given list.
+  """
+  price_in: [Float!]
+  """
+  All values that are not contained in given list.
+  """
+  price_not_in: [Float!]
+  """
+  All values less than the given value.
+  """
+  price_lt: Float
+  """
+  All values less than or equal the given value.
+  """
+  price_lte: Float
+  """
+  All values greater than the given value.
+  """
+  price_gt: Float
+  """
+  All values greater than or equal the given value.
+  """
+  price_gte: Float
+  user: UserWhereInput
 }

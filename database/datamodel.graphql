@@ -45,7 +45,16 @@ type Product {
   name: String!
   price: Float!
   quantity: Int!
-  client: Client!
+  user: User!
+}
+
+type Service {
+  id: ID! @unique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  price: Float!
+  user: User!
 }
 
 type Sale {
@@ -53,7 +62,6 @@ type Sale {
   createdAt: DateTime!
   updatedAt: DateTime!
   products: [CartProduct!]!
-  client: Client!
   soldBy: User!
 }
 
@@ -69,7 +77,7 @@ type Log {
   message: String!
   type: LogType!
   createdAt: DateTime!
-  client: Client!
+  user: User!
 }
 
 enum LogType {
