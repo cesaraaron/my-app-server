@@ -16,11 +16,11 @@ type User {
   updatedAt: DateTime!
   name: String!
   lastName: String
-  notifications: Notifications! @default(value: { fireWhen: 5 })
+  notifications: Notifications!
   phoneNumber: String! @unique
   password: String!
   permissions: [UserPermissions!]!
-  isAdmin: Boolean @default(value: false)
+  isAdmin: Boolean! @default(value: false)
   client: Client!
   sales: [Sale!]!
 }
@@ -31,10 +31,10 @@ type Notifications {
 }
 
 enum UserPermissions {
-  ADD_PRODUCTS
-  EDIT_PRODUCTS
+  CREATE_PRODUCTS
+  UPDATE_PRODUCTS
   DELETE_PRODUCTS
-  ADD_SALES
+  CREATE_SALES
   DELETE_SALES
 }
 
@@ -46,6 +46,7 @@ type Product {
   price: Float!
   quantity: Int!
   user: User!
+  client: Client!
 }
 
 type Service {
@@ -55,6 +56,7 @@ type Service {
   name: String!
   price: Float!
   user: User!
+  client: Client!
 }
 
 type Sale {
@@ -63,6 +65,7 @@ type Sale {
   updatedAt: DateTime!
   products: [CartProduct!]!
   soldBy: User!
+  client: Client!
 }
 
 type CartProduct {
@@ -78,6 +81,7 @@ type Log {
   type: LogType!
   createdAt: DateTime!
   user: User!
+  client: Client!
 }
 
 enum LogType {

@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-candlelion-41/my-app-server/dev
-# timestamp: Thu Jun 21 2018 08:34:04 GMT-0600 (CST)
+# timestamp: Sun Jul 01 2018 06:46:16 GMT-0600 (CST)
 
 type AggregateCartProduct {
   count: Int!
@@ -315,9 +315,29 @@ input ClientCreateInput {
   email: String
   phoneNumber: String!
   users: UserCreateManyWithoutClientInput
-  products: ProductCreateManyInput
-  sales: SaleCreateManyInput
-  logs: LogCreateManyInput
+  products: ProductCreateManyWithoutClientInput
+  sales: SaleCreateManyWithoutClientInput
+  logs: LogCreateManyWithoutClientInput
+}
+
+input ClientCreateOneInput {
+  create: ClientCreateInput
+  connect: ClientWhereUniqueInput
+}
+
+input ClientCreateOneWithoutLogsInput {
+  create: ClientCreateWithoutLogsInput
+  connect: ClientWhereUniqueInput
+}
+
+input ClientCreateOneWithoutProductsInput {
+  create: ClientCreateWithoutProductsInput
+  connect: ClientWhereUniqueInput
+}
+
+input ClientCreateOneWithoutSalesInput {
+  create: ClientCreateWithoutSalesInput
+  connect: ClientWhereUniqueInput
 }
 
 input ClientCreateOneWithoutUsersInput {
@@ -325,14 +345,44 @@ input ClientCreateOneWithoutUsersInput {
   connect: ClientWhereUniqueInput
 }
 
+input ClientCreateWithoutLogsInput {
+  name: String!
+  lastName: String
+  email: String
+  phoneNumber: String!
+  users: UserCreateManyWithoutClientInput
+  products: ProductCreateManyWithoutClientInput
+  sales: SaleCreateManyWithoutClientInput
+}
+
+input ClientCreateWithoutProductsInput {
+  name: String!
+  lastName: String
+  email: String
+  phoneNumber: String!
+  users: UserCreateManyWithoutClientInput
+  sales: SaleCreateManyWithoutClientInput
+  logs: LogCreateManyWithoutClientInput
+}
+
+input ClientCreateWithoutSalesInput {
+  name: String!
+  lastName: String
+  email: String
+  phoneNumber: String!
+  users: UserCreateManyWithoutClientInput
+  products: ProductCreateManyWithoutClientInput
+  logs: LogCreateManyWithoutClientInput
+}
+
 input ClientCreateWithoutUsersInput {
   name: String!
   lastName: String
   email: String
   phoneNumber: String!
-  products: ProductCreateManyInput
-  sales: SaleCreateManyInput
-  logs: LogCreateManyInput
+  products: ProductCreateManyWithoutClientInput
+  sales: SaleCreateManyWithoutClientInput
+  logs: LogCreateManyWithoutClientInput
 }
 
 """An edge in a connection."""
@@ -408,15 +458,58 @@ input ClientSubscriptionWhereInput {
   node: ClientWhereInput
 }
 
+input ClientUpdateDataInput {
+  name: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  users: UserUpdateManyWithoutClientInput
+  products: ProductUpdateManyWithoutClientInput
+  sales: SaleUpdateManyWithoutClientInput
+  logs: LogUpdateManyWithoutClientInput
+}
+
 input ClientUpdateInput {
   name: String
   lastName: String
   email: String
   phoneNumber: String
   users: UserUpdateManyWithoutClientInput
-  products: ProductUpdateManyInput
-  sales: SaleUpdateManyInput
-  logs: LogUpdateManyInput
+  products: ProductUpdateManyWithoutClientInput
+  sales: SaleUpdateManyWithoutClientInput
+  logs: LogUpdateManyWithoutClientInput
+}
+
+input ClientUpdateOneInput {
+  create: ClientCreateInput
+  connect: ClientWhereUniqueInput
+  delete: Boolean
+  update: ClientUpdateDataInput
+  upsert: ClientUpsertNestedInput
+}
+
+input ClientUpdateOneWithoutLogsInput {
+  create: ClientCreateWithoutLogsInput
+  connect: ClientWhereUniqueInput
+  delete: Boolean
+  update: ClientUpdateWithoutLogsDataInput
+  upsert: ClientUpsertWithoutLogsInput
+}
+
+input ClientUpdateOneWithoutProductsInput {
+  create: ClientCreateWithoutProductsInput
+  connect: ClientWhereUniqueInput
+  delete: Boolean
+  update: ClientUpdateWithoutProductsDataInput
+  upsert: ClientUpsertWithoutProductsInput
+}
+
+input ClientUpdateOneWithoutSalesInput {
+  create: ClientCreateWithoutSalesInput
+  connect: ClientWhereUniqueInput
+  delete: Boolean
+  update: ClientUpdateWithoutSalesDataInput
+  upsert: ClientUpsertWithoutSalesInput
 }
 
 input ClientUpdateOneWithoutUsersInput {
@@ -427,14 +520,64 @@ input ClientUpdateOneWithoutUsersInput {
   upsert: ClientUpsertWithoutUsersInput
 }
 
+input ClientUpdateWithoutLogsDataInput {
+  name: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  users: UserUpdateManyWithoutClientInput
+  products: ProductUpdateManyWithoutClientInput
+  sales: SaleUpdateManyWithoutClientInput
+}
+
+input ClientUpdateWithoutProductsDataInput {
+  name: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  users: UserUpdateManyWithoutClientInput
+  sales: SaleUpdateManyWithoutClientInput
+  logs: LogUpdateManyWithoutClientInput
+}
+
+input ClientUpdateWithoutSalesDataInput {
+  name: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  users: UserUpdateManyWithoutClientInput
+  products: ProductUpdateManyWithoutClientInput
+  logs: LogUpdateManyWithoutClientInput
+}
+
 input ClientUpdateWithoutUsersDataInput {
   name: String
   lastName: String
   email: String
   phoneNumber: String
-  products: ProductUpdateManyInput
-  sales: SaleUpdateManyInput
-  logs: LogUpdateManyInput
+  products: ProductUpdateManyWithoutClientInput
+  sales: SaleUpdateManyWithoutClientInput
+  logs: LogUpdateManyWithoutClientInput
+}
+
+input ClientUpsertNestedInput {
+  update: ClientUpdateDataInput!
+  create: ClientCreateInput!
+}
+
+input ClientUpsertWithoutLogsInput {
+  update: ClientUpdateWithoutLogsDataInput!
+  create: ClientCreateWithoutLogsInput!
+}
+
+input ClientUpsertWithoutProductsInput {
+  update: ClientUpdateWithoutProductsDataInput!
+  create: ClientCreateWithoutProductsInput!
+}
+
+input ClientUpsertWithoutSalesInput {
+  update: ClientUpdateWithoutSalesDataInput!
+  create: ClientCreateWithoutSalesInput!
 }
 
 input ClientUpsertWithoutUsersInput {
@@ -663,6 +806,9 @@ input ClientWhereInput {
   logs_every: LogWhereInput
   logs_some: LogWhereInput
   logs_none: LogWhereInput
+  _MagicalBackRelation_ClientToService_every: ServiceWhereInput
+  _MagicalBackRelation_ClientToService_some: ServiceWhereInput
+  _MagicalBackRelation_ClientToService_none: ServiceWhereInput
 }
 
 input ClientWhereUniqueInput {
@@ -679,6 +825,7 @@ type Log implements Node {
   type: LogType!
   createdAt: DateTime!
   user(where: UserWhereInput): User!
+  client(where: ClientWhereInput): Client!
 }
 
 """A connection to a list of items."""
@@ -695,11 +842,18 @@ input LogCreateInput {
   message: String!
   type: LogType!
   user: UserCreateOneInput!
+  client: ClientCreateOneWithoutLogsInput!
 }
 
-input LogCreateManyInput {
-  create: [LogCreateInput!]
+input LogCreateManyWithoutClientInput {
+  create: [LogCreateWithoutClientInput!]
   connect: [LogWhereUniqueInput!]
+}
+
+input LogCreateWithoutClientInput {
+  message: String!
+  type: LogType!
+  user: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -774,36 +928,37 @@ enum LogType {
   ERROR
 }
 
-input LogUpdateDataInput {
-  message: String
-  type: LogType
-  user: UserUpdateOneInput
-}
-
 input LogUpdateInput {
   message: String
   type: LogType
   user: UserUpdateOneInput
+  client: ClientUpdateOneWithoutLogsInput
 }
 
-input LogUpdateManyInput {
-  create: [LogCreateInput!]
+input LogUpdateManyWithoutClientInput {
+  create: [LogCreateWithoutClientInput!]
   connect: [LogWhereUniqueInput!]
   disconnect: [LogWhereUniqueInput!]
   delete: [LogWhereUniqueInput!]
-  update: [LogUpdateWithWhereUniqueNestedInput!]
-  upsert: [LogUpsertWithWhereUniqueNestedInput!]
+  update: [LogUpdateWithWhereUniqueWithoutClientInput!]
+  upsert: [LogUpsertWithWhereUniqueWithoutClientInput!]
 }
 
-input LogUpdateWithWhereUniqueNestedInput {
-  where: LogWhereUniqueInput!
-  data: LogUpdateDataInput!
+input LogUpdateWithoutClientDataInput {
+  message: String
+  type: LogType
+  user: UserUpdateOneInput
 }
 
-input LogUpsertWithWhereUniqueNestedInput {
+input LogUpdateWithWhereUniqueWithoutClientInput {
   where: LogWhereUniqueInput!
-  update: LogUpdateDataInput!
-  create: LogCreateInput!
+  data: LogUpdateWithoutClientDataInput!
+}
+
+input LogUpsertWithWhereUniqueWithoutClientInput {
+  where: LogWhereUniqueInput!
+  update: LogUpdateWithoutClientDataInput!
+  create: LogCreateWithoutClientInput!
 }
 
 input LogWhereInput {
@@ -928,9 +1083,7 @@ input LogWhereInput {
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
   user: UserWhereInput
-  _MagicalBackRelation_ClientToLog_every: ClientWhereInput
-  _MagicalBackRelation_ClientToLog_some: ClientWhereInput
-  _MagicalBackRelation_ClientToLog_none: ClientWhereInput
+  client: ClientWhereInput
 }
 
 input LogWhereUniqueInput {
@@ -944,47 +1097,47 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createClient(data: ClientCreateInput!): Client!
-  createService(data: ServiceCreateInput!): Service!
-  createNotifications(data: NotificationsCreateInput!): Notifications!
-  createSale(data: SaleCreateInput!): Sale!
   createProduct(data: ProductCreateInput!): Product!
-  createUser(data: UserCreateInput!): User!
+  createService(data: ServiceCreateInput!): Service!
+  createSale(data: SaleCreateInput!): Sale!
   createLog(data: LogCreateInput!): Log!
+  createNotifications(data: NotificationsCreateInput!): Notifications!
+  createClient(data: ClientCreateInput!): Client!
+  createUser(data: UserCreateInput!): User!
   createCartProduct(data: CartProductCreateInput!): CartProduct!
-  updateClient(data: ClientUpdateInput!, where: ClientWhereUniqueInput!): Client
+  updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
   updateService(data: ServiceUpdateInput!, where: ServiceWhereUniqueInput!): Service
   updateSale(data: SaleUpdateInput!, where: SaleWhereUniqueInput!): Sale
-  updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateLog(data: LogUpdateInput!, where: LogWhereUniqueInput!): Log
-  deleteClient(where: ClientWhereUniqueInput!): Client
+  updateClient(data: ClientUpdateInput!, where: ClientWhereUniqueInput!): Client
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteService(where: ServiceWhereUniqueInput!): Service
   deleteSale(where: SaleWhereUniqueInput!): Sale
-  deleteProduct(where: ProductWhereUniqueInput!): Product
-  deleteUser(where: UserWhereUniqueInput!): User
   deleteLog(where: LogWhereUniqueInput!): Log
-  upsertClient(where: ClientWhereUniqueInput!, create: ClientCreateInput!, update: ClientUpdateInput!): Client!
+  deleteClient(where: ClientWhereUniqueInput!): Client
+  deleteUser(where: UserWhereUniqueInput!): User
+  upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
   upsertService(where: ServiceWhereUniqueInput!, create: ServiceCreateInput!, update: ServiceUpdateInput!): Service!
   upsertSale(where: SaleWhereUniqueInput!, create: SaleCreateInput!, update: SaleUpdateInput!): Sale!
-  upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertLog(where: LogWhereUniqueInput!, create: LogCreateInput!, update: LogUpdateInput!): Log!
-  updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
-  updateManyServices(data: ServiceUpdateInput!, where: ServiceWhereInput): BatchPayload!
-  updateManyNotificationses(data: NotificationsUpdateInput!, where: NotificationsWhereInput): BatchPayload!
-  updateManySales(data: SaleUpdateInput!, where: SaleWhereInput): BatchPayload!
+  upsertClient(where: ClientWhereUniqueInput!, create: ClientCreateInput!, update: ClientUpdateInput!): Client!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyServices(data: ServiceUpdateInput!, where: ServiceWhereInput): BatchPayload!
+  updateManySales(data: SaleUpdateInput!, where: SaleWhereInput): BatchPayload!
   updateManyLogs(data: LogUpdateInput!, where: LogWhereInput): BatchPayload!
+  updateManyNotificationses(data: NotificationsUpdateInput!, where: NotificationsWhereInput): BatchPayload!
+  updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   updateManyCartProducts(data: CartProductUpdateInput!, where: CartProductWhereInput): BatchPayload!
-  deleteManyClients(where: ClientWhereInput): BatchPayload!
-  deleteManyServices(where: ServiceWhereInput): BatchPayload!
-  deleteManyNotificationses(where: NotificationsWhereInput): BatchPayload!
-  deleteManySales(where: SaleWhereInput): BatchPayload!
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyServices(where: ServiceWhereInput): BatchPayload!
+  deleteManySales(where: SaleWhereInput): BatchPayload!
   deleteManyLogs(where: LogWhereInput): BatchPayload!
+  deleteManyNotificationses(where: NotificationsWhereInput): BatchPayload!
+  deleteManyClients(where: ClientWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
 }
 
@@ -1177,6 +1330,7 @@ type Product implements Node {
   price: Float!
   quantity: Int!
   user(where: UserWhereInput): User!
+  client(where: ClientWhereInput): Client!
 }
 
 """A connection to a list of items."""
@@ -1194,11 +1348,19 @@ input ProductCreateInput {
   price: Float!
   quantity: Int!
   user: UserCreateOneInput!
+  client: ClientCreateOneWithoutProductsInput!
 }
 
-input ProductCreateManyInput {
-  create: [ProductCreateInput!]
+input ProductCreateManyWithoutClientInput {
+  create: [ProductCreateWithoutClientInput!]
   connect: [ProductWhereUniqueInput!]
+}
+
+input ProductCreateWithoutClientInput {
+  name: String!
+  price: Float!
+  quantity: Int!
+  user: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -1273,38 +1435,39 @@ input ProductSubscriptionWhereInput {
   node: ProductWhereInput
 }
 
-input ProductUpdateDataInput {
-  name: String
-  price: Float
-  quantity: Int
-  user: UserUpdateOneInput
-}
-
 input ProductUpdateInput {
   name: String
   price: Float
   quantity: Int
   user: UserUpdateOneInput
+  client: ClientUpdateOneWithoutProductsInput
 }
 
-input ProductUpdateManyInput {
-  create: [ProductCreateInput!]
+input ProductUpdateManyWithoutClientInput {
+  create: [ProductCreateWithoutClientInput!]
   connect: [ProductWhereUniqueInput!]
   disconnect: [ProductWhereUniqueInput!]
   delete: [ProductWhereUniqueInput!]
-  update: [ProductUpdateWithWhereUniqueNestedInput!]
-  upsert: [ProductUpsertWithWhereUniqueNestedInput!]
+  update: [ProductUpdateWithWhereUniqueWithoutClientInput!]
+  upsert: [ProductUpsertWithWhereUniqueWithoutClientInput!]
 }
 
-input ProductUpdateWithWhereUniqueNestedInput {
-  where: ProductWhereUniqueInput!
-  data: ProductUpdateDataInput!
+input ProductUpdateWithoutClientDataInput {
+  name: String
+  price: Float
+  quantity: Int
+  user: UserUpdateOneInput
 }
 
-input ProductUpsertWithWhereUniqueNestedInput {
+input ProductUpdateWithWhereUniqueWithoutClientInput {
   where: ProductWhereUniqueInput!
-  update: ProductUpdateDataInput!
-  create: ProductCreateInput!
+  data: ProductUpdateWithoutClientDataInput!
+}
+
+input ProductUpsertWithWhereUniqueWithoutClientInput {
+  where: ProductWhereUniqueInput!
+  update: ProductUpdateWithoutClientDataInput!
+  create: ProductCreateWithoutClientInput!
 }
 
 input ProductWhereInput {
@@ -1485,9 +1648,7 @@ input ProductWhereInput {
   """All values greater than or equal the given value."""
   quantity_gte: Int
   user: UserWhereInput
-  _MagicalBackRelation_ClientToProduct_every: ClientWhereInput
-  _MagicalBackRelation_ClientToProduct_some: ClientWhereInput
-  _MagicalBackRelation_ClientToProduct_none: ClientWhereInput
+  client: ClientWhereInput
 }
 
 input ProductWhereUniqueInput {
@@ -1495,27 +1656,27 @@ input ProductWhereUniqueInput {
 }
 
 type Query {
-  clients(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client]!
-  services(where: ServiceWhereInput, orderBy: ServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Service]!
-  notificationses(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifications]!
-  sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale]!
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  services(where: ServiceWhereInput, orderBy: ServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Service]!
+  sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale]!
   logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log]!
+  notificationses(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifications]!
+  clients(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client]!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
-  client(where: ClientWhereUniqueInput!): Client
+  product(where: ProductWhereUniqueInput!): Product
   service(where: ServiceWhereUniqueInput!): Service
   sale(where: SaleWhereUniqueInput!): Sale
-  product(where: ProductWhereUniqueInput!): Product
-  user(where: UserWhereUniqueInput!): User
   log(where: LogWhereUniqueInput!): Log
-  clientsConnection(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClientConnection!
-  servicesConnection(where: ServiceWhereInput, orderBy: ServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ServiceConnection!
-  notificationsesConnection(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationsConnection!
-  salesConnection(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SaleConnection!
+  client(where: ClientWhereUniqueInput!): Client
+  user(where: UserWhereUniqueInput!): User
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  servicesConnection(where: ServiceWhereInput, orderBy: ServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ServiceConnection!
+  salesConnection(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SaleConnection!
   logsConnection(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LogConnection!
+  notificationsesConnection(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationsConnection!
+  clientsConnection(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClientConnection!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
 
   """Fetches an object given its ID"""
@@ -1531,6 +1692,7 @@ type Sale implements Node {
   updatedAt: DateTime!
   products(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct!]
   soldBy(where: UserWhereInput): User!
+  client(where: ClientWhereInput): Client!
 }
 
 """A connection to a list of items."""
@@ -1546,10 +1708,11 @@ type SaleConnection {
 input SaleCreateInput {
   products: CartProductCreateManyInput
   soldBy: UserCreateOneWithoutSalesInput!
+  client: ClientCreateOneWithoutSalesInput!
 }
 
-input SaleCreateManyInput {
-  create: [SaleCreateInput!]
+input SaleCreateManyWithoutClientInput {
+  create: [SaleCreateWithoutClientInput!]
   connect: [SaleWhereUniqueInput!]
 }
 
@@ -1558,8 +1721,14 @@ input SaleCreateManyWithoutSoldByInput {
   connect: [SaleWhereUniqueInput!]
 }
 
+input SaleCreateWithoutClientInput {
+  products: CartProductCreateManyInput
+  soldBy: UserCreateOneWithoutSalesInput!
+}
+
 input SaleCreateWithoutSoldByInput {
   products: CartProductCreateManyInput
+  client: ClientCreateOneWithoutSalesInput!
 }
 
 """An edge in a connection."""
@@ -1625,23 +1794,19 @@ input SaleSubscriptionWhereInput {
   node: SaleWhereInput
 }
 
-input SaleUpdateDataInput {
-  products: CartProductUpdateManyInput
-  soldBy: UserUpdateOneWithoutSalesInput
-}
-
 input SaleUpdateInput {
   products: CartProductUpdateManyInput
   soldBy: UserUpdateOneWithoutSalesInput
+  client: ClientUpdateOneWithoutSalesInput
 }
 
-input SaleUpdateManyInput {
-  create: [SaleCreateInput!]
+input SaleUpdateManyWithoutClientInput {
+  create: [SaleCreateWithoutClientInput!]
   connect: [SaleWhereUniqueInput!]
   disconnect: [SaleWhereUniqueInput!]
   delete: [SaleWhereUniqueInput!]
-  update: [SaleUpdateWithWhereUniqueNestedInput!]
-  upsert: [SaleUpsertWithWhereUniqueNestedInput!]
+  update: [SaleUpdateWithWhereUniqueWithoutClientInput!]
+  upsert: [SaleUpsertWithWhereUniqueWithoutClientInput!]
 }
 
 input SaleUpdateManyWithoutSoldByInput {
@@ -1653,13 +1818,19 @@ input SaleUpdateManyWithoutSoldByInput {
   upsert: [SaleUpsertWithWhereUniqueWithoutSoldByInput!]
 }
 
-input SaleUpdateWithoutSoldByDataInput {
+input SaleUpdateWithoutClientDataInput {
   products: CartProductUpdateManyInput
+  soldBy: UserUpdateOneWithoutSalesInput
 }
 
-input SaleUpdateWithWhereUniqueNestedInput {
+input SaleUpdateWithoutSoldByDataInput {
+  products: CartProductUpdateManyInput
+  client: ClientUpdateOneWithoutSalesInput
+}
+
+input SaleUpdateWithWhereUniqueWithoutClientInput {
   where: SaleWhereUniqueInput!
-  data: SaleUpdateDataInput!
+  data: SaleUpdateWithoutClientDataInput!
 }
 
 input SaleUpdateWithWhereUniqueWithoutSoldByInput {
@@ -1667,10 +1838,10 @@ input SaleUpdateWithWhereUniqueWithoutSoldByInput {
   data: SaleUpdateWithoutSoldByDataInput!
 }
 
-input SaleUpsertWithWhereUniqueNestedInput {
+input SaleUpsertWithWhereUniqueWithoutClientInput {
   where: SaleWhereUniqueInput!
-  update: SaleUpdateDataInput!
-  create: SaleCreateInput!
+  update: SaleUpdateWithoutClientDataInput!
+  create: SaleCreateWithoutClientInput!
 }
 
 input SaleUpsertWithWhereUniqueWithoutSoldByInput {
@@ -1776,9 +1947,7 @@ input SaleWhereInput {
   products_some: CartProductWhereInput
   products_none: CartProductWhereInput
   soldBy: UserWhereInput
-  _MagicalBackRelation_ClientToSale_every: ClientWhereInput
-  _MagicalBackRelation_ClientToSale_some: ClientWhereInput
-  _MagicalBackRelation_ClientToSale_none: ClientWhereInput
+  client: ClientWhereInput
 }
 
 input SaleWhereUniqueInput {
@@ -1792,6 +1961,7 @@ type Service implements Node {
   name: String!
   price: Float!
   user(where: UserWhereInput): User!
+  client(where: ClientWhereInput): Client!
 }
 
 """A connection to a list of items."""
@@ -1808,6 +1978,7 @@ input ServiceCreateInput {
   name: String!
   price: Float!
   user: UserCreateOneInput!
+  client: ClientCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -1883,6 +2054,7 @@ input ServiceUpdateInput {
   name: String
   price: Float
   user: UserUpdateOneInput
+  client: ClientUpdateOneInput
 }
 
 input ServiceWhereInput {
@@ -2041,6 +2213,7 @@ input ServiceWhereInput {
   """All values greater than or equal the given value."""
   price_gte: Float
   user: UserWhereInput
+  client: ClientWhereInput
 }
 
 input ServiceWhereUniqueInput {
@@ -2048,13 +2221,13 @@ input ServiceWhereUniqueInput {
 }
 
 type Subscription {
-  client(where: ClientSubscriptionWhereInput): ClientSubscriptionPayload
-  service(where: ServiceSubscriptionWhereInput): ServiceSubscriptionPayload
-  notifications(where: NotificationsSubscriptionWhereInput): NotificationsSubscriptionPayload
-  sale(where: SaleSubscriptionWhereInput): SaleSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  service(where: ServiceSubscriptionWhereInput): ServiceSubscriptionPayload
+  sale(where: SaleSubscriptionWhereInput): SaleSubscriptionPayload
   log(where: LogSubscriptionWhereInput): LogSubscriptionPayload
+  notifications(where: NotificationsSubscriptionWhereInput): NotificationsSubscriptionPayload
+  client(where: ClientSubscriptionWhereInput): ClientSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
 }
 
@@ -2068,7 +2241,7 @@ type User implements Node {
   phoneNumber: String!
   password: String!
   permissions: [UserPermissions!]!
-  isAdmin: Boolean
+  isAdmin: Boolean!
   client(where: ClientWhereInput): Client!
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale!]
 }
@@ -2165,10 +2338,10 @@ enum UserOrderByInput {
 }
 
 enum UserPermissions {
-  ADD_PRODUCTS
-  EDIT_PRODUCTS
+  CREATE_PRODUCTS
+  UPDATE_PRODUCTS
   DELETE_PRODUCTS
-  ADD_SALES
+  CREATE_SALES
   DELETE_SALES
 }
 
@@ -2181,7 +2354,7 @@ type UserPreviousValues {
   phoneNumber: String!
   password: String!
   permissions: [UserPermissions!]!
-  isAdmin: Boolean
+  isAdmin: Boolean!
 }
 
 type UserSubscriptionPayload {

@@ -1,4 +1,4 @@
-# import Product, Sale, CartProductCreateInput, UserPermissions, Notifications, NotificationsCreateInput, NotificationsUpdateInput, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload, Service from "./generated/prisma.graphql"
+# import Product, CartProductCreateInput, UserPermissions, Notifications, NotificationsCreateInput, NotificationsUpdateInput, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload, Service from "./generated/prisma.graphql"
 
 type Query {
   me: User
@@ -43,10 +43,17 @@ type Mutation {
   # deleteService(serviceId: ID!): Service
 }
 
-
 type AuthPayload {
   token: String!
   user: User
+}
+
+type Sale {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  products: [CartProduct!]!
+  soldBy: User!
 }
 
 type User {
@@ -56,7 +63,7 @@ type User {
   name: String!
   lastName: String
   phoneNumber: String!
-  notifications: Notifications
+  notifications: Notifications!
   permissions: [UserPermissions!]!
   isAdmin: Boolean
   client: Client!

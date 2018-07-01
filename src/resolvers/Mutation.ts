@@ -15,7 +15,7 @@ const login = async (_, { phoneNumber, password }, ctx, _1) => {
 
   if (!user) {
     throw new Error(
-      `La cuenta con el numero: ${phoneNumber} no existe. Por favor verifica el numero y vuelve a intentarlo`
+      `La cuenta con el numero: "${phoneNumber}" no existe. Por favor verifica el numero y vuelve a intentarlo`
     )
   }
 
@@ -129,7 +129,16 @@ const createProduct = async (
   ctx: Context,
   info
 ) => {
-  const id = await getUserId(ctx)
+  const userId = await getUserId(ctx)
+  const {
+    isAdmin,
+    permissions,
+    client: { id: clientId },
+  } = await getUserWithId(userId, ctx, 'isAdmin permissions client {id}')
+
+  if (!isAdmin && !permissions.includes('CREATE_PRODUCTS')) {
+    throw new Error('Este usuario no tiene permisos para editar productos.')
+  }
 
   return ctx.db.mutation.createProduct(
     {
@@ -137,7 +146,8 @@ const createProduct = async (
         name,
         price,
         quantity,
-        user: { connect: { id } },
+        user: { connect: { id: userId } },
+        client: { connect: { id: clientId } },
       },
     },
     info
@@ -145,11 +155,16 @@ const createProduct = async (
 }
 
 // TODO: validate the fields of the product before trying to update it
-const updateProduct = async (_, { name, price, quantity, productId }, ctx: Context, info) => {
+const updateProduct = async (
+  _,
+  { name, price, quantity, productId },
+  ctx: Context,
+  info
+) => {
   const userId = await getUserId(ctx)
   const user = await getUserWithId(userId, ctx, '{ isAdmin permissions }')
 
-  if (!user.isAdmin && !user.permissions.includes('EDIT_PRODUCTS')) {
+  if (!user.isAdmin && !user.permissions.includes('UPDATE_PRODUCTS')) {
     throw new Error('Este usuario no tiene permisos para editar productos.')
   }
 
@@ -187,26 +202,42 @@ const createSale = async (_, args, ctx: Context, info) => {
     cartProducts: CartProduct[]
   }
   const userId = await getUserId(ctx)
-  const user = await getUserWithId(userId, ctx, '{ isAdmin permissions }')
+  const user = await getUserWithId(
+    userId,
+    ctx,
+    '{ isAdmin permissions client {id} }'
+  )
 
-  if (!user.isAdmin && !user.permissions.includes('ADD_SALES')) {
+  if (!user.isAdmin && !user.permissions.includes('CREATE_SALES')) {
     throw new Error('Este usuario no tiene permisos para añadir ventas')
   }
 
   const updateProducts = await updateProductsQuantity(cartProducts, ctx)
-  await Promise.all(updateProducts).then(products => {
-    sendNotifications(products, ctx)
-  })
 
-  return ctx.db.mutation.createSale(
-    {
-      data: {
-        products: { create: cartProducts },
-        soldBy: { connect: { id: userId } },
+  return ctx.db.mutation
+    .createSale(
+      {
+        data: {
+          products: { create: cartProducts },
+          soldBy: { connect: { id: userId } },
+          client: { connect: { id: user.client.id } },
+        },
       },
-    },
-    info
-  )
+      info
+    )
+    .then(async sale => {
+      await sendNotifications(updateProducts, ctx)
+
+      updateProducts.forEach(({ id, quantity }) => {
+        ctx.db.mutation.updateProduct({
+          data: {
+            quantity,
+          },
+          where: { id },
+        })
+      })
+      return sale
+    })
 }
 
 const deleteSale = async (_, { saleId }, ctx: Context, info) => {
@@ -217,18 +248,19 @@ const deleteSale = async (_, { saleId }, ctx: Context, info) => {
     throw new Error('Este usuario no tiene permisos para eliminar ventas')
   }
 
-  const sale = await ctx.db.mutation.deleteSale(
+  return ctx.db.mutation.deleteSale(
     {
       where: { id: saleId },
     },
-    `{ id }`
+    info
   )
-
-  return ctx.db.query.sale({ where: { id: sale.id } }, info)
 }
 
 const createLog = async (_, args, ctx: Context, info) => {
   const userId = await getUserId(ctx)
+  const {
+    client: { id: clientId },
+  } = await getUserWithId(userId, ctx, '{ client { id } }')
 
   return ctx.db.mutation.createLog(
     {
@@ -236,6 +268,7 @@ const createLog = async (_, args, ctx: Context, info) => {
         message: args.message,
         type: args.type,
         user: { connect: { id: userId } },
+        client: { connect: { id: clientId } },
       },
     },
     info

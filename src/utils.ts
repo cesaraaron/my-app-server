@@ -9,20 +9,15 @@ export interface Context {
   request: any
 }
 
-// TODO: Just return the userId from here
 export function getUserId(ctx: Context): string {
-  const Authorization = ctx.request.get('Authorization')
+  let userId: string
 
-  if (!Authorization) {
-    throw new AuthError()
-  }
+  try {
+    const Authorization = ctx.request.get('Authorization')
+    const token = Authorization.replace('Bearer ', '')
 
-  const token = Authorization.replace('Bearer ', '')
-  const { userId } = jwt.verify(token, process.env.APP_SECRET) as {
-    userId: string
-  }
-
-  if (!userId) {
+    userId = jwt.verify(token, process.env.APP_SECRET).userId as string
+  } catch (e) {
     throw new AuthError()
   }
 
@@ -32,39 +27,33 @@ export function getUserId(ctx: Context): string {
 export const updateProductsQuantity = async (
   cartProducts: CartProduct[],
   ctx: Context
-) => {
+): Promise<Product[]> => {
   const cartProductIds = cartProducts.map(p => p.productId)
 
   const products = await ctx.db.query.products({
     where: { id_in: cartProductIds },
   })
 
-  let updateManyProductPromises: Promise<Product>[] = []
+  const newProducts: Product[] = []
 
-  products.forEach(({ id, quantity }) => {
+  products.forEach(({ id, quantity, ...rest }) => {
     const cartProduct = cartProducts.find(p => p.productId === id)
-
     const newQuantity = quantity - cartProduct.quantitySold
-    if (newQuantity < 0) {
-      throw new Error(
-        `El producto: ${
-          cartProduct.name
-        } solo tiene ${quantity} disponible. Usted esta intentado agregar ${
-          cartProduct.quantitySold
-        }`
-      )
+
+    if (newQuantity >= 0) {
+      newProducts.push({ ...rest, id, quantity: newQuantity })
+      return
     }
 
-    updateManyProductPromises.push(
-      ctx.db.mutation.updateProduct({
-        where: { id },
-        data: {
-          quantity: newQuantity,
-        },
-      })
+    throw new Error(
+      `El producto: ${
+        cartProduct.name
+      } solo tiene ${quantity} disponible. Usted esta intentado agregar ${
+        cartProduct.quantitySold
+      }`
     )
   })
-  return updateManyProductPromises
+  return newProducts
 }
 
 type ExpoNotification = {
@@ -78,13 +67,15 @@ type ProductQuantityWithMessage = {
   quantity: number
 }
 
+// If there are more than 10 notifications show a single notification
+// with data to show in the app with the products low in inventory
 export const sendNotifications = async (
   updatedProducts: Product[],
   ctx: Context
 ) => {
   const userId = await getUserId(ctx)
   const user = await getUserWithId(userId, ctx, '{ client {id}}')
-
+  console.log('Start of sendnotifications')
   const users = await ctx.db.query.users(
     {
       where: { client: { id: user.client.id } },
@@ -106,6 +97,9 @@ export const sendNotifications = async (
       }
     }
   )
+
+  console.log('after map of notificationMessagesWithProductQuantity')
+
 
   const notifications: ExpoNotification[] = []
 
@@ -139,9 +133,8 @@ export const sendNotifications = async (
   if (notifications.length === 0) {
     return
   }
-
+  console.log('about to send the notifications')
   let chunks = expo.chunkPushNotifications(notifications)
-
   ;(async () => {
     // Send the chunks to the Expo push notification service. There are
     // different strategies you could use. A simple one is to send one chunk at a
@@ -155,6 +148,8 @@ export const sendNotifications = async (
       }
     }
   })()
+
+  console.log('notifications sent!')
 }
 
 export function getUserWithId(

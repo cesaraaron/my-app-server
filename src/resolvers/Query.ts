@@ -1,26 +1,35 @@
-import { getUserId, Context } from '../utils'
+import { getUserId, Context, getUserWithId } from '../utils'
 
 export const Query = {
   async me(_, _1, ctx: Context, info) {
     const id = await getUserId(ctx)
 
-    return ctx.db.query.user({where: {id}}, info)
+    return ctx.db.query.user({ where: { id } }, info)
   },
   users: async (_, _1, ctx: Context, info) => {
-    const id = await getUserId(ctx)
+    const userId = await getUserId(ctx)
+    const {
+      client: { id: clientId },
+    } = await getUserWithId(userId, ctx, '{ client { id } }')
 
-    return ctx.db.query.users({ where: { id } }, info)
+    return ctx.db.query.users({ where: { client: { id: clientId } } }, info)
   },
 
   products: async (_, _1, ctx: Context, info) => {
-    const id = await getUserId(ctx)
+    const userId = await getUserId(ctx)
+    const {
+      client: { id: clientId },
+    } = await getUserWithId(userId, ctx, '{ client { id } }')
 
-    return ctx.db.query.products({ where: { user: {id} } }, info)
+    return ctx.db.query.products({ where: { client: { id: clientId } } }, info)
   },
 
   sales: async (_, _1, ctx: Context, info) => {
-    const id = await getUserId(ctx)
+    const userId = await getUserId(ctx)
+    const {
+      client: { id: clientId },
+    } = await getUserWithId(userId, ctx, '{ client { id } }')
 
-    return ctx.db.query.sales({ where: { id } }, info)
+    return ctx.db.query.sales({ where: { client: { id: clientId } } }, info)
   },
 }
