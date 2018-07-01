@@ -1,8 +1,124 @@
-import { Prisma as BasePrisma, BasePrismaOptions } from 'prisma-binding'
-import { GraphQLResolveInfo } from 'graphql'
+import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
+import { IResolvers } from 'graphql-tools/dist/Interfaces'
+import { Options } from 'graphql-binding'
+import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'
 
-export const typeDefs = `
-type AggregateCartProduct {
+export interface Query {
+    products: <T = Product[]>(args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    services: <T = Service[]>(args: { where?: ServiceWhereInput, orderBy?: ServiceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    sales: <T = Sale[]>(args: { where?: SaleWhereInput, orderBy?: SaleOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    logs: <T = Log[]>(args: { where?: LogWhereInput, orderBy?: LogOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    notificationses: <T = Notifications[]>(args: { where?: NotificationsWhereInput, orderBy?: NotificationsOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    clients: <T = Client[]>(args: { where?: ClientWhereInput, orderBy?: ClientOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    users: <T = User[]>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    cartProducts: <T = CartProduct[]>(args: { where?: CartProductWhereInput, orderBy?: CartProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    product: <T = Product | null>(args: { where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    service: <T = Service | null>(args: { where: ServiceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    sale: <T = Sale | null>(args: { where: SaleWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    log: <T = Log | null>(args: { where: LogWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    client: <T = Client | null>(args: { where: ClientWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    productsConnection: <T = ProductConnection>(args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    servicesConnection: <T = ServiceConnection>(args: { where?: ServiceWhereInput, orderBy?: ServiceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    salesConnection: <T = SaleConnection>(args: { where?: SaleWhereInput, orderBy?: SaleOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    logsConnection: <T = LogConnection>(args: { where?: LogWhereInput, orderBy?: LogOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    notificationsesConnection: <T = NotificationsConnection>(args: { where?: NotificationsWhereInput, orderBy?: NotificationsOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    clientsConnection: <T = ClientConnection>(args: { where?: ClientWhereInput, orderBy?: ClientOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    usersConnection: <T = UserConnection>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    cartProductsConnection: <T = CartProductConnection>(args: { where?: CartProductWhereInput, orderBy?: CartProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+  }
+
+export interface Mutation {
+    createProduct: <T = Product>(args: { data: ProductCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createService: <T = Service>(args: { data: ServiceCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createSale: <T = Sale>(args: { data: SaleCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createLog: <T = Log>(args: { data: LogCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createNotifications: <T = Notifications>(args: { data: NotificationsCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createClient: <T = Client>(args: { data: ClientCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createUser: <T = User>(args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createCartProduct: <T = CartProduct>(args: { data: CartProductCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateProduct: <T = Product | null>(args: { data: ProductUpdateInput, where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateService: <T = Service | null>(args: { data: ServiceUpdateInput, where: ServiceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateSale: <T = Sale | null>(args: { data: SaleUpdateInput, where: SaleWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateLog: <T = Log | null>(args: { data: LogUpdateInput, where: LogWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateClient: <T = Client | null>(args: { data: ClientUpdateInput, where: ClientWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteProduct: <T = Product | null>(args: { where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteService: <T = Service | null>(args: { where: ServiceWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteSale: <T = Sale | null>(args: { where: SaleWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteLog: <T = Log | null>(args: { where: LogWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteClient: <T = Client | null>(args: { where: ClientWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertProduct: <T = Product>(args: { where: ProductWhereUniqueInput, create: ProductCreateInput, update: ProductUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertService: <T = Service>(args: { where: ServiceWhereUniqueInput, create: ServiceCreateInput, update: ServiceUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertSale: <T = Sale>(args: { where: SaleWhereUniqueInput, create: SaleCreateInput, update: SaleUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertLog: <T = Log>(args: { where: LogWhereUniqueInput, create: LogCreateInput, update: LogUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertClient: <T = Client>(args: { where: ClientWhereUniqueInput, create: ClientCreateInput, update: ClientUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyProducts: <T = BatchPayload>(args: { data: ProductUpdateInput, where?: ProductWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyServices: <T = BatchPayload>(args: { data: ServiceUpdateInput, where?: ServiceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManySales: <T = BatchPayload>(args: { data: SaleUpdateInput, where?: SaleWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyLogs: <T = BatchPayload>(args: { data: LogUpdateInput, where?: LogWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyNotificationses: <T = BatchPayload>(args: { data: NotificationsUpdateInput, where?: NotificationsWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyClients: <T = BatchPayload>(args: { data: ClientUpdateInput, where?: ClientWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyCartProducts: <T = BatchPayload>(args: { data: CartProductUpdateInput, where?: CartProductWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyProducts: <T = BatchPayload>(args: { where?: ProductWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyServices: <T = BatchPayload>(args: { where?: ServiceWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManySales: <T = BatchPayload>(args: { where?: SaleWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyLogs: <T = BatchPayload>(args: { where?: LogWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyNotificationses: <T = BatchPayload>(args: { where?: NotificationsWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyClients: <T = BatchPayload>(args: { where?: ClientWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyCartProducts: <T = BatchPayload>(args: { where?: CartProductWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+  }
+
+export interface Subscription {
+    product: <T = ProductSubscriptionPayload | null>(args: { where?: ProductSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    service: <T = ServiceSubscriptionPayload | null>(args: { where?: ServiceSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    sale: <T = SaleSubscriptionPayload | null>(args: { where?: SaleSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    log: <T = LogSubscriptionPayload | null>(args: { where?: LogSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    notifications: <T = NotificationsSubscriptionPayload | null>(args: { where?: NotificationsSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    client: <T = ClientSubscriptionPayload | null>(args: { where?: ClientSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    user: <T = UserSubscriptionPayload | null>(args: { where?: UserSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    cartProduct: <T = CartProductSubscriptionPayload | null>(args: { where?: CartProductSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
+  }
+
+export interface Exists {
+  Product: (where?: ProductWhereInput) => Promise<boolean>
+  Service: (where?: ServiceWhereInput) => Promise<boolean>
+  Sale: (where?: SaleWhereInput) => Promise<boolean>
+  Log: (where?: LogWhereInput) => Promise<boolean>
+  Notifications: (where?: NotificationsWhereInput) => Promise<boolean>
+  Client: (where?: ClientWhereInput) => Promise<boolean>
+  User: (where?: UserWhereInput) => Promise<boolean>
+  CartProduct: (where?: CartProductWhereInput) => Promise<boolean>
+}
+
+export interface Prisma {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+  exists: Exists
+  request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
+  delegate(operation: 'query' | 'mutation', fieldName: string, args: {
+    [key: string]: any;
+}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<any>;
+delegateSubscription(fieldName: string, args?: {
+    [key: string]: any;
+}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<AsyncIterator<any>>;
+getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
+}
+
+export interface BindingConstructor<T> {
+  new(options: BasePrismaOptions): T
+}
+/**
+ * Type Defs
+*/
+
+const typeDefs = `type AggregateCartProduct {
   count: Int!
 }
 
@@ -35,9 +151,7 @@ type AggregateUser {
 }
 
 type BatchPayload {
-  """
-  The number of nodes that have been affected by the Batch operation.
-  """
+  """The number of nodes that have been affected by the Batch operation."""
   count: Long!
 }
 
@@ -48,17 +162,12 @@ type CartProduct {
   quantitySold: Int!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type CartProductConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [CartProductEdge]!
   aggregate: AggregateCartProduct!
 }
@@ -74,17 +183,12 @@ input CartProductCreateManyInput {
   create: [CartProductCreateInput!]
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type CartProductEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: CartProduct!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -120,30 +224,30 @@ type CartProductSubscriptionPayload {
 }
 
 input CartProductSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [CartProductSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [CartProductSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [CartProductSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -163,181 +267,137 @@ input CartProductUpdateManyInput {
 }
 
 input CartProductWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [CartProductWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [CartProductWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [CartProductWhereInput!]
   productId: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   productId_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   productId_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   productId_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   productId_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   productId_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   productId_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   productId_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   productId_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   productId_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   productId_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   productId_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   productId_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   productId_not_ends_with: ID
   name: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   name_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   name_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   name_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   name_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   name_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   name_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   name_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   name_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   name_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   name_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   name_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   name_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   name_not_ends_with: String
   price: Float
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   price_not: Float
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   price_in: [Float!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   price_not_in: [Float!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   price_lt: Float
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   price_lte: Float
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   price_gt: Float
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   price_gte: Float
   quantitySold: Int
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   quantitySold_not: Int
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   quantitySold_in: [Int!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   quantitySold_not_in: [Int!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   quantitySold_lt: Int
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   quantitySold_lte: Int
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   quantitySold_gt: Int
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   quantitySold_gte: Int
   _MagicalBackRelation_CartProductToSale_every: SaleWhereInput
   _MagicalBackRelation_CartProductToSale_some: SaleWhereInput
@@ -356,17 +416,12 @@ type Client implements Node {
   logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log!]
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type ClientConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [ClientEdge]!
   aggregate: AggregateClient!
 }
@@ -447,17 +502,12 @@ input ClientCreateWithoutUsersInput {
   logs: LogCreateManyWithoutClientInput
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type ClientEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: Client!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -494,30 +544,30 @@ type ClientSubscriptionPayload {
 }
 
 input ClientSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [ClientSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [ClientSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [ClientSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -653,282 +703,213 @@ input ClientUpsertWithoutUsersInput {
 }
 
 input ClientWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [ClientWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [ClientWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [ClientWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   name: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   name_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   name_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   name_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   name_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   name_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   name_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   name_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   name_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   name_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   name_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   name_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   name_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   name_not_ends_with: String
   lastName: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   lastName_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   lastName_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   lastName_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   lastName_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   lastName_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   lastName_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   lastName_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   lastName_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   lastName_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   lastName_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   lastName_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   lastName_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   lastName_not_ends_with: String
   email: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   email_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   email_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   email_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   email_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   email_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   email_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   email_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   email_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   email_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   email_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   email_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   email_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   email_not_ends_with: String
   phoneNumber: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   phoneNumber_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   phoneNumber_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   phoneNumber_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   phoneNumber_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   phoneNumber_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   phoneNumber_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   phoneNumber_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   phoneNumber_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   phoneNumber_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   phoneNumber_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   phoneNumber_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   phoneNumber_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   phoneNumber_not_ends_with: String
   users_every: UserWhereInput
   users_some: UserWhereInput
@@ -964,17 +945,12 @@ type Log implements Node {
   client(where: ClientWhereInput): Client!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type LogConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [LogEdge]!
   aggregate: AggregateLog!
 }
@@ -997,17 +973,12 @@ input LogCreateWithoutClientInput {
   user: UserCreateOneInput!
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type LogEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: Log!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -1039,30 +1010,30 @@ type LogSubscriptionPayload {
 }
 
 input LogSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [LogSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [LogSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [LogSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -1108,165 +1079,125 @@ input LogUpsertWithWhereUniqueWithoutClientInput {
 }
 
 input LogWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [LogWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [LogWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [LogWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   message: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   message_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   message_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   message_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   message_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   message_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   message_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   message_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   message_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   message_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   message_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   message_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   message_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   message_not_ends_with: String
   type: LogType
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   type_not: LogType
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   type_in: [LogType!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   type_not_in: [LogType!]
   createdAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   createdAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   createdAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   createdAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   createdAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   createdAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   createdAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   createdAt_gte: DateTime
   user: UserWhereInput
   client: ClientWhereInput
@@ -1277,10 +1208,55 @@ input LogWhereUniqueInput {
 }
 
 """
-The 'Long' scalar type represents non-fractional signed whole numeric values.
+The \`Long\` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 """
 scalar Long
+
+type Mutation {
+  createProduct(data: ProductCreateInput!): Product!
+  createService(data: ServiceCreateInput!): Service!
+  createSale(data: SaleCreateInput!): Sale!
+  createLog(data: LogCreateInput!): Log!
+  createNotifications(data: NotificationsCreateInput!): Notifications!
+  createClient(data: ClientCreateInput!): Client!
+  createUser(data: UserCreateInput!): User!
+  createCartProduct(data: CartProductCreateInput!): CartProduct!
+  updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
+  updateService(data: ServiceUpdateInput!, where: ServiceWhereUniqueInput!): Service
+  updateSale(data: SaleUpdateInput!, where: SaleWhereUniqueInput!): Sale
+  updateLog(data: LogUpdateInput!, where: LogWhereUniqueInput!): Log
+  updateClient(data: ClientUpdateInput!, where: ClientWhereUniqueInput!): Client
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  deleteProduct(where: ProductWhereUniqueInput!): Product
+  deleteService(where: ServiceWhereUniqueInput!): Service
+  deleteSale(where: SaleWhereUniqueInput!): Sale
+  deleteLog(where: LogWhereUniqueInput!): Log
+  deleteClient(where: ClientWhereUniqueInput!): Client
+  deleteUser(where: UserWhereUniqueInput!): User
+  upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
+  upsertService(where: ServiceWhereUniqueInput!, create: ServiceCreateInput!, update: ServiceUpdateInput!): Service!
+  upsertSale(where: SaleWhereUniqueInput!, create: SaleCreateInput!, update: SaleUpdateInput!): Sale!
+  upsertLog(where: LogWhereUniqueInput!, create: LogCreateInput!, update: LogUpdateInput!): Log!
+  upsertClient(where: ClientWhereUniqueInput!, create: ClientCreateInput!, update: ClientUpdateInput!): Client!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
+  updateManyServices(data: ServiceUpdateInput!, where: ServiceWhereInput): BatchPayload!
+  updateManySales(data: SaleUpdateInput!, where: SaleWhereInput): BatchPayload!
+  updateManyLogs(data: LogUpdateInput!, where: LogWhereInput): BatchPayload!
+  updateManyNotificationses(data: NotificationsUpdateInput!, where: NotificationsWhereInput): BatchPayload!
+  updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyCartProducts(data: CartProductUpdateInput!, where: CartProductWhereInput): BatchPayload!
+  deleteManyProducts(where: ProductWhereInput): BatchPayload!
+  deleteManyServices(where: ServiceWhereInput): BatchPayload!
+  deleteManySales(where: SaleWhereInput): BatchPayload!
+  deleteManyLogs(where: LogWhereInput): BatchPayload!
+  deleteManyNotificationses(where: NotificationsWhereInput): BatchPayload!
+  deleteManyClients(where: ClientWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
+}
 
 enum MutationType {
   CREATED
@@ -1288,13 +1264,9 @@ enum MutationType {
   DELETED
 }
 
-"""
-An object with an ID
-"""
+"""An object with an ID"""
 interface Node {
-  """
-  The id of the object.
-  """
+  """The id of the object."""
   id: ID!
 }
 
@@ -1303,17 +1275,12 @@ type Notifications {
   devices: [String!]!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type NotificationsConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [NotificationsEdge]!
   aggregate: AggregateNotifications!
 }
@@ -1331,17 +1298,12 @@ input NotificationsCreateOneInput {
   create: NotificationsCreateInput
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type NotificationsEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: Notifications!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -1369,30 +1331,30 @@ type NotificationsSubscriptionPayload {
 }
 
 input NotificationsSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [NotificationsSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [NotificationsSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [NotificationsSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -1427,71 +1389,53 @@ input NotificationsUpsertNestedInput {
 }
 
 input NotificationsWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [NotificationsWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [NotificationsWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [NotificationsWhereInput!]
   fireWhen: Int
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   fireWhen_not: Int
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   fireWhen_in: [Int!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   fireWhen_not_in: [Int!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   fireWhen_lt: Int
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   fireWhen_lte: Int
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   fireWhen_gt: Int
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   fireWhen_gte: Int
   _MagicalBackRelation_NotificationsToUser_every: UserWhereInput
   _MagicalBackRelation_NotificationsToUser_some: UserWhereInput
   _MagicalBackRelation_NotificationsToUser_none: UserWhereInput
 }
 
-"""
-Information about pagination in a connection.
-"""
+"""Information about pagination in a connection."""
 type PageInfo {
-  """
-  When paginating forwards, are there more items?
-  """
+  """When paginating forwards, are there more items?"""
   hasNextPage: Boolean!
-  """
-  When paginating backwards, are there more items?
-  """
+
+  """When paginating backwards, are there more items?"""
   hasPreviousPage: Boolean!
-  """
-  When paginating backwards, the cursor to continue.
-  """
+
+  """When paginating backwards, the cursor to continue."""
   startCursor: String
-  """
-  When paginating forwards, the cursor to continue.
-  """
+
+  """When paginating forwards, the cursor to continue."""
   endCursor: String
 }
 
@@ -1506,17 +1450,12 @@ type Product implements Node {
   client(where: ClientWhereInput): Client!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type ProductConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [ProductEdge]!
   aggregate: AggregateProduct!
 }
@@ -1541,17 +1480,12 @@ input ProductCreateWithoutClientInput {
   user: UserCreateOneInput!
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type ProductEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: Product!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -1587,30 +1521,30 @@ type ProductSubscriptionPayload {
 }
 
 input ProductSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [ProductSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [ProductSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [ProductSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -1654,239 +1588,181 @@ input ProductUpsertWithWhereUniqueWithoutClientInput {
 }
 
 input ProductWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [ProductWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [ProductWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [ProductWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   createdAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   createdAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   createdAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   createdAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   createdAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   createdAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   createdAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   createdAt_gte: DateTime
   updatedAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   updatedAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   updatedAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   updatedAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   updatedAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   updatedAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   updatedAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
   name: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   name_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   name_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   name_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   name_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   name_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   name_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   name_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   name_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   name_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   name_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   name_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   name_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   name_not_ends_with: String
   price: Float
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   price_not: Float
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   price_in: [Float!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   price_not_in: [Float!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   price_lt: Float
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   price_lte: Float
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   price_gt: Float
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   price_gte: Float
   quantity: Int
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   quantity_not: Int
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   quantity_in: [Int!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   quantity_not_in: [Int!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   quantity_lt: Int
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   quantity_lte: Int
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   quantity_gt: Int
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   quantity_gte: Int
   user: UserWhereInput
   client: ClientWhereInput
@@ -1894,6 +1770,37 @@ input ProductWhereInput {
 
 input ProductWhereUniqueInput {
   id: ID
+}
+
+type Query {
+  products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
+  services(where: ServiceWhereInput, orderBy: ServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Service]!
+  sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale]!
+  logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log]!
+  notificationses(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifications]!
+  clients(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client]!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
+  product(where: ProductWhereUniqueInput!): Product
+  service(where: ServiceWhereUniqueInput!): Service
+  sale(where: SaleWhereUniqueInput!): Sale
+  log(where: LogWhereUniqueInput!): Log
+  client(where: ClientWhereUniqueInput!): Client
+  user(where: UserWhereUniqueInput!): User
+  productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
+  servicesConnection(where: ServiceWhereInput, orderBy: ServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ServiceConnection!
+  salesConnection(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SaleConnection!
+  logsConnection(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LogConnection!
+  notificationsesConnection(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationsConnection!
+  clientsConnection(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClientConnection!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
 }
 
 type Sale implements Node {
@@ -1905,17 +1812,12 @@ type Sale implements Node {
   client(where: ClientWhereInput): Client!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type SaleConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [SaleEdge]!
   aggregate: AggregateSale!
 }
@@ -1946,17 +1848,12 @@ input SaleCreateWithoutSoldByInput {
   client: ClientCreateOneWithoutSalesInput!
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type SaleEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: Sale!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -1983,30 +1880,30 @@ type SaleSubscriptionPayload {
 }
 
 input SaleSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [SaleSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [SaleSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [SaleSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -2071,128 +1968,97 @@ input SaleUpsertWithWhereUniqueWithoutSoldByInput {
 }
 
 input SaleWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [SaleWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [SaleWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [SaleWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   createdAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   createdAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   createdAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   createdAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   createdAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   createdAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   createdAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   createdAt_gte: DateTime
   updatedAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   updatedAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   updatedAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   updatedAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   updatedAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   updatedAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   updatedAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
   products_every: CartProductWhereInput
   products_some: CartProductWhereInput
@@ -2215,17 +2081,12 @@ type Service implements Node {
   client(where: ClientWhereInput): Client!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type ServiceConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [ServiceEdge]!
   aggregate: AggregateService!
 }
@@ -2237,17 +2098,12 @@ input ServiceCreateInput {
   client: ClientCreateOneInput!
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type ServiceEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: Service!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -2280,30 +2136,30 @@ type ServiceSubscriptionPayload {
 }
 
 input ServiceSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [ServiceSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [ServiceSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [ServiceSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -2319,210 +2175,159 @@ input ServiceUpdateInput {
 }
 
 input ServiceWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [ServiceWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [ServiceWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [ServiceWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   createdAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   createdAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   createdAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   createdAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   createdAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   createdAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   createdAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   createdAt_gte: DateTime
   updatedAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   updatedAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   updatedAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   updatedAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   updatedAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   updatedAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   updatedAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
   name: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   name_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   name_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   name_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   name_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   name_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   name_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   name_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   name_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   name_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   name_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   name_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   name_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   name_not_ends_with: String
   price: Float
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   price_not: Float
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   price_in: [Float!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   price_not_in: [Float!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   price_lt: Float
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   price_lte: Float
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   price_gt: Float
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   price_gte: Float
   user: UserWhereInput
   client: ClientWhereInput
@@ -2530,6 +2335,17 @@ input ServiceWhereInput {
 
 input ServiceWhereUniqueInput {
   id: ID
+}
+
+type Subscription {
+  product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
+  service(where: ServiceSubscriptionWhereInput): ServiceSubscriptionPayload
+  sale(where: SaleSubscriptionWhereInput): SaleSubscriptionPayload
+  log(where: LogSubscriptionWhereInput): LogSubscriptionPayload
+  notifications(where: NotificationsSubscriptionWhereInput): NotificationsSubscriptionPayload
+  client(where: ClientSubscriptionWhereInput): ClientSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
 }
 
 type User implements Node {
@@ -2547,17 +2363,12 @@ type User implements Node {
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale!]
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type UserConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [UserEdge]!
   aggregate: AggregateUser!
 }
@@ -2615,17 +2426,12 @@ input UserCreateWithoutSalesInput {
   client: ClientCreateOneWithoutUsersInput!
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type UserEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: User!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -2676,30 +2482,30 @@ type UserSubscriptionPayload {
 }
 
 input UserSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [UserSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [UserSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [UserSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -2804,345 +2610,261 @@ input UserUpsertWithWhereUniqueWithoutClientInput {
 }
 
 input UserWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [UserWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [UserWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [UserWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   createdAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   createdAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   createdAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   createdAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   createdAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   createdAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   createdAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   createdAt_gte: DateTime
   updatedAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   updatedAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   updatedAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   updatedAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   updatedAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   updatedAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   updatedAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
   name: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   name_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   name_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   name_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   name_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   name_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   name_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   name_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   name_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   name_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   name_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   name_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   name_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   name_not_ends_with: String
   lastName: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   lastName_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   lastName_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   lastName_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   lastName_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   lastName_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   lastName_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   lastName_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   lastName_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   lastName_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   lastName_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   lastName_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   lastName_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   lastName_not_ends_with: String
   phoneNumber: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   phoneNumber_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   phoneNumber_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   phoneNumber_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   phoneNumber_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   phoneNumber_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   phoneNumber_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   phoneNumber_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   phoneNumber_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   phoneNumber_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   phoneNumber_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   phoneNumber_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   phoneNumber_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   phoneNumber_not_ends_with: String
   password: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   password_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   password_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   password_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   password_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   password_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   password_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   password_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   password_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   password_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   password_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   password_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   password_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   password_not_ends_with: String
   isAdmin: Boolean
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   isAdmin_not: Boolean
   notifications: NotificationsWhereInput
   client: ClientWhereInput
@@ -3164,98 +2886,15 @@ input UserWhereUniqueInput {
   id: ID
   phoneNumber: String
 }
-
-type Mutation {
-  createProduct(data: ProductCreateInput!): Product!
-  createService(data: ServiceCreateInput!): Service!
-  createSale(data: SaleCreateInput!): Sale!
-  createLog(data: LogCreateInput!): Log!
-  createNotifications(data: NotificationsCreateInput!): Notifications!
-  createClient(data: ClientCreateInput!): Client!
-  createUser(data: UserCreateInput!): User!
-  createCartProduct(data: CartProductCreateInput!): CartProduct!
-  updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
-  updateService(data: ServiceUpdateInput!, where: ServiceWhereUniqueInput!): Service
-  updateSale(data: SaleUpdateInput!, where: SaleWhereUniqueInput!): Sale
-  updateLog(data: LogUpdateInput!, where: LogWhereUniqueInput!): Log
-  updateClient(data: ClientUpdateInput!, where: ClientWhereUniqueInput!): Client
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteProduct(where: ProductWhereUniqueInput!): Product
-  deleteService(where: ServiceWhereUniqueInput!): Service
-  deleteSale(where: SaleWhereUniqueInput!): Sale
-  deleteLog(where: LogWhereUniqueInput!): Log
-  deleteClient(where: ClientWhereUniqueInput!): Client
-  deleteUser(where: UserWhereUniqueInput!): User
-  upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
-  upsertService(where: ServiceWhereUniqueInput!, create: ServiceCreateInput!, update: ServiceUpdateInput!): Service!
-  upsertSale(where: SaleWhereUniqueInput!, create: SaleCreateInput!, update: SaleUpdateInput!): Sale!
-  upsertLog(where: LogWhereUniqueInput!, create: LogCreateInput!, update: LogUpdateInput!): Log!
-  upsertClient(where: ClientWhereUniqueInput!, create: ClientCreateInput!, update: ClientUpdateInput!): Client!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
-  updateManyServices(data: ServiceUpdateInput!, where: ServiceWhereInput): BatchPayload!
-  updateManySales(data: SaleUpdateInput!, where: SaleWhereInput): BatchPayload!
-  updateManyLogs(data: LogUpdateInput!, where: LogWhereInput): BatchPayload!
-  updateManyNotificationses(data: NotificationsUpdateInput!, where: NotificationsWhereInput): BatchPayload!
-  updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
-  updateManyCartProducts(data: CartProductUpdateInput!, where: CartProductWhereInput): BatchPayload!
-  deleteManyProducts(where: ProductWhereInput): BatchPayload!
-  deleteManyServices(where: ServiceWhereInput): BatchPayload!
-  deleteManySales(where: SaleWhereInput): BatchPayload!
-  deleteManyLogs(where: LogWhereInput): BatchPayload!
-  deleteManyNotificationses(where: NotificationsWhereInput): BatchPayload!
-  deleteManyClients(where: ClientWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
-  deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
-}
-
-type Query {
-  products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
-  services(where: ServiceWhereInput, orderBy: ServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Service]!
-  sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale]!
-  logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log]!
-  notificationses(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifications]!
-  clients(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client]!
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
-  product(where: ProductWhereUniqueInput!): Product
-  service(where: ServiceWhereUniqueInput!): Service
-  sale(where: SaleWhereUniqueInput!): Sale
-  log(where: LogWhereUniqueInput!): Log
-  client(where: ClientWhereUniqueInput!): Client
-  user(where: UserWhereUniqueInput!): User
-  productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
-  servicesConnection(where: ServiceWhereInput, orderBy: ServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ServiceConnection!
-  salesConnection(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SaleConnection!
-  logsConnection(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LogConnection!
-  notificationsesConnection(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationsConnection!
-  clientsConnection(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClientConnection!
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
-  """
-  Fetches an object given its ID
-  """
-  node("""
-  The ID of an object
-  """
-  id: ID!): Node
-}
-
-type Subscription {
-  product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
-  service(where: ServiceSubscriptionWhereInput): ServiceSubscriptionPayload
-  sale(where: SaleSubscriptionWhereInput): SaleSubscriptionPayload
-  log(where: LogSubscriptionWhereInput): LogSubscriptionPayload
-  notifications(where: NotificationsSubscriptionWhereInput): NotificationsSubscriptionPayload
-  client(where: ClientSubscriptionWhereInput): ClientSubscriptionPayload
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
-}
 `
 
-export type CartProductOrderByInput = 
-  'productId_ASC' |
+export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDefs})
+
+/**
+ * Types
+*/
+
+export type CartProductOrderByInput =   'productId_ASC' |
   'productId_DESC' |
   'name_ASC' |
   'name_DESC' |
@@ -3270,11 +2909,9 @@ export type CartProductOrderByInput =
   'createdAt_ASC' |
   'createdAt_DESC'
 
-export type LogType = 
-  'ERROR'
+export type LogType =   'ERROR'
 
-export type ProductOrderByInput = 
-  'id_ASC' |
+export type ProductOrderByInput =   'id_ASC' |
   'id_DESC' |
   'createdAt_ASC' |
   'createdAt_DESC' |
@@ -3287,15 +2924,13 @@ export type ProductOrderByInput =
   'quantity_ASC' |
   'quantity_DESC'
 
-export type UserPermissions = 
-  'CREATE_PRODUCTS' |
+export type UserPermissions =   'CREATE_PRODUCTS' |
   'UPDATE_PRODUCTS' |
   'DELETE_PRODUCTS' |
   'CREATE_SALES' |
   'DELETE_SALES'
 
-export type UserOrderByInput = 
-  'id_ASC' |
+export type UserOrderByInput =   'id_ASC' |
   'id_DESC' |
   'createdAt_ASC' |
   'createdAt_DESC' |
@@ -3312,21 +2947,18 @@ export type UserOrderByInput =
   'isAdmin_ASC' |
   'isAdmin_DESC'
 
-export type SaleOrderByInput = 
-  'id_ASC' |
+export type SaleOrderByInput =   'id_ASC' |
   'id_DESC' |
   'createdAt_ASC' |
   'createdAt_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC'
 
-export type MutationType = 
-  'CREATED' |
+export type MutationType =   'CREATED' |
   'UPDATED' |
   'DELETED'
 
-export type LogOrderByInput = 
-  'id_ASC' |
+export type LogOrderByInput =   'id_ASC' |
   'id_DESC' |
   'message_ASC' |
   'message_DESC' |
@@ -3337,8 +2969,7 @@ export type LogOrderByInput =
   'updatedAt_ASC' |
   'updatedAt_DESC'
 
-export type ServiceOrderByInput = 
-  'id_ASC' |
+export type ServiceOrderByInput =   'id_ASC' |
   'id_DESC' |
   'createdAt_ASC' |
   'createdAt_DESC' |
@@ -3349,8 +2980,7 @@ export type ServiceOrderByInput =
   'price_ASC' |
   'price_DESC'
 
-export type NotificationsOrderByInput = 
-  'fireWhen_ASC' |
+export type NotificationsOrderByInput =   'fireWhen_ASC' |
   'fireWhen_DESC' |
   'id_ASC' |
   'id_DESC' |
@@ -3359,8 +2989,7 @@ export type NotificationsOrderByInput =
   'createdAt_ASC' |
   'createdAt_DESC'
 
-export type ClientOrderByInput = 
-  'id_ASC' |
+export type ClientOrderByInput =   'id_ASC' |
   'id_DESC' |
   'name_ASC' |
   'name_DESC' |
@@ -4995,7 +4624,7 @@ export interface NotificationsConnection {
 }
 
 /*
-The 'Long' scalar type represents non-fractional signed whole numeric values.
+The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 */
 export type Long = string
@@ -5016,7 +4645,7 @@ The `Float` scalar type represents signed double-precision fractional values as 
 */
 export type Float = number
 
-export type DateTime = string
+export type DateTime = Date | string
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
@@ -5027,191 +4656,3 @@ export type Int = number
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean
-
-export interface Schema {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
-}
-
-export type Query = {
-  products: (args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Product[]>
-  services: (args: { where?: ServiceWhereInput, orderBy?: ServiceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Service[]>
-  sales: (args: { where?: SaleWhereInput, orderBy?: SaleOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Sale[]>
-  logs: (args: { where?: LogWhereInput, orderBy?: LogOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Log[]>
-  notificationses: (args: { where?: NotificationsWhereInput, orderBy?: NotificationsOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Notifications[]>
-  clients: (args: { where?: ClientWhereInput, orderBy?: ClientOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Client[]>
-  users: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<User[]>
-  cartProducts: (args: { where?: CartProductWhereInput, orderBy?: CartProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<CartProduct[]>
-  product: (args: { where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Product | null>
-  service: (args: { where: ServiceWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Service | null>
-  sale: (args: { where: SaleWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Sale | null>
-  log: (args: { where: LogWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Log | null>
-  client: (args: { where: ClientWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Client | null>
-  user: (args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
-  productsConnection: (args: { where?: ProductWhereInput, orderBy?: ProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<ProductConnection>
-  servicesConnection: (args: { where?: ServiceWhereInput, orderBy?: ServiceOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<ServiceConnection>
-  salesConnection: (args: { where?: SaleWhereInput, orderBy?: SaleOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<SaleConnection>
-  logsConnection: (args: { where?: LogWhereInput, orderBy?: LogOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<LogConnection>
-  notificationsesConnection: (args: { where?: NotificationsWhereInput, orderBy?: NotificationsOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<NotificationsConnection>
-  clientsConnection: (args: { where?: ClientWhereInput, orderBy?: ClientOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<ClientConnection>
-  usersConnection: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<UserConnection>
-  cartProductsConnection: (args: { where?: CartProductWhereInput, orderBy?: CartProductOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<CartProductConnection>
-  node: (args: { id: ID_Output }, info?: GraphQLResolveInfo | string) => Promise<Node | null>
-}
-
-export type Mutation = {
-  createProduct: (args: { data: ProductCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Product>
-  createService: (args: { data: ServiceCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Service>
-  createSale: (args: { data: SaleCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Sale>
-  createLog: (args: { data: LogCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Log>
-  createNotifications: (args: { data: NotificationsCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Notifications>
-  createClient: (args: { data: ClientCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Client>
-  createUser: (args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string) => Promise<User>
-  createCartProduct: (args: { data: CartProductCreateInput }, info?: GraphQLResolveInfo | string) => Promise<CartProduct>
-  updateProduct: (args: { data: ProductUpdateInput, where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Product | null>
-  updateService: (args: { data: ServiceUpdateInput, where: ServiceWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Service | null>
-  updateSale: (args: { data: SaleUpdateInput, where: SaleWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Sale | null>
-  updateLog: (args: { data: LogUpdateInput, where: LogWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Log | null>
-  updateClient: (args: { data: ClientUpdateInput, where: ClientWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Client | null>
-  updateUser: (args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
-  deleteProduct: (args: { where: ProductWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Product | null>
-  deleteService: (args: { where: ServiceWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Service | null>
-  deleteSale: (args: { where: SaleWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Sale | null>
-  deleteLog: (args: { where: LogWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Log | null>
-  deleteClient: (args: { where: ClientWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Client | null>
-  deleteUser: (args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
-  upsertProduct: (args: { where: ProductWhereUniqueInput, create: ProductCreateInput, update: ProductUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Product>
-  upsertService: (args: { where: ServiceWhereUniqueInput, create: ServiceCreateInput, update: ServiceUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Service>
-  upsertSale: (args: { where: SaleWhereUniqueInput, create: SaleCreateInput, update: SaleUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Sale>
-  upsertLog: (args: { where: LogWhereUniqueInput, create: LogCreateInput, update: LogUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Log>
-  upsertClient: (args: { where: ClientWhereUniqueInput, create: ClientCreateInput, update: ClientUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Client>
-  upsertUser: (args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<User>
-  updateManyProducts: (args: { data: ProductUpdateInput, where?: ProductWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManyServices: (args: { data: ServiceUpdateInput, where?: ServiceWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManySales: (args: { data: SaleUpdateInput, where?: SaleWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManyLogs: (args: { data: LogUpdateInput, where?: LogWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManyNotificationses: (args: { data: NotificationsUpdateInput, where?: NotificationsWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManyClients: (args: { data: ClientUpdateInput, where?: ClientWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManyUsers: (args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManyCartProducts: (args: { data: CartProductUpdateInput, where?: CartProductWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyProducts: (args: { where?: ProductWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyServices: (args: { where?: ServiceWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManySales: (args: { where?: SaleWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyLogs: (args: { where?: LogWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyNotificationses: (args: { where?: NotificationsWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyClients: (args: { where?: ClientWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyUsers: (args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyCartProducts: (args: { where?: CartProductWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-}
-
-export type Subscription = {
-  product: (args: { where?: ProductSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<ProductSubscriptionPayload>>
-  service: (args: { where?: ServiceSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<ServiceSubscriptionPayload>>
-  sale: (args: { where?: SaleSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<SaleSubscriptionPayload>>
-  log: (args: { where?: LogSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<LogSubscriptionPayload>>
-  notifications: (args: { where?: NotificationsSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<NotificationsSubscriptionPayload>>
-  client: (args: { where?: ClientSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<ClientSubscriptionPayload>>
-  user: (args: { where?: UserSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<UserSubscriptionPayload>>
-  cartProduct: (args: { where?: CartProductSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<CartProductSubscriptionPayload>>
-}
-
-export class Prisma extends BasePrisma {
-  
-  constructor({ endpoint, secret, fragmentReplacements, debug }: BasePrismaOptions) {
-    super({ typeDefs, endpoint, secret, fragmentReplacements, debug });
-  }
-
-  exists = {
-    Product: (where: ProductWhereInput): Promise<boolean> => super.existsDelegate('query', 'products', { where }, {}, '{ id }'),
-    Service: (where: ServiceWhereInput): Promise<boolean> => super.existsDelegate('query', 'services', { where }, {}, '{ id }'),
-    Sale: (where: SaleWhereInput): Promise<boolean> => super.existsDelegate('query', 'sales', { where }, {}, '{ id }'),
-    Log: (where: LogWhereInput): Promise<boolean> => super.existsDelegate('query', 'logs', { where }, {}, '{ id }'),
-    Notifications: (where: NotificationsWhereInput): Promise<boolean> => super.existsDelegate('query', 'notificationses', { where }, {}, '{ id }'),
-    Client: (where: ClientWhereInput): Promise<boolean> => super.existsDelegate('query', 'clients', { where }, {}, '{ id }'),
-    User: (where: UserWhereInput): Promise<boolean> => super.existsDelegate('query', 'users', { where }, {}, '{ id }'),
-    CartProduct: (where: CartProductWhereInput): Promise<boolean> => super.existsDelegate('query', 'cartProducts', { where }, {}, '{ id }')
-  }
-
-  query: Query = {
-    products: (args, info): Promise<Product[]> => super.delegate('query', 'products', args, {}, info),
-    services: (args, info): Promise<Service[]> => super.delegate('query', 'services', args, {}, info),
-    sales: (args, info): Promise<Sale[]> => super.delegate('query', 'sales', args, {}, info),
-    logs: (args, info): Promise<Log[]> => super.delegate('query', 'logs', args, {}, info),
-    notificationses: (args, info): Promise<Notifications[]> => super.delegate('query', 'notificationses', args, {}, info),
-    clients: (args, info): Promise<Client[]> => super.delegate('query', 'clients', args, {}, info),
-    users: (args, info): Promise<User[]> => super.delegate('query', 'users', args, {}, info),
-    cartProducts: (args, info): Promise<CartProduct[]> => super.delegate('query', 'cartProducts', args, {}, info),
-    product: (args, info): Promise<Product | null> => super.delegate('query', 'product', args, {}, info),
-    service: (args, info): Promise<Service | null> => super.delegate('query', 'service', args, {}, info),
-    sale: (args, info): Promise<Sale | null> => super.delegate('query', 'sale', args, {}, info),
-    log: (args, info): Promise<Log | null> => super.delegate('query', 'log', args, {}, info),
-    client: (args, info): Promise<Client | null> => super.delegate('query', 'client', args, {}, info),
-    user: (args, info): Promise<User | null> => super.delegate('query', 'user', args, {}, info),
-    productsConnection: (args, info): Promise<ProductConnection> => super.delegate('query', 'productsConnection', args, {}, info),
-    servicesConnection: (args, info): Promise<ServiceConnection> => super.delegate('query', 'servicesConnection', args, {}, info),
-    salesConnection: (args, info): Promise<SaleConnection> => super.delegate('query', 'salesConnection', args, {}, info),
-    logsConnection: (args, info): Promise<LogConnection> => super.delegate('query', 'logsConnection', args, {}, info),
-    notificationsesConnection: (args, info): Promise<NotificationsConnection> => super.delegate('query', 'notificationsesConnection', args, {}, info),
-    clientsConnection: (args, info): Promise<ClientConnection> => super.delegate('query', 'clientsConnection', args, {}, info),
-    usersConnection: (args, info): Promise<UserConnection> => super.delegate('query', 'usersConnection', args, {}, info),
-    cartProductsConnection: (args, info): Promise<CartProductConnection> => super.delegate('query', 'cartProductsConnection', args, {}, info),
-    node: (args, info): Promise<Node | null> => super.delegate('query', 'node', args, {}, info)
-  }
-
-  mutation: Mutation = {
-    createProduct: (args, info): Promise<Product> => super.delegate('mutation', 'createProduct', args, {}, info),
-    createService: (args, info): Promise<Service> => super.delegate('mutation', 'createService', args, {}, info),
-    createSale: (args, info): Promise<Sale> => super.delegate('mutation', 'createSale', args, {}, info),
-    createLog: (args, info): Promise<Log> => super.delegate('mutation', 'createLog', args, {}, info),
-    createNotifications: (args, info): Promise<Notifications> => super.delegate('mutation', 'createNotifications', args, {}, info),
-    createClient: (args, info): Promise<Client> => super.delegate('mutation', 'createClient', args, {}, info),
-    createUser: (args, info): Promise<User> => super.delegate('mutation', 'createUser', args, {}, info),
-    createCartProduct: (args, info): Promise<CartProduct> => super.delegate('mutation', 'createCartProduct', args, {}, info),
-    updateProduct: (args, info): Promise<Product | null> => super.delegate('mutation', 'updateProduct', args, {}, info),
-    updateService: (args, info): Promise<Service | null> => super.delegate('mutation', 'updateService', args, {}, info),
-    updateSale: (args, info): Promise<Sale | null> => super.delegate('mutation', 'updateSale', args, {}, info),
-    updateLog: (args, info): Promise<Log | null> => super.delegate('mutation', 'updateLog', args, {}, info),
-    updateClient: (args, info): Promise<Client | null> => super.delegate('mutation', 'updateClient', args, {}, info),
-    updateUser: (args, info): Promise<User | null> => super.delegate('mutation', 'updateUser', args, {}, info),
-    deleteProduct: (args, info): Promise<Product | null> => super.delegate('mutation', 'deleteProduct', args, {}, info),
-    deleteService: (args, info): Promise<Service | null> => super.delegate('mutation', 'deleteService', args, {}, info),
-    deleteSale: (args, info): Promise<Sale | null> => super.delegate('mutation', 'deleteSale', args, {}, info),
-    deleteLog: (args, info): Promise<Log | null> => super.delegate('mutation', 'deleteLog', args, {}, info),
-    deleteClient: (args, info): Promise<Client | null> => super.delegate('mutation', 'deleteClient', args, {}, info),
-    deleteUser: (args, info): Promise<User | null> => super.delegate('mutation', 'deleteUser', args, {}, info),
-    upsertProduct: (args, info): Promise<Product> => super.delegate('mutation', 'upsertProduct', args, {}, info),
-    upsertService: (args, info): Promise<Service> => super.delegate('mutation', 'upsertService', args, {}, info),
-    upsertSale: (args, info): Promise<Sale> => super.delegate('mutation', 'upsertSale', args, {}, info),
-    upsertLog: (args, info): Promise<Log> => super.delegate('mutation', 'upsertLog', args, {}, info),
-    upsertClient: (args, info): Promise<Client> => super.delegate('mutation', 'upsertClient', args, {}, info),
-    upsertUser: (args, info): Promise<User> => super.delegate('mutation', 'upsertUser', args, {}, info),
-    updateManyProducts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyProducts', args, {}, info),
-    updateManyServices: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyServices', args, {}, info),
-    updateManySales: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManySales', args, {}, info),
-    updateManyLogs: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyLogs', args, {}, info),
-    updateManyNotificationses: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyNotificationses', args, {}, info),
-    updateManyClients: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyClients', args, {}, info),
-    updateManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyUsers', args, {}, info),
-    updateManyCartProducts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyCartProducts', args, {}, info),
-    deleteManyProducts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyProducts', args, {}, info),
-    deleteManyServices: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyServices', args, {}, info),
-    deleteManySales: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManySales', args, {}, info),
-    deleteManyLogs: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyLogs', args, {}, info),
-    deleteManyNotificationses: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyNotificationses', args, {}, info),
-    deleteManyClients: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyClients', args, {}, info),
-    deleteManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyUsers', args, {}, info),
-    deleteManyCartProducts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyCartProducts', args, {}, info)
-  }
-
-  subscription: Subscription = {
-    product: (args, infoOrQuery): Promise<AsyncIterator<ProductSubscriptionPayload>> => super.delegateSubscription('product', args, {}, infoOrQuery),
-    service: (args, infoOrQuery): Promise<AsyncIterator<ServiceSubscriptionPayload>> => super.delegateSubscription('service', args, {}, infoOrQuery),
-    sale: (args, infoOrQuery): Promise<AsyncIterator<SaleSubscriptionPayload>> => super.delegateSubscription('sale', args, {}, infoOrQuery),
-    log: (args, infoOrQuery): Promise<AsyncIterator<LogSubscriptionPayload>> => super.delegateSubscription('log', args, {}, infoOrQuery),
-    notifications: (args, infoOrQuery): Promise<AsyncIterator<NotificationsSubscriptionPayload>> => super.delegateSubscription('notifications', args, {}, infoOrQuery),
-    client: (args, infoOrQuery): Promise<AsyncIterator<ClientSubscriptionPayload>> => super.delegateSubscription('client', args, {}, infoOrQuery),
-    user: (args, infoOrQuery): Promise<AsyncIterator<UserSubscriptionPayload>> => super.delegateSubscription('user', args, {}, infoOrQuery),
-    cartProduct: (args, infoOrQuery): Promise<AsyncIterator<CartProductSubscriptionPayload>> => super.delegateSubscription('cartProduct', args, {}, infoOrQuery)
-  }
-}

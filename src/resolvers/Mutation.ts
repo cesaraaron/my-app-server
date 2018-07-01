@@ -134,7 +134,7 @@ const createProduct = async (
     isAdmin,
     permissions,
     client: { id: clientId },
-  } = await getUserWithId(userId, ctx, 'isAdmin permissions client {id}')
+  } = await getUserWithId(userId, ctx, '{ isAdmin permissions client {id} }')
 
   if (!isAdmin && !permissions.includes('CREATE_PRODUCTS')) {
     throw new Error('Este usuario no tiene permisos para editar productos.')

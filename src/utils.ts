@@ -16,7 +16,7 @@ export function getUserId(ctx: Context): string {
     const Authorization = ctx.request.get('Authorization')
     const token = Authorization.replace('Bearer ', '')
 
-    userId = jwt.verify(token, process.env.APP_SECRET).userId as string
+    userId = (jwt.verify(token, process.env.APP_SECRET) as {userId: string}).userId
   } catch (e) {
     throw new AuthError()
   }
