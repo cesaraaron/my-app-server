@@ -10,14 +10,18 @@ export interface Context {
 }
 
 export function getUserId(ctx: Context): string {
-  let userId: string
+  const Authorization = ctx.request.get('Authorization')
+  const token = Authorization.replace('Bearer ', '')
 
-  try {
-    const Authorization = ctx.request.get('Authorization')
-    const token = Authorization.replace('Bearer ', '')
+  if (!token) {
+    throw new AuthError()
+  }
 
-    userId = (jwt.verify(token, process.env.APP_SECRET) as {userId: string}).userId
-  } catch (e) {
+  const { userId } = jwt.verify(token, process.env.APP_SECRET) as {
+    userId: string
+  }
+
+  if (!userId) {
     throw new AuthError()
   }
 
@@ -75,7 +79,7 @@ export const sendNotifications = async (
 ) => {
   const userId = await getUserId(ctx)
   const user = await getUserWithId(userId, ctx, '{ client {id}}')
-  console.log('Start of sendnotifications')
+
   const users = await ctx.db.query.users(
     {
       where: { client: { id: user.client.id } },
@@ -97,9 +101,6 @@ export const sendNotifications = async (
       }
     }
   )
-
-  console.log('after map of notificationMessagesWithProductQuantity')
-
 
   const notifications: ExpoNotification[] = []
 
@@ -133,7 +134,7 @@ export const sendNotifications = async (
   if (notifications.length === 0) {
     return
   }
-  console.log('about to send the notifications')
+
   let chunks = expo.chunkPushNotifications(notifications)
   ;(async () => {
     // Send the chunks to the Expo push notification service. There are
