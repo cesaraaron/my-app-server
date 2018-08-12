@@ -11,6 +11,11 @@ export interface Context {
 
 export function getUserId(ctx: Context): string {
   const Authorization = ctx.request.get('Authorization')
+
+  if (!Authorization) {
+    throw new AuthError()
+  }
+
   const token = Authorization.replace('Bearer ', '')
 
   if (!token) {
