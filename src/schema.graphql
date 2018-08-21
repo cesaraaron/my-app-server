@@ -38,6 +38,7 @@ type Mutation {
   createLog(message: String!, type: LogType!): Log
   saveDeviceToken(token: String!): User
   removeDeviceToken(token: String!): User
+  updateNotis(fireWhen: Int!): User
   # createService(name: String!, price: Float!): Service
   # updateService(serviceId: ID!, name: String, price: Float): Service
   # deleteService(serviceId: ID!): Service

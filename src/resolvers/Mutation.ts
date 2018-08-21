@@ -323,6 +323,24 @@ const removeDeviceToken = async (_, { token }, ctx: Context, info) => {
   )
 }
 
+const updateNotis = async (_, { fireWhen }, ctx: Context, info) => {
+  const userId = await getUserId(ctx)
+
+  return ctx.db.mutation.updateUser(
+    {
+      where: { id: userId },
+      data: {
+        notifications: {
+          update: {
+            fireWhen
+          },
+        },
+      },
+    },
+    info
+  )
+}
+
 // const createService = async (_, { name, price }, ctx: Context, info) => {
 //   const userId = await getUserId(ctx)
 
@@ -371,5 +389,6 @@ export const Mutation = {
   createLog,
   saveDeviceToken,
   removeDeviceToken,
+  updateNotis
   // createService,
 }
