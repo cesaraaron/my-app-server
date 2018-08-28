@@ -65,19 +65,23 @@ export const updateProductsQuantity = async (
   return newProducts
 }
 
-type ExpoNotification = {
-  to: string
-  sound: string
-  body: string
-}
-
-type ProductQuantityWithMessage = {
-  message: string
+export type PartialProduct = {
+  id: string
+  name: string
   quantity: number
 }
 
-// If there are more than 10 notifications show a single notification
-// with data to show in the app with the products low in inventory
+export type NotificationData = {
+  products?: PartialProduct[]
+}
+
+type ExpoNotification = {
+  to: string
+  sound: string
+  data: NotificationData
+  body: string
+}
+
 export const sendNotifications = async (
   updatedProducts: Product[],
   ctx: Context
@@ -92,46 +96,68 @@ export const sendNotifications = async (
     '{ notifications { devices fireWhen } }'
   )
 
-  const notificationMessagesWithProductQuantity: ProductQuantityWithMessage[] = updatedProducts.map(
-    ({ name, quantity }) => {
-      const message =
-        quantity === 0
-          ? `El producto "${name}" tiene 0 unidades disponibles`
-          : `El producto "${name}" se esta agotando. Solo le quedan ${quantity} ${
-              quantity === 1 ? 'unidad disponible' : 'unidades disponibles.'
-            }`
-      return {
-        message,
-        quantity,
-      }
-    }
-  )
-
   const notifications: ExpoNotification[] = []
 
-  users.forEach(({ name, notifications: { devices, fireWhen } }) => {
+  users.forEach(({ name: userName, notifications: { devices, fireWhen } }) => {
     if (fireWhen === 0 || !devices.length) {
       return
     }
 
-    notificationMessagesWithProductQuantity.forEach(({ quantity, message }) => {
-      if (quantity > fireWhen) {
-        return
-      }
+    const productsRunningOut: PartialProduct[] = []
 
-      devices.forEach(token => {
-        // Check that all your push tokens appear to be valid Expo push tokens
-        if (!Expo.isExpoPushToken(token)) {
-          console.error(
-            `Push token ${token} for user "${name}" is not a valid Expo push token.`
-          )
+    updatedProducts.forEach(
+      ({ name: productName, id: productId, quantity }) => {
+        if (quantity > fireWhen) {
           return
         }
-        notifications.push({
-          to: token,
-          body: message,
-          sound: 'default',
-        })
+
+        productsRunningOut.push({ name: productName, id: productId, quantity })
+      }
+    )
+
+    let bodyMessage: string
+
+    if (productsRunningOut.length === 0) {
+      return
+    }
+
+    if (productsRunningOut.length === 1) {
+      bodyMessage = `El producto '${
+        productsRunningOut[0].name
+      }' se esta acabando`
+    } else {
+      // Only send the name of the first 4 items
+      const firstFourProducts = productsRunningOut.slice(0, 4)
+      let remainingProductCount =
+        productsRunningOut.length - firstFourProducts.length
+
+      bodyMessage =
+        `Los productos '${firstFourProducts.reduce(
+          (p, c, idx) =>
+            p + c.name + (idx === firstFourProducts.length - 1 ? '' : ', '),
+          ''
+        )}'` +
+        `${
+          remainingProductCount > 0
+            ? ` y ${remainingProductCount} productos más`
+            : ''
+        }` +
+        ' se estan acabando.'
+    }
+
+    devices.forEach(token => {
+      // Check that all your push tokens appear to be valid Expo push tokens
+      if (!Expo.isExpoPushToken(token)) {
+        console.error(
+          `Push token ${token} for user "${userName}" is not a valid Expo push token.`
+        )
+        return
+      }
+      notifications.push({
+        to: token,
+        body: bodyMessage,
+        data: { products: productsRunningOut },
+        sound: 'default',
       })
     })
   })
