@@ -83,7 +83,6 @@ type ExpoNotification = {
 }
 
 export const sendNotifications = async (
-  updatedProducts: Product[],
   ctx: Context
 ) => {
   const userId = await getUserId(ctx)
@@ -96,6 +95,13 @@ export const sendNotifications = async (
     '{ notifications { devices fireWhen } }'
   )
 
+  const products = await ctx.db.query.products(
+    {
+      where: { client: {id: user.client.id}}
+    },
+    '{ id name quantity }'
+  )
+
   const notifications: ExpoNotification[] = []
 
   users.forEach(({ name: userName, notifications: { devices, fireWhen } }) => {
@@ -105,7 +111,7 @@ export const sendNotifications = async (
 
     const productsRunningOut: PartialProduct[] = []
 
-    updatedProducts.forEach(
+    products.forEach(
       ({ name: productName, id: productId, quantity }) => {
         if (quantity > fireWhen) {
           return

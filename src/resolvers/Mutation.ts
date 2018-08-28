@@ -8,7 +8,7 @@ import {
   updateProductsQuantity,
   sendNotifications,
 } from '../utils'
-import { CartProduct } from '../generated/prisma'
+import { CartProduct, Product } from '../generated/prisma'
 
 const login = async (_, { phoneNumber, password }, ctx, _1) => {
   const user = await ctx.db.query.user({ where: { phoneNumber } })
@@ -226,16 +226,21 @@ const createSale = async (_, args, ctx: Context, info) => {
       info
     )
     .then(async sale => {
-      await sendNotifications(updateProducts, ctx)
+      const productsToUpdate: Promise<Product>[] = []
 
       updateProducts.forEach(({ id, quantity }) => {
-        ctx.db.mutation.updateProduct({
+        productsToUpdate.push(ctx.db.mutation.updateProduct({
           data: {
             quantity,
           },
           where: { id },
-        })
+        }))
       })
+
+      await Promise.all(productsToUpdate)
+
+      sendNotifications(ctx)
+
       return sale
     })
 }
