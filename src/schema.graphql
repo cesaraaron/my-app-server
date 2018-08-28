@@ -4,6 +4,7 @@ type Query {
   me: User
   users: [User!]!
   products: [Product!]!
+  productsWithIds(ids: [ID!]!): [Product!]!
   sales: [Sale!]!
 }
 

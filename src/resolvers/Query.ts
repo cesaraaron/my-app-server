@@ -24,6 +24,15 @@ export const Query = {
     return ctx.db.query.products({ where: { client: { id: clientId } } }, info)
   },
 
+  productsWithIds: async (_, {ids}, ctx: Context, info) => {
+    const userId = await getUserId(ctx)
+    const {
+      client: { id: clientId },
+    } = await getUserWithId(userId, ctx, '{ client { id } }')
+
+    return ctx.db.query.products({where: {client: {id: clientId}, id_in: ids}}, info)
+  },
+
   sales: async (_, _1, ctx: Context, info) => {
     const userId = await getUserId(ctx)
     const {

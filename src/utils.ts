@@ -72,7 +72,7 @@ export type PartialProduct = {
 }
 
 export type NotificationData = {
-  products?: PartialProduct[]
+  fireWhenProductIds?: string[]
 }
 
 type ExpoNotification = {
@@ -122,19 +122,15 @@ export const sendNotifications = async (
     }
 
     if (productsRunningOut.length === 1) {
-      bodyMessage = `El producto '${
-        productsRunningOut[0].name
-      }' se esta acabando`
+      bodyMessage = `El producto '${productsRunningOut[0].name}' se esta acabando`
     } else {
       // Only send the name of the first 4 items
       const firstFourProducts = productsRunningOut.slice(0, 4)
-      let remainingProductCount =
-        productsRunningOut.length - firstFourProducts.length
+      let remainingProductCount = productsRunningOut.length - firstFourProducts.length
 
       bodyMessage =
         `Los productos '${firstFourProducts.reduce(
-          (p, c, idx) =>
-            p + c.name + (idx === firstFourProducts.length - 1 ? '' : ', '),
+          (p, c, idx) => p + c.name + (idx === firstFourProducts.length - 1 ? '' : ', '),
           ''
         )}'` +
         `${
@@ -156,7 +152,7 @@ export const sendNotifications = async (
       notifications.push({
         to: token,
         body: bodyMessage,
-        data: { products: productsRunningOut },
+        data: { fireWhenProductIds: productsRunningOut.map(p => p.id)},
         sound: 'default',
       })
     })
