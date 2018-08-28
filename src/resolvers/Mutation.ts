@@ -125,7 +125,7 @@ const deleteUser = async (_, { userId }, ctx: Context, info) => {
 
 const createProduct = async (
   _,
-  { name, price, quantity },
+  { name, price, quantity, notifications },
   ctx: Context,
   info
 ) => {
@@ -146,6 +146,7 @@ const createProduct = async (
         name,
         price,
         quantity,
+        notifications,
         user: { connect: { id: userId } },
         client: { connect: { id: clientId } },
       },
@@ -157,7 +158,7 @@ const createProduct = async (
 // TODO: validate the fields of the product before trying to update it
 const updateProduct = async (
   _,
-  { name, price, quantity, productId },
+  { name, price, quantity, productId, notifications },
   ctx: Context,
   info
 ) => {
@@ -174,6 +175,7 @@ const updateProduct = async (
       data: {
         name,
         price,
+        notifications,
         quantity,
       },
     },
@@ -229,12 +231,14 @@ const createSale = async (_, args, ctx: Context, info) => {
       const productsToUpdate: Promise<Product>[] = []
 
       updateProducts.forEach(({ id, quantity }) => {
-        productsToUpdate.push(ctx.db.mutation.updateProduct({
-          data: {
-            quantity,
-          },
-          where: { id },
-        }))
+        productsToUpdate.push(
+          ctx.db.mutation.updateProduct({
+            data: {
+              quantity,
+            },
+            where: { id },
+          })
+        )
       })
 
       await Promise.all(productsToUpdate)
@@ -337,7 +341,7 @@ const updateNotis = async (_, { fireWhen }, ctx: Context, info) => {
       data: {
         notifications: {
           update: {
-            fireWhen
+            fireWhen,
           },
         },
       },
@@ -394,6 +398,6 @@ export const Mutation = {
   createLog,
   saveDeviceToken,
   removeDeviceToken,
-  updateNotis
+  updateNotis,
   // createService,
 }

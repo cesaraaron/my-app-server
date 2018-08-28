@@ -1,5 +1,5 @@
-# source: https://us1.prisma.sh/public-candlelion-41/my-app-server/dev
-# timestamp: Sun Jul 01 2018 06:46:16 GMT-0600 (CST)
+# source: https://my-app-8250.herokuapp.com/my-app-server/dev
+# timestamp: Tue Aug 28 2018 10:50:26 GMT-0600 (CST)
 
 type AggregateCartProduct {
   count: Int!
@@ -1328,6 +1328,7 @@ type Product implements Node {
   updatedAt: DateTime!
   name: String!
   price: Float!
+  notifications: Boolean
   quantity: Int!
   user(where: UserWhereInput): User!
   client(where: ClientWhereInput): Client!
@@ -1346,6 +1347,7 @@ type ProductConnection {
 input ProductCreateInput {
   name: String!
   price: Float!
+  notifications: Boolean
   quantity: Int!
   user: UserCreateOneInput!
   client: ClientCreateOneWithoutProductsInput!
@@ -1359,6 +1361,7 @@ input ProductCreateManyWithoutClientInput {
 input ProductCreateWithoutClientInput {
   name: String!
   price: Float!
+  notifications: Boolean
   quantity: Int!
   user: UserCreateOneInput!
 }
@@ -1383,6 +1386,8 @@ enum ProductOrderByInput {
   name_DESC
   price_ASC
   price_DESC
+  notifications_ASC
+  notifications_DESC
   quantity_ASC
   quantity_DESC
 }
@@ -1393,6 +1398,7 @@ type ProductPreviousValues {
   updatedAt: DateTime!
   name: String!
   price: Float!
+  notifications: Boolean
   quantity: Int!
 }
 
@@ -1438,6 +1444,7 @@ input ProductSubscriptionWhereInput {
 input ProductUpdateInput {
   name: String
   price: Float
+  notifications: Boolean
   quantity: Int
   user: UserUpdateOneInput
   client: ClientUpdateOneWithoutProductsInput
@@ -1455,6 +1462,7 @@ input ProductUpdateManyWithoutClientInput {
 input ProductUpdateWithoutClientDataInput {
   name: String
   price: Float
+  notifications: Boolean
   quantity: Int
   user: UserUpdateOneInput
 }
@@ -1625,6 +1633,10 @@ input ProductWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
+  notifications: Boolean
+
+  """All values that are not equal to given value."""
+  notifications_not: Boolean
   quantity: Int
 
   """All values that are not equal to given value."""

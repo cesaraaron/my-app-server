@@ -1,4 +1,41 @@
-# import Product, CartProductCreateInput, UserPermissions, Notifications, NotificationsCreateInput, NotificationsUpdateInput, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload, Service from "./generated/prisma.graphql"
+# import CartProductCreateInput, UserPermissions, Notifications, NotificationsCreateInput, NotificationsUpdateInput, Log, LogType, SaleSubscriptionPayload, ProductSubscriptionPayload, UserSubscriptionPayload, Service from "./generated/prisma.graphql"
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  lastName: String
+  phoneNumber: String!
+  notifications: Notifications!
+  permissions: [UserPermissions!]!
+  isAdmin: Boolean
+  client: Client!
+  sales: [Sale!]!
+}
+
+type Product {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  price: Float!
+  notifications: Boolean!
+  quantity: Int!
+  user: User!
+  client: Client!
+}
+
+type Client {
+  id: ID!
+  name: String!
+  lastName: String
+  email: String
+  phoneNumber: String!
+  users: [User!]!
+  products: [Product!]!
+  sales: [Sale!]!
+}
 
 type Query {
   me: User
@@ -10,12 +47,18 @@ type Query {
 
 type Mutation {
   login(phoneNumber: String!, password: String!): AuthPayload!
-  createProduct(name: String!, price: Float!, quantity: Int!): Product
+  createProduct(
+    name: String!
+    price: Float!
+    quantity: Int!
+    notifications: Boolean!
+  ): Product
   updateProduct(
     productId: String!
     name: String
     price: Float
     quantity: Int
+    notifications: Boolean
   ): Product
   deleteProduct(productId: String!): Product
   createSale(cartProducts: [CartProductCreateInput!]!): Sale
@@ -56,31 +99,6 @@ type Sale {
   updatedAt: DateTime!
   products: [CartProduct!]!
   soldBy: User!
-}
-
-type User {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String!
-  lastName: String
-  phoneNumber: String!
-  notifications: Notifications!
-  permissions: [UserPermissions!]!
-  isAdmin: Boolean
-  client: Client!
-  sales: [Sale!]!
-}
-
-type Client {
-  id: ID!
-  name: String!
-  lastName: String
-  email: String
-  phoneNumber: String!
-  users: [User!]!
-  products: [Product!]!
-  sales: [Sale!]!
 }
 
 type Subscription {

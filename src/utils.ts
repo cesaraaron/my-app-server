@@ -95,11 +95,12 @@ export const sendNotifications = async (
     '{ notifications { devices fireWhen } }'
   )
 
+  // Only query the products that have notifications enabled
   const products = await ctx.db.query.products(
     {
-      where: { client: {id: user.client.id}}
+      where: { client: {id: user.client.id}, notifications: true }
     },
-    '{ id name quantity }'
+    '{ id name quantity notifications }'
   )
 
   const notifications: ExpoNotification[] = []

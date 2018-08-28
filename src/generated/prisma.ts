@@ -1445,6 +1445,7 @@ type Product implements Node {
   updatedAt: DateTime!
   name: String!
   price: Float!
+  notifications: Boolean
   quantity: Int!
   user(where: UserWhereInput): User!
   client(where: ClientWhereInput): Client!
@@ -1463,6 +1464,7 @@ type ProductConnection {
 input ProductCreateInput {
   name: String!
   price: Float!
+  notifications: Boolean
   quantity: Int!
   user: UserCreateOneInput!
   client: ClientCreateOneWithoutProductsInput!
@@ -1476,6 +1478,7 @@ input ProductCreateManyWithoutClientInput {
 input ProductCreateWithoutClientInput {
   name: String!
   price: Float!
+  notifications: Boolean
   quantity: Int!
   user: UserCreateOneInput!
 }
@@ -1500,6 +1503,8 @@ enum ProductOrderByInput {
   name_DESC
   price_ASC
   price_DESC
+  notifications_ASC
+  notifications_DESC
   quantity_ASC
   quantity_DESC
 }
@@ -1510,6 +1515,7 @@ type ProductPreviousValues {
   updatedAt: DateTime!
   name: String!
   price: Float!
+  notifications: Boolean
   quantity: Int!
 }
 
@@ -1555,6 +1561,7 @@ input ProductSubscriptionWhereInput {
 input ProductUpdateInput {
   name: String
   price: Float
+  notifications: Boolean
   quantity: Int
   user: UserUpdateOneInput
   client: ClientUpdateOneWithoutProductsInput
@@ -1572,6 +1579,7 @@ input ProductUpdateManyWithoutClientInput {
 input ProductUpdateWithoutClientDataInput {
   name: String
   price: Float
+  notifications: Boolean
   quantity: Int
   user: UserUpdateOneInput
 }
@@ -1742,6 +1750,10 @@ input ProductWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Float
+  notifications: Boolean
+
+  """All values that are not equal to given value."""
+  notifications_not: Boolean
   quantity: Int
 
   """All values that are not equal to given value."""
@@ -2921,6 +2933,8 @@ export type ProductOrderByInput =   'id_ASC' |
   'name_DESC' |
   'price_ASC' |
   'price_DESC' |
+  'notifications_ASC' |
+  'notifications_DESC' |
   'quantity_ASC' |
   'quantity_DESC'
 
@@ -3070,6 +3084,8 @@ export interface ProductWhereInput {
   price_lte?: Float
   price_gt?: Float
   price_gte?: Float
+  notifications?: Boolean
+  notifications_not?: Boolean
   quantity?: Int
   quantity_not?: Int
   quantity_in?: Int[] | Int
@@ -3216,6 +3232,7 @@ export interface ClientCreateOneWithoutUsersInput {
 export interface ProductUpdateInput {
   name?: String
   price?: Float
+  notifications?: Boolean
   quantity?: Int
   user?: UserUpdateOneInput
   client?: ClientUpdateOneWithoutProductsInput
@@ -3371,6 +3388,7 @@ export interface ClientWhereInput {
 export interface ProductCreateWithoutClientInput {
   name: String
   price: Float
+  notifications?: Boolean
   quantity: Int
   user: UserCreateOneInput
 }
@@ -3391,15 +3409,15 @@ export interface SaleCreateManyWithoutClientInput {
   connect?: SaleWhereUniqueInput[] | SaleWhereUniqueInput
 }
 
-export interface LogSubscriptionWhereInput {
-  AND?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
-  OR?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
-  NOT?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
+export interface NotificationsSubscriptionWhereInput {
+  AND?: NotificationsSubscriptionWhereInput[] | NotificationsSubscriptionWhereInput
+  OR?: NotificationsSubscriptionWhereInput[] | NotificationsSubscriptionWhereInput
+  NOT?: NotificationsSubscriptionWhereInput[] | NotificationsSubscriptionWhereInput
   mutation_in?: MutationType[] | MutationType
   updatedFields_contains?: String
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
-  node?: LogWhereInput
+  node?: NotificationsWhereInput
 }
 
 export interface SaleCreateWithoutClientInput {
@@ -3658,6 +3676,7 @@ export interface SaleCreateInput {
 export interface ProductCreateInput {
   name: String
   price: Float
+  notifications?: Boolean
   quantity: Int
   user: UserCreateOneInput
   client: ClientCreateOneWithoutProductsInput
@@ -3793,112 +3812,15 @@ export interface UserUpdateOneInput {
   upsert?: UserUpsertNestedInput
 }
 
-export interface UserWhereInput {
-  AND?: UserWhereInput[] | UserWhereInput
-  OR?: UserWhereInput[] | UserWhereInput
-  NOT?: UserWhereInput[] | UserWhereInput
-  id?: ID_Input
-  id_not?: ID_Input
-  id_in?: ID_Input[] | ID_Input
-  id_not_in?: ID_Input[] | ID_Input
-  id_lt?: ID_Input
-  id_lte?: ID_Input
-  id_gt?: ID_Input
-  id_gte?: ID_Input
-  id_contains?: ID_Input
-  id_not_contains?: ID_Input
-  id_starts_with?: ID_Input
-  id_not_starts_with?: ID_Input
-  id_ends_with?: ID_Input
-  id_not_ends_with?: ID_Input
-  createdAt?: DateTime
-  createdAt_not?: DateTime
-  createdAt_in?: DateTime[] | DateTime
-  createdAt_not_in?: DateTime[] | DateTime
-  createdAt_lt?: DateTime
-  createdAt_lte?: DateTime
-  createdAt_gt?: DateTime
-  createdAt_gte?: DateTime
-  updatedAt?: DateTime
-  updatedAt_not?: DateTime
-  updatedAt_in?: DateTime[] | DateTime
-  updatedAt_not_in?: DateTime[] | DateTime
-  updatedAt_lt?: DateTime
-  updatedAt_lte?: DateTime
-  updatedAt_gt?: DateTime
-  updatedAt_gte?: DateTime
-  name?: String
-  name_not?: String
-  name_in?: String[] | String
-  name_not_in?: String[] | String
-  name_lt?: String
-  name_lte?: String
-  name_gt?: String
-  name_gte?: String
-  name_contains?: String
-  name_not_contains?: String
-  name_starts_with?: String
-  name_not_starts_with?: String
-  name_ends_with?: String
-  name_not_ends_with?: String
-  lastName?: String
-  lastName_not?: String
-  lastName_in?: String[] | String
-  lastName_not_in?: String[] | String
-  lastName_lt?: String
-  lastName_lte?: String
-  lastName_gt?: String
-  lastName_gte?: String
-  lastName_contains?: String
-  lastName_not_contains?: String
-  lastName_starts_with?: String
-  lastName_not_starts_with?: String
-  lastName_ends_with?: String
-  lastName_not_ends_with?: String
-  phoneNumber?: String
-  phoneNumber_not?: String
-  phoneNumber_in?: String[] | String
-  phoneNumber_not_in?: String[] | String
-  phoneNumber_lt?: String
-  phoneNumber_lte?: String
-  phoneNumber_gt?: String
-  phoneNumber_gte?: String
-  phoneNumber_contains?: String
-  phoneNumber_not_contains?: String
-  phoneNumber_starts_with?: String
-  phoneNumber_not_starts_with?: String
-  phoneNumber_ends_with?: String
-  phoneNumber_not_ends_with?: String
-  password?: String
-  password_not?: String
-  password_in?: String[] | String
-  password_not_in?: String[] | String
-  password_lt?: String
-  password_lte?: String
-  password_gt?: String
-  password_gte?: String
-  password_contains?: String
-  password_not_contains?: String
-  password_starts_with?: String
-  password_not_starts_with?: String
-  password_ends_with?: String
-  password_not_ends_with?: String
-  isAdmin?: Boolean
-  isAdmin_not?: Boolean
-  notifications?: NotificationsWhereInput
-  client?: ClientWhereInput
-  sales_every?: SaleWhereInput
-  sales_some?: SaleWhereInput
-  sales_none?: SaleWhereInput
-  _MagicalBackRelation_ProductToUser_every?: ProductWhereInput
-  _MagicalBackRelation_ProductToUser_some?: ProductWhereInput
-  _MagicalBackRelation_ProductToUser_none?: ProductWhereInput
-  _MagicalBackRelation_LogToUser_every?: LogWhereInput
-  _MagicalBackRelation_LogToUser_some?: LogWhereInput
-  _MagicalBackRelation_LogToUser_none?: LogWhereInput
-  _MagicalBackRelation_ServiceToUser_every?: ServiceWhereInput
-  _MagicalBackRelation_ServiceToUser_some?: ServiceWhereInput
-  _MagicalBackRelation_ServiceToUser_none?: ServiceWhereInput
+export interface LogSubscriptionWhereInput {
+  AND?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
+  OR?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
+  NOT?: LogSubscriptionWhereInput[] | LogSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: LogWhereInput
 }
 
 export interface UserUpdateDataInput {
@@ -4048,6 +3970,7 @@ export interface UserCreatepermissionsInput {
 export interface ProductUpdateWithoutClientDataInput {
   name?: String
   price?: Float
+  notifications?: Boolean
   quantity?: Int
   user?: UserUpdateOneInput
 }
@@ -4204,15 +4127,112 @@ export interface ClientUpsertWithoutLogsInput {
   create: ClientCreateWithoutLogsInput
 }
 
-export interface NotificationsSubscriptionWhereInput {
-  AND?: NotificationsSubscriptionWhereInput[] | NotificationsSubscriptionWhereInput
-  OR?: NotificationsSubscriptionWhereInput[] | NotificationsSubscriptionWhereInput
-  NOT?: NotificationsSubscriptionWhereInput[] | NotificationsSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: NotificationsWhereInput
+export interface UserWhereInput {
+  AND?: UserWhereInput[] | UserWhereInput
+  OR?: UserWhereInput[] | UserWhereInput
+  NOT?: UserWhereInput[] | UserWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  lastName?: String
+  lastName_not?: String
+  lastName_in?: String[] | String
+  lastName_not_in?: String[] | String
+  lastName_lt?: String
+  lastName_lte?: String
+  lastName_gt?: String
+  lastName_gte?: String
+  lastName_contains?: String
+  lastName_not_contains?: String
+  lastName_starts_with?: String
+  lastName_not_starts_with?: String
+  lastName_ends_with?: String
+  lastName_not_ends_with?: String
+  phoneNumber?: String
+  phoneNumber_not?: String
+  phoneNumber_in?: String[] | String
+  phoneNumber_not_in?: String[] | String
+  phoneNumber_lt?: String
+  phoneNumber_lte?: String
+  phoneNumber_gt?: String
+  phoneNumber_gte?: String
+  phoneNumber_contains?: String
+  phoneNumber_not_contains?: String
+  phoneNumber_starts_with?: String
+  phoneNumber_not_starts_with?: String
+  phoneNumber_ends_with?: String
+  phoneNumber_not_ends_with?: String
+  password?: String
+  password_not?: String
+  password_in?: String[] | String
+  password_not_in?: String[] | String
+  password_lt?: String
+  password_lte?: String
+  password_gt?: String
+  password_gte?: String
+  password_contains?: String
+  password_not_contains?: String
+  password_starts_with?: String
+  password_not_starts_with?: String
+  password_ends_with?: String
+  password_not_ends_with?: String
+  isAdmin?: Boolean
+  isAdmin_not?: Boolean
+  notifications?: NotificationsWhereInput
+  client?: ClientWhereInput
+  sales_every?: SaleWhereInput
+  sales_some?: SaleWhereInput
+  sales_none?: SaleWhereInput
+  _MagicalBackRelation_ProductToUser_every?: ProductWhereInput
+  _MagicalBackRelation_ProductToUser_some?: ProductWhereInput
+  _MagicalBackRelation_ProductToUser_none?: ProductWhereInput
+  _MagicalBackRelation_LogToUser_every?: LogWhereInput
+  _MagicalBackRelation_LogToUser_some?: LogWhereInput
+  _MagicalBackRelation_LogToUser_none?: LogWhereInput
+  _MagicalBackRelation_ServiceToUser_every?: ServiceWhereInput
+  _MagicalBackRelation_ServiceToUser_some?: ServiceWhereInput
+  _MagicalBackRelation_ServiceToUser_none?: ServiceWhereInput
 }
 
 export interface UserCreateOneInput {
@@ -4263,6 +4283,7 @@ export interface Product extends Node {
   updatedAt: DateTime
   name: String
   price: Float
+  notifications?: Boolean
   quantity: Int
   user: User
   client: Client
@@ -4380,6 +4401,7 @@ export interface ProductPreviousValues {
   updatedAt: DateTime
   name: String
   price: Float
+  notifications?: Boolean
   quantity: Int
 }
 
@@ -4488,11 +4510,16 @@ export interface UserConnection {
   aggregate: AggregateUser
 }
 
-export interface CartProduct {
-  productId: ID_Output
+export interface Client extends Node {
+  id: ID_Output
   name: String
-  price: Float
-  quantitySold: Int
+  lastName?: String
+  email?: String
+  phoneNumber: String
+  users?: User[]
+  products?: Product[]
+  sales?: Sale[]
+  logs?: Log[]
 }
 
 export interface AggregateNotifications {
@@ -4532,16 +4559,11 @@ export interface SaleConnection {
   aggregate: AggregateSale
 }
 
-export interface Client extends Node {
-  id: ID_Output
+export interface CartProduct {
+  productId: ID_Output
   name: String
-  lastName?: String
-  email?: String
-  phoneNumber: String
-  users?: User[]
-  products?: Product[]
-  sales?: Sale[]
-  logs?: Log[]
+  price: Float
+  quantitySold: Int
 }
 
 export interface AggregateProduct {
@@ -4648,11 +4670,11 @@ export type Float = number
 export type DateTime = Date | string
 
 /*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number
-
-/*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number
