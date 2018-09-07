@@ -1,4 +1,4 @@
-endpoint: https://my-app-8250.herokuapp.com/my-app-server/dev
+endpoint: https://inventory-app-12394.herokuapp.com/
 
 secret: applebloom
 

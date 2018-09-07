@@ -1445,7 +1445,7 @@ type Product implements Node {
   updatedAt: DateTime!
   name: String!
   price: Float!
-  notifications: Boolean
+  notifications: Boolean!
   quantity: Int!
   user(where: UserWhereInput): User!
   client(where: ClientWhereInput): Client!
@@ -1464,7 +1464,7 @@ type ProductConnection {
 input ProductCreateInput {
   name: String!
   price: Float!
-  notifications: Boolean
+  notifications: Boolean!
   quantity: Int!
   user: UserCreateOneInput!
   client: ClientCreateOneWithoutProductsInput!
@@ -1478,7 +1478,7 @@ input ProductCreateManyWithoutClientInput {
 input ProductCreateWithoutClientInput {
   name: String!
   price: Float!
-  notifications: Boolean
+  notifications: Boolean!
   quantity: Int!
   user: UserCreateOneInput!
 }
@@ -1515,7 +1515,7 @@ type ProductPreviousValues {
   updatedAt: DateTime!
   name: String!
   price: Float!
-  notifications: Boolean
+  notifications: Boolean!
   quantity: Int!
 }
 
@@ -3388,7 +3388,7 @@ export interface ClientWhereInput {
 export interface ProductCreateWithoutClientInput {
   name: String
   price: Float
-  notifications?: Boolean
+  notifications: Boolean
   quantity: Int
   user: UserCreateOneInput
 }
@@ -3676,7 +3676,7 @@ export interface SaleCreateInput {
 export interface ProductCreateInput {
   name: String
   price: Float
-  notifications?: Boolean
+  notifications: Boolean
   quantity: Int
   user: UserCreateOneInput
   client: ClientCreateOneWithoutProductsInput
@@ -4283,7 +4283,7 @@ export interface Product extends Node {
   updatedAt: DateTime
   name: String
   price: Float
-  notifications?: Boolean
+  notifications: Boolean
   quantity: Int
   user: User
   client: Client
@@ -4401,7 +4401,7 @@ export interface ProductPreviousValues {
   updatedAt: DateTime
   name: String
   price: Float
-  notifications?: Boolean
+  notifications: Boolean
   quantity: Int
 }
 
