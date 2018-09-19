@@ -1,5 +1,5 @@
-# source: https://inventory-app-12394.herokuapp.com
-# timestamp: Fri Sep 07 2018 11:12:34 GMT-0600 (Central Standard Time)
+# source: http://54.210.243.224:4466
+# timestamp: Tue Sep 18 2018 23:26:43 GMT+0000 (UTC)
 
 type AggregateCartProduct {
   count: Int!
@@ -282,9 +282,6 @@ input CartProductWhereInput {
 
   """All values greater than or equal the given value."""
   quantitySold_gte: Int
-  _MagicalBackRelation_CartProductToSale_every: SaleWhereInput
-  _MagicalBackRelation_CartProductToSale_some: SaleWhereInput
-  _MagicalBackRelation_CartProductToSale_none: SaleWhereInput
 }
 
 type Client implements Node {
@@ -806,9 +803,6 @@ input ClientWhereInput {
   logs_every: LogWhereInput
   logs_some: LogWhereInput
   logs_none: LogWhereInput
-  _MagicalBackRelation_ClientToService_every: ServiceWhereInput
-  _MagicalBackRelation_ClientToService_some: ServiceWhereInput
-  _MagicalBackRelation_ClientToService_none: ServiceWhereInput
 }
 
 input ClientWhereUniqueInput {
@@ -1302,9 +1296,6 @@ input NotificationsWhereInput {
 
   """All values greater than or equal the given value."""
   fireWhen_gte: Int
-  _MagicalBackRelation_NotificationsToUser_every: UserWhereInput
-  _MagicalBackRelation_NotificationsToUser_some: UserWhereInput
-  _MagicalBackRelation_NotificationsToUser_none: UserWhereInput
 }
 
 """Information about pagination in a connection."""
@@ -2766,15 +2757,6 @@ input UserWhereInput {
   sales_every: SaleWhereInput
   sales_some: SaleWhereInput
   sales_none: SaleWhereInput
-  _MagicalBackRelation_ProductToUser_every: ProductWhereInput
-  _MagicalBackRelation_ProductToUser_some: ProductWhereInput
-  _MagicalBackRelation_ProductToUser_none: ProductWhereInput
-  _MagicalBackRelation_LogToUser_every: LogWhereInput
-  _MagicalBackRelation_LogToUser_some: LogWhereInput
-  _MagicalBackRelation_LogToUser_none: LogWhereInput
-  _MagicalBackRelation_ServiceToUser_every: ServiceWhereInput
-  _MagicalBackRelation_ServiceToUser_some: ServiceWhereInput
-  _MagicalBackRelation_ServiceToUser_none: ServiceWhereInput
 }
 
 input UserWhereUniqueInput {
