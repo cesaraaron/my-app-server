@@ -17,9 +17,11 @@ const product = {
 }
 
 const user = {
-  subscribe: (_, _1, ctx: Context, info) => {
+  subscribe: (_, {userId}, ctx: Context, info) => {
     return ctx.db.subscription.user({
-      where: { mutation_in: ['CREATED', 'DELETED', 'UPDATED'] },
+      where: { mutation_in: ['CREATED', 'DELETED', 'UPDATED'], node: {
+        id: userId
+      } },
     }, info)
   },
 }

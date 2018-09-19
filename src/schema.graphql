@@ -103,6 +103,6 @@ type Sale {
 
 type Subscription {
   sale: SaleSubscriptionPayload
-  user: UserSubscriptionPayload
+  user(userId: ID!): UserSubscriptionPayload
   product: ProductSubscriptionPayload
 }
