@@ -1439,6 +1439,7 @@ type Product implements Node {
   notifications: Boolean!
   quantity: Int!
   user(where: UserWhereInput): User!
+  barCodeData: String
   client(where: ClientWhereInput): Client!
 }
 
@@ -1457,6 +1458,7 @@ input ProductCreateInput {
   price: Float!
   notifications: Boolean!
   quantity: Int!
+  barCodeData: String
   user: UserCreateOneInput!
   client: ClientCreateOneWithoutProductsInput!
 }
@@ -1471,6 +1473,7 @@ input ProductCreateWithoutClientInput {
   price: Float!
   notifications: Boolean!
   quantity: Int!
+  barCodeData: String
   user: UserCreateOneInput!
 }
 
@@ -1498,6 +1501,8 @@ enum ProductOrderByInput {
   notifications_DESC
   quantity_ASC
   quantity_DESC
+  barCodeData_ASC
+  barCodeData_DESC
 }
 
 type ProductPreviousValues {
@@ -1508,6 +1513,7 @@ type ProductPreviousValues {
   price: Float!
   notifications: Boolean!
   quantity: Int!
+  barCodeData: String
 }
 
 type ProductSubscriptionPayload {
@@ -1554,6 +1560,7 @@ input ProductUpdateInput {
   price: Float
   notifications: Boolean
   quantity: Int
+  barCodeData: String
   user: UserUpdateOneInput
   client: ClientUpdateOneWithoutProductsInput
 }
@@ -1572,6 +1579,7 @@ input ProductUpdateWithoutClientDataInput {
   price: Float
   notifications: Boolean
   quantity: Int
+  barCodeData: String
   user: UserUpdateOneInput
 }
 
@@ -1767,6 +1775,46 @@ input ProductWhereInput {
 
   """All values greater than or equal the given value."""
   quantity_gte: Int
+  barCodeData: String
+
+  """All values that are not equal to given value."""
+  barCodeData_not: String
+
+  """All values that are contained in given list."""
+  barCodeData_in: [String!]
+
+  """All values that are not contained in given list."""
+  barCodeData_not_in: [String!]
+
+  """All values less than the given value."""
+  barCodeData_lt: String
+
+  """All values less than or equal the given value."""
+  barCodeData_lte: String
+
+  """All values greater than the given value."""
+  barCodeData_gt: String
+
+  """All values greater than or equal the given value."""
+  barCodeData_gte: String
+
+  """All values containing the given string."""
+  barCodeData_contains: String
+
+  """All values not containing the given string."""
+  barCodeData_not_contains: String
+
+  """All values starting with the given string."""
+  barCodeData_starts_with: String
+
+  """All values not starting with the given string."""
+  barCodeData_not_starts_with: String
+
+  """All values ending with the given string."""
+  barCodeData_ends_with: String
+
+  """All values not ending with the given string."""
+  barCodeData_not_ends_with: String
   user: UserWhereInput
   client: ClientWhereInput
 }
@@ -2918,7 +2966,9 @@ export type ProductOrderByInput =   'id_ASC' |
   'notifications_ASC' |
   'notifications_DESC' |
   'quantity_ASC' |
-  'quantity_DESC'
+  'quantity_DESC' |
+  'barCodeData_ASC' |
+  'barCodeData_DESC'
 
 export type UserPermissions =   'CREATE_PRODUCTS' |
   'UPDATE_PRODUCTS' |
@@ -3076,6 +3126,20 @@ export interface ProductWhereInput {
   quantity_lte?: Int
   quantity_gt?: Int
   quantity_gte?: Int
+  barCodeData?: String
+  barCodeData_not?: String
+  barCodeData_in?: String[] | String
+  barCodeData_not_in?: String[] | String
+  barCodeData_lt?: String
+  barCodeData_lte?: String
+  barCodeData_gt?: String
+  barCodeData_gte?: String
+  barCodeData_contains?: String
+  barCodeData_not_contains?: String
+  barCodeData_starts_with?: String
+  barCodeData_not_starts_with?: String
+  barCodeData_ends_with?: String
+  barCodeData_not_ends_with?: String
   user?: UserWhereInput
   client?: ClientWhereInput
 }
@@ -3200,6 +3264,7 @@ export interface ProductCreateWithoutClientInput {
   price: Float
   notifications: Boolean
   quantity: Int
+  barCodeData?: String
   user: UserCreateOneInput
 }
 
@@ -3649,6 +3714,7 @@ export interface ProductCreateInput {
   price: Float
   notifications: Boolean
   quantity: Int
+  barCodeData?: String
   user: UserCreateOneInput
   client: ClientCreateOneWithoutProductsInput
 }
@@ -3735,6 +3801,7 @@ export interface ProductUpdateInput {
   price?: Float
   notifications?: Boolean
   quantity?: Int
+  barCodeData?: String
   user?: UserUpdateOneInput
   client?: ClientUpdateOneWithoutProductsInput
 }
@@ -3982,6 +4049,7 @@ export interface ProductUpdateWithoutClientDataInput {
   price?: Float
   notifications?: Boolean
   quantity?: Int
+  barCodeData?: String
   user?: UserUpdateOneInput
 }
 
@@ -4253,6 +4321,7 @@ export interface Product extends Node {
   notifications: Boolean
   quantity: Int
   user: User
+  barCodeData?: String
   client: Client
 }
 
@@ -4379,6 +4448,7 @@ export interface ProductPreviousValues {
   price: Float
   notifications: Boolean
   quantity: Int
+  barCodeData?: String
 }
 
 /*

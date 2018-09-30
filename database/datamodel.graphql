@@ -47,6 +47,7 @@ type Product {
   notifications: Boolean!
   quantity: Int!
   user: User!
+  barCodeData: String
   client: Client!
 }
 

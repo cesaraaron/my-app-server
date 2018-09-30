@@ -20,6 +20,7 @@ type Product {
   updatedAt: DateTime!
   name: String!
   price: Float!
+  barCodeData: String
   notifications: Boolean!
   quantity: Int!
   user: User!
@@ -52,6 +53,7 @@ type Mutation {
     price: Float!
     quantity: Int!
     notifications: Boolean!
+    barCodeData: String
   ): Product
   updateProduct(
     productId: String!
@@ -59,6 +61,7 @@ type Mutation {
     price: Float
     quantity: Int
     notifications: Boolean
+    barCodeData: String
   ): Product
   deleteProduct(productId: String!): Product
   createSale(cartProducts: [CartProductCreateInput!]!): Sale

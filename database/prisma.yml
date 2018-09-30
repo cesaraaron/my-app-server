@@ -3,3 +3,9 @@ endpoint: http://54.210.243.224:4466/
 secret: applebloom
 
 datamodel: datamodel.graphql
+
+hooks:
+  post-deploy:
+    - echo "Deployment finished"
+    - graphql get-schema -p database
+    - graphql codegen

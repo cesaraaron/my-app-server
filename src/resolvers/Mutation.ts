@@ -125,7 +125,7 @@ const deleteUser = async (_, { userId }, ctx: Context, info) => {
 
 const createProduct = async (
   _,
-  { name, price, quantity, notifications },
+  { name, price, quantity, notifications, barCodeData },
   ctx: Context,
   info
 ) => {
@@ -147,6 +147,7 @@ const createProduct = async (
         price,
         quantity,
         notifications,
+        barCodeData,
         user: { connect: { id: userId } },
         client: { connect: { id: clientId } },
       },
@@ -158,7 +159,7 @@ const createProduct = async (
 // TODO: validate the fields of the product before trying to update it
 const updateProduct = async (
   _,
-  { name, price, quantity, productId, notifications },
+  { name, price, quantity, productId, notifications, barCodeData },
   ctx: Context,
   info
 ) => {
@@ -175,6 +176,7 @@ const updateProduct = async (
       data: {
         name,
         price,
+        barCodeData,
         notifications,
         quantity,
       },
