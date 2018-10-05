@@ -12,7 +12,7 @@ export interface Context {
 export function getUserId(ctx: Context): string {
   const Authorization = ctx.request.get('Authorization')
 
-  if (Authorization === null) {
+  if (!Authorization) {
     throw new AuthError()
   }
 

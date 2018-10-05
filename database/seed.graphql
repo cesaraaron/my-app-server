@@ -1,0 +1,25 @@
+mutation {
+  createUser(data: {
+    name: "John Doe"
+    phoneNumber: "123456"
+    password: "$2a$10$mLQzh4PFLo70/LPIgi6bMO.VjveJl6b1mRs4m0MSJUqOs6QkvEAZy" # plaintext password: "123456"
+    isAdmin: true
+    notifications: {
+      create: {
+        fireWhen: 5
+        devices: {
+          set: []
+        }
+      }
+    }
+    client: {
+      create: {
+        name: "John Doe"
+        phoneNumber: "123456"
+
+      }
+    }
+  }) {
+    id
+  }
+}
