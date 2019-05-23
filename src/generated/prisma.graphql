@@ -1,5 +1,5 @@
-# source: http://54.210.243.224:4466
-# timestamp: Sat Sep 29 2018 16:06:15 GMT-0600 (Central Standard Time)
+# source: https://us1.prisma.sh/cesar-aaron/database/dev
+# timestamp: Thu May 23 2019 16:29:34 GMT-0600 (Central Standard Time)
 
 type AggregateCartProduct {
   count: Int!
@@ -56,7 +56,7 @@ type CartProductConnection {
 }
 
 input CartProductCreateInput {
-  productId: ID!
+  productId: ID
   name: String!
   price: Float!
   quantitySold: Int!
@@ -64,6 +64,7 @@ input CartProductCreateInput {
 
 input CartProductCreateManyInput {
   create: [CartProductCreateInput!]
+  connect: [CartProductWhereUniqueInput!]
 }
 
 """An edge in a connection."""
@@ -84,12 +85,6 @@ enum CartProductOrderByInput {
   price_DESC
   quantitySold_ASC
   quantitySold_DESC
-  id_ASC
-  id_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type CartProductPreviousValues {
@@ -97,6 +92,141 @@ type CartProductPreviousValues {
   name: String!
   price: Float!
   quantitySold: Int!
+}
+
+input CartProductScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CartProductScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CartProductScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CartProductScalarWhereInput!]
+  productId: ID
+
+  """All values that are not equal to given value."""
+  productId_not: ID
+
+  """All values that are contained in given list."""
+  productId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  productId_not_in: [ID!]
+
+  """All values less than the given value."""
+  productId_lt: ID
+
+  """All values less than or equal the given value."""
+  productId_lte: ID
+
+  """All values greater than the given value."""
+  productId_gt: ID
+
+  """All values greater than or equal the given value."""
+  productId_gte: ID
+
+  """All values containing the given string."""
+  productId_contains: ID
+
+  """All values not containing the given string."""
+  productId_not_contains: ID
+
+  """All values starting with the given string."""
+  productId_starts_with: ID
+
+  """All values not starting with the given string."""
+  productId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  productId_ends_with: ID
+
+  """All values not ending with the given string."""
+  productId_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  price: Float
+
+  """All values that are not equal to given value."""
+  price_not: Float
+
+  """All values that are contained in given list."""
+  price_in: [Float!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Float!]
+
+  """All values less than the given value."""
+  price_lt: Float
+
+  """All values less than or equal the given value."""
+  price_lte: Float
+
+  """All values greater than the given value."""
+  price_gt: Float
+
+  """All values greater than or equal the given value."""
+  price_gte: Float
+  quantitySold: Int
+
+  """All values that are not equal to given value."""
+  quantitySold_not: Int
+
+  """All values that are contained in given list."""
+  quantitySold_in: [Int!]
+
+  """All values that are not contained in given list."""
+  quantitySold_not_in: [Int!]
+
+  """All values less than the given value."""
+  quantitySold_lt: Int
+
+  """All values less than or equal the given value."""
+  quantitySold_lte: Int
+
+  """All values greater than the given value."""
+  quantitySold_gt: Int
+
+  """All values greater than or equal the given value."""
+  quantitySold_gte: Int
 }
 
 type CartProductSubscriptionPayload {
@@ -138,8 +268,19 @@ input CartProductSubscriptionWhereInput {
   node: CartProductWhereInput
 }
 
+input CartProductUpdateDataInput {
+  name: String
+  price: Float
+  quantitySold: Int
+}
+
 input CartProductUpdateInput {
-  productId: ID
+  name: String
+  price: Float
+  quantitySold: Int
+}
+
+input CartProductUpdateManyDataInput {
   name: String
   price: Float
   quantitySold: Int
@@ -147,6 +288,36 @@ input CartProductUpdateInput {
 
 input CartProductUpdateManyInput {
   create: [CartProductCreateInput!]
+  connect: [CartProductWhereUniqueInput!]
+  set: [CartProductWhereUniqueInput!]
+  disconnect: [CartProductWhereUniqueInput!]
+  delete: [CartProductWhereUniqueInput!]
+  update: [CartProductUpdateWithWhereUniqueNestedInput!]
+  updateMany: [CartProductUpdateManyWithWhereNestedInput!]
+  deleteMany: [CartProductScalarWhereInput!]
+  upsert: [CartProductUpsertWithWhereUniqueNestedInput!]
+}
+
+input CartProductUpdateManyMutationInput {
+  name: String
+  price: Float
+  quantitySold: Int
+}
+
+input CartProductUpdateManyWithWhereNestedInput {
+  where: CartProductScalarWhereInput!
+  data: CartProductUpdateManyDataInput!
+}
+
+input CartProductUpdateWithWhereUniqueNestedInput {
+  where: CartProductWhereUniqueInput!
+  data: CartProductUpdateDataInput!
+}
+
+input CartProductUpsertWithWhereUniqueNestedInput {
+  where: CartProductWhereUniqueInput!
+  update: CartProductUpdateDataInput!
+  create: CartProductCreateInput!
 }
 
 input CartProductWhereInput {
@@ -284,6 +455,10 @@ input CartProductWhereInput {
   quantitySold_gte: Int
 }
 
+input CartProductWhereUniqueInput {
+  productId: ID
+}
+
 type Client implements Node {
   id: ID!
   name: String!
@@ -307,6 +482,7 @@ type ClientConnection {
 }
 
 input ClientCreateInput {
+  id: ID
   name: String!
   lastName: String
   email: String
@@ -343,6 +519,7 @@ input ClientCreateOneWithoutUsersInput {
 }
 
 input ClientCreateWithoutLogsInput {
+  id: ID
   name: String!
   lastName: String
   email: String
@@ -353,6 +530,7 @@ input ClientCreateWithoutLogsInput {
 }
 
 input ClientCreateWithoutProductsInput {
+  id: ID
   name: String!
   lastName: String
   email: String
@@ -363,6 +541,7 @@ input ClientCreateWithoutProductsInput {
 }
 
 input ClientCreateWithoutSalesInput {
+  id: ID
   name: String!
   lastName: String
   email: String
@@ -373,6 +552,7 @@ input ClientCreateWithoutSalesInput {
 }
 
 input ClientCreateWithoutUsersInput {
+  id: ID
   name: String!
   lastName: String
   email: String
@@ -402,10 +582,6 @@ enum ClientOrderByInput {
   email_DESC
   phoneNumber_ASC
   phoneNumber_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type ClientPreviousValues {
@@ -477,42 +653,44 @@ input ClientUpdateInput {
   logs: LogUpdateManyWithoutClientInput
 }
 
-input ClientUpdateOneInput {
+input ClientUpdateManyMutationInput {
+  name: String
+  lastName: String
+  email: String
+  phoneNumber: String
+}
+
+input ClientUpdateOneRequiredInput {
   create: ClientCreateInput
   connect: ClientWhereUniqueInput
-  delete: Boolean
   update: ClientUpdateDataInput
   upsert: ClientUpsertNestedInput
 }
 
-input ClientUpdateOneWithoutLogsInput {
+input ClientUpdateOneRequiredWithoutLogsInput {
   create: ClientCreateWithoutLogsInput
   connect: ClientWhereUniqueInput
-  delete: Boolean
   update: ClientUpdateWithoutLogsDataInput
   upsert: ClientUpsertWithoutLogsInput
 }
 
-input ClientUpdateOneWithoutProductsInput {
+input ClientUpdateOneRequiredWithoutProductsInput {
   create: ClientCreateWithoutProductsInput
   connect: ClientWhereUniqueInput
-  delete: Boolean
   update: ClientUpdateWithoutProductsDataInput
   upsert: ClientUpsertWithoutProductsInput
 }
 
-input ClientUpdateOneWithoutSalesInput {
+input ClientUpdateOneRequiredWithoutSalesInput {
   create: ClientCreateWithoutSalesInput
   connect: ClientWhereUniqueInput
-  delete: Boolean
   update: ClientUpdateWithoutSalesDataInput
   upsert: ClientUpsertWithoutSalesInput
 }
 
-input ClientUpdateOneWithoutUsersInput {
+input ClientUpdateOneRequiredWithoutUsersInput {
   create: ClientCreateWithoutUsersInput
   connect: ClientWhereUniqueInput
-  delete: Boolean
   update: ClientUpdateWithoutUsersDataInput
   upsert: ClientUpsertWithoutUsersInput
 }
@@ -818,8 +996,8 @@ type Log implements Node {
   message: String!
   type: LogType!
   createdAt: DateTime!
-  user(where: UserWhereInput): User!
-  client(where: ClientWhereInput): Client!
+  user: User!
+  client: Client!
 }
 
 """A connection to a list of items."""
@@ -833,6 +1011,7 @@ type LogConnection {
 }
 
 input LogCreateInput {
+  id: ID
   message: String!
   type: LogType!
   user: UserCreateOneInput!
@@ -845,6 +1024,7 @@ input LogCreateManyWithoutClientInput {
 }
 
 input LogCreateWithoutClientInput {
+  id: ID
   message: String!
   type: LogType!
   user: UserCreateOneInput!
@@ -868,8 +1048,6 @@ enum LogOrderByInput {
   type_DESC
   createdAt_ASC
   createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 
 type LogPreviousValues {
@@ -877,6 +1055,129 @@ type LogPreviousValues {
   message: String!
   type: LogType!
   createdAt: DateTime!
+}
+
+input LogScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [LogScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [LogScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [LogScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  message: String
+
+  """All values that are not equal to given value."""
+  message_not: String
+
+  """All values that are contained in given list."""
+  message_in: [String!]
+
+  """All values that are not contained in given list."""
+  message_not_in: [String!]
+
+  """All values less than the given value."""
+  message_lt: String
+
+  """All values less than or equal the given value."""
+  message_lte: String
+
+  """All values greater than the given value."""
+  message_gt: String
+
+  """All values greater than or equal the given value."""
+  message_gte: String
+
+  """All values containing the given string."""
+  message_contains: String
+
+  """All values not containing the given string."""
+  message_not_contains: String
+
+  """All values starting with the given string."""
+  message_starts_with: String
+
+  """All values not starting with the given string."""
+  message_not_starts_with: String
+
+  """All values ending with the given string."""
+  message_ends_with: String
+
+  """All values not ending with the given string."""
+  message_not_ends_with: String
+  type: LogType
+
+  """All values that are not equal to given value."""
+  type_not: LogType
+
+  """All values that are contained in given list."""
+  type_in: [LogType!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [LogType!]
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
 }
 
 type LogSubscriptionPayload {
@@ -925,23 +1226,41 @@ enum LogType {
 input LogUpdateInput {
   message: String
   type: LogType
-  user: UserUpdateOneInput
-  client: ClientUpdateOneWithoutLogsInput
+  user: UserUpdateOneRequiredInput
+  client: ClientUpdateOneRequiredWithoutLogsInput
+}
+
+input LogUpdateManyDataInput {
+  message: String
+  type: LogType
+}
+
+input LogUpdateManyMutationInput {
+  message: String
+  type: LogType
 }
 
 input LogUpdateManyWithoutClientInput {
   create: [LogCreateWithoutClientInput!]
   connect: [LogWhereUniqueInput!]
+  set: [LogWhereUniqueInput!]
   disconnect: [LogWhereUniqueInput!]
   delete: [LogWhereUniqueInput!]
   update: [LogUpdateWithWhereUniqueWithoutClientInput!]
+  updateMany: [LogUpdateManyWithWhereNestedInput!]
+  deleteMany: [LogScalarWhereInput!]
   upsert: [LogUpsertWithWhereUniqueWithoutClientInput!]
+}
+
+input LogUpdateManyWithWhereNestedInput {
+  where: LogScalarWhereInput!
+  data: LogUpdateManyDataInput!
 }
 
 input LogUpdateWithoutClientDataInput {
   message: String
   type: LogType
-  user: UserUpdateOneInput
+  user: UserUpdateOneRequiredInput
 }
 
 input LogUpdateWithWhereUniqueWithoutClientInput {
@@ -1096,43 +1415,48 @@ type Mutation {
   createSale(data: SaleCreateInput!): Sale!
   createLog(data: LogCreateInput!): Log!
   createNotifications(data: NotificationsCreateInput!): Notifications!
+  createCartProduct(data: CartProductCreateInput!): CartProduct!
   createClient(data: ClientCreateInput!): Client!
   createUser(data: UserCreateInput!): User!
-  createCartProduct(data: CartProductCreateInput!): CartProduct!
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
   updateService(data: ServiceUpdateInput!, where: ServiceWhereUniqueInput!): Service
   updateSale(data: SaleUpdateInput!, where: SaleWhereUniqueInput!): Sale
   updateLog(data: LogUpdateInput!, where: LogWhereUniqueInput!): Log
+  updateNotifications(data: NotificationsUpdateInput!, where: NotificationsWhereUniqueInput!): Notifications
+  updateCartProduct(data: CartProductUpdateInput!, where: CartProductWhereUniqueInput!): CartProduct
   updateClient(data: ClientUpdateInput!, where: ClientWhereUniqueInput!): Client
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteService(where: ServiceWhereUniqueInput!): Service
   deleteSale(where: SaleWhereUniqueInput!): Sale
   deleteLog(where: LogWhereUniqueInput!): Log
+  deleteNotifications(where: NotificationsWhereUniqueInput!): Notifications
+  deleteCartProduct(where: CartProductWhereUniqueInput!): CartProduct
   deleteClient(where: ClientWhereUniqueInput!): Client
   deleteUser(where: UserWhereUniqueInput!): User
   upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
   upsertService(where: ServiceWhereUniqueInput!, create: ServiceCreateInput!, update: ServiceUpdateInput!): Service!
   upsertSale(where: SaleWhereUniqueInput!, create: SaleCreateInput!, update: SaleUpdateInput!): Sale!
   upsertLog(where: LogWhereUniqueInput!, create: LogCreateInput!, update: LogUpdateInput!): Log!
+  upsertNotifications(where: NotificationsWhereUniqueInput!, create: NotificationsCreateInput!, update: NotificationsUpdateInput!): Notifications!
+  upsertCartProduct(where: CartProductWhereUniqueInput!, create: CartProductCreateInput!, update: CartProductUpdateInput!): CartProduct!
   upsertClient(where: ClientWhereUniqueInput!, create: ClientCreateInput!, update: ClientUpdateInput!): Client!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyProducts(data: ProductUpdateInput!, where: ProductWhereInput): BatchPayload!
-  updateManyServices(data: ServiceUpdateInput!, where: ServiceWhereInput): BatchPayload!
-  updateManySales(data: SaleUpdateInput!, where: SaleWhereInput): BatchPayload!
-  updateManyLogs(data: LogUpdateInput!, where: LogWhereInput): BatchPayload!
-  updateManyNotificationses(data: NotificationsUpdateInput!, where: NotificationsWhereInput): BatchPayload!
-  updateManyClients(data: ClientUpdateInput!, where: ClientWhereInput): BatchPayload!
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
-  updateManyCartProducts(data: CartProductUpdateInput!, where: CartProductWhereInput): BatchPayload!
+  updateManyProducts(data: ProductUpdateManyMutationInput!, where: ProductWhereInput): BatchPayload!
+  updateManyServices(data: ServiceUpdateManyMutationInput!, where: ServiceWhereInput): BatchPayload!
+  updateManyLogs(data: LogUpdateManyMutationInput!, where: LogWhereInput): BatchPayload!
+  updateManyNotificationses(data: NotificationsUpdateManyMutationInput!, where: NotificationsWhereInput): BatchPayload!
+  updateManyCartProducts(data: CartProductUpdateManyMutationInput!, where: CartProductWhereInput): BatchPayload!
+  updateManyClients(data: ClientUpdateManyMutationInput!, where: ClientWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
   deleteManyServices(where: ServiceWhereInput): BatchPayload!
   deleteManySales(where: SaleWhereInput): BatchPayload!
   deleteManyLogs(where: LogWhereInput): BatchPayload!
   deleteManyNotificationses(where: NotificationsWhereInput): BatchPayload!
+  deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
   deleteManyClients(where: ClientWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
-  deleteManyCartProducts(where: CartProductWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -1147,7 +1471,8 @@ interface Node {
   id: ID!
 }
 
-type Notifications {
+type Notifications implements Node {
+  id: ID!
   fireWhen: Int!
   devices: [String!]!
 }
@@ -1167,12 +1492,14 @@ input NotificationsCreatedevicesInput {
 }
 
 input NotificationsCreateInput {
+  id: ID
   fireWhen: Int
   devices: NotificationsCreatedevicesInput
 }
 
 input NotificationsCreateOneInput {
   create: NotificationsCreateInput
+  connect: NotificationsWhereUniqueInput
 }
 
 """An edge in a connection."""
@@ -1185,17 +1512,14 @@ type NotificationsEdge {
 }
 
 enum NotificationsOrderByInput {
-  fireWhen_ASC
-  fireWhen_DESC
   id_ASC
   id_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
+  fireWhen_ASC
+  fireWhen_DESC
 }
 
 type NotificationsPreviousValues {
+  id: ID!
   fireWhen: Int!
   devices: [String!]!
 }
@@ -1253,9 +1577,14 @@ input NotificationsUpdateInput {
   devices: NotificationsUpdatedevicesInput
 }
 
-input NotificationsUpdateOneInput {
+input NotificationsUpdateManyMutationInput {
+  fireWhen: Int
+  devices: NotificationsUpdatedevicesInput
+}
+
+input NotificationsUpdateOneRequiredInput {
   create: NotificationsCreateInput
-  delete: Boolean
+  connect: NotificationsWhereUniqueInput
   update: NotificationsUpdateDataInput
   upsert: NotificationsUpsertNestedInput
 }
@@ -1274,6 +1603,46 @@ input NotificationsWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [NotificationsWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   fireWhen: Int
 
   """All values that are not equal to given value."""
@@ -1296,6 +1665,10 @@ input NotificationsWhereInput {
 
   """All values greater than or equal the given value."""
   fireWhen_gte: Int
+}
+
+input NotificationsWhereUniqueInput {
+  id: ID
 }
 
 """Information about pagination in a connection."""
@@ -1321,9 +1694,9 @@ type Product implements Node {
   price: Float!
   notifications: Boolean!
   quantity: Int!
-  user(where: UserWhereInput): User!
+  user: User!
   barCodeData: String
-  client(where: ClientWhereInput): Client!
+  client: Client!
 }
 
 """A connection to a list of items."""
@@ -1337,6 +1710,7 @@ type ProductConnection {
 }
 
 input ProductCreateInput {
+  id: ID
   name: String!
   price: Float!
   notifications: Boolean!
@@ -1352,6 +1726,7 @@ input ProductCreateManyWithoutClientInput {
 }
 
 input ProductCreateWithoutClientInput {
+  id: ID
   name: String!
   price: Float!
   notifications: Boolean!
@@ -1399,6 +1774,229 @@ type ProductPreviousValues {
   barCodeData: String
 }
 
+input ProductScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ProductScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ProductScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ProductScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  price: Float
+
+  """All values that are not equal to given value."""
+  price_not: Float
+
+  """All values that are contained in given list."""
+  price_in: [Float!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Float!]
+
+  """All values less than the given value."""
+  price_lt: Float
+
+  """All values less than or equal the given value."""
+  price_lte: Float
+
+  """All values greater than the given value."""
+  price_gt: Float
+
+  """All values greater than or equal the given value."""
+  price_gte: Float
+  notifications: Boolean
+
+  """All values that are not equal to given value."""
+  notifications_not: Boolean
+  quantity: Int
+
+  """All values that are not equal to given value."""
+  quantity_not: Int
+
+  """All values that are contained in given list."""
+  quantity_in: [Int!]
+
+  """All values that are not contained in given list."""
+  quantity_not_in: [Int!]
+
+  """All values less than the given value."""
+  quantity_lt: Int
+
+  """All values less than or equal the given value."""
+  quantity_lte: Int
+
+  """All values greater than the given value."""
+  quantity_gt: Int
+
+  """All values greater than or equal the given value."""
+  quantity_gte: Int
+  barCodeData: String
+
+  """All values that are not equal to given value."""
+  barCodeData_not: String
+
+  """All values that are contained in given list."""
+  barCodeData_in: [String!]
+
+  """All values that are not contained in given list."""
+  barCodeData_not_in: [String!]
+
+  """All values less than the given value."""
+  barCodeData_lt: String
+
+  """All values less than or equal the given value."""
+  barCodeData_lte: String
+
+  """All values greater than the given value."""
+  barCodeData_gt: String
+
+  """All values greater than or equal the given value."""
+  barCodeData_gte: String
+
+  """All values containing the given string."""
+  barCodeData_contains: String
+
+  """All values not containing the given string."""
+  barCodeData_not_contains: String
+
+  """All values starting with the given string."""
+  barCodeData_starts_with: String
+
+  """All values not starting with the given string."""
+  barCodeData_not_starts_with: String
+
+  """All values ending with the given string."""
+  barCodeData_ends_with: String
+
+  """All values not ending with the given string."""
+  barCodeData_not_ends_with: String
+}
+
 type ProductSubscriptionPayload {
   mutation: MutationType!
   node: Product
@@ -1444,17 +2042,41 @@ input ProductUpdateInput {
   notifications: Boolean
   quantity: Int
   barCodeData: String
-  user: UserUpdateOneInput
-  client: ClientUpdateOneWithoutProductsInput
+  user: UserUpdateOneRequiredInput
+  client: ClientUpdateOneRequiredWithoutProductsInput
+}
+
+input ProductUpdateManyDataInput {
+  name: String
+  price: Float
+  notifications: Boolean
+  quantity: Int
+  barCodeData: String
+}
+
+input ProductUpdateManyMutationInput {
+  name: String
+  price: Float
+  notifications: Boolean
+  quantity: Int
+  barCodeData: String
 }
 
 input ProductUpdateManyWithoutClientInput {
   create: [ProductCreateWithoutClientInput!]
   connect: [ProductWhereUniqueInput!]
+  set: [ProductWhereUniqueInput!]
   disconnect: [ProductWhereUniqueInput!]
   delete: [ProductWhereUniqueInput!]
   update: [ProductUpdateWithWhereUniqueWithoutClientInput!]
+  updateMany: [ProductUpdateManyWithWhereNestedInput!]
+  deleteMany: [ProductScalarWhereInput!]
   upsert: [ProductUpsertWithWhereUniqueWithoutClientInput!]
+}
+
+input ProductUpdateManyWithWhereNestedInput {
+  where: ProductScalarWhereInput!
+  data: ProductUpdateManyDataInput!
 }
 
 input ProductUpdateWithoutClientDataInput {
@@ -1463,7 +2085,7 @@ input ProductUpdateWithoutClientDataInput {
   notifications: Boolean
   quantity: Int
   barCodeData: String
-  user: UserUpdateOneInput
+  user: UserUpdateOneRequiredInput
 }
 
 input ProductUpdateWithWhereUniqueWithoutClientInput {
@@ -1712,13 +2334,15 @@ type Query {
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale]!
   logs(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Log]!
   notificationses(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifications]!
+  cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
   clients(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Client]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  cartProducts(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct]!
   product(where: ProductWhereUniqueInput!): Product
   service(where: ServiceWhereUniqueInput!): Service
   sale(where: SaleWhereUniqueInput!): Sale
   log(where: LogWhereUniqueInput!): Log
+  notifications(where: NotificationsWhereUniqueInput!): Notifications
+  cartProduct(where: CartProductWhereUniqueInput!): CartProduct
   client(where: ClientWhereUniqueInput!): Client
   user(where: UserWhereUniqueInput!): User
   productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
@@ -1726,9 +2350,9 @@ type Query {
   salesConnection(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SaleConnection!
   logsConnection(where: LogWhereInput, orderBy: LogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LogConnection!
   notificationsesConnection(where: NotificationsWhereInput, orderBy: NotificationsOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationsConnection!
+  cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
   clientsConnection(where: ClientWhereInput, orderBy: ClientOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClientConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  cartProductsConnection(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CartProductConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1742,8 +2366,8 @@ type Sale implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   products(where: CartProductWhereInput, orderBy: CartProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CartProduct!]
-  soldBy(where: UserWhereInput): User!
-  client(where: ClientWhereInput): Client!
+  soldBy: User!
+  client: Client!
 }
 
 """A connection to a list of items."""
@@ -1757,6 +2381,7 @@ type SaleConnection {
 }
 
 input SaleCreateInput {
+  id: ID
   products: CartProductCreateManyInput
   soldBy: UserCreateOneWithoutSalesInput!
   client: ClientCreateOneWithoutSalesInput!
@@ -1773,11 +2398,13 @@ input SaleCreateManyWithoutSoldByInput {
 }
 
 input SaleCreateWithoutClientInput {
+  id: ID
   products: CartProductCreateManyInput
   soldBy: UserCreateOneWithoutSalesInput!
 }
 
 input SaleCreateWithoutSoldByInput {
+  id: ID
   products: CartProductCreateManyInput
   client: ClientCreateOneWithoutSalesInput!
 }
@@ -1804,6 +2431,101 @@ type SalePreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+input SaleScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SaleScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SaleScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SaleScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
 }
 
 type SaleSubscriptionPayload {
@@ -1847,36 +2569,40 @@ input SaleSubscriptionWhereInput {
 
 input SaleUpdateInput {
   products: CartProductUpdateManyInput
-  soldBy: UserUpdateOneWithoutSalesInput
-  client: ClientUpdateOneWithoutSalesInput
+  soldBy: UserUpdateOneRequiredWithoutSalesInput
+  client: ClientUpdateOneRequiredWithoutSalesInput
 }
 
 input SaleUpdateManyWithoutClientInput {
   create: [SaleCreateWithoutClientInput!]
   connect: [SaleWhereUniqueInput!]
+  set: [SaleWhereUniqueInput!]
   disconnect: [SaleWhereUniqueInput!]
   delete: [SaleWhereUniqueInput!]
   update: [SaleUpdateWithWhereUniqueWithoutClientInput!]
+  deleteMany: [SaleScalarWhereInput!]
   upsert: [SaleUpsertWithWhereUniqueWithoutClientInput!]
 }
 
 input SaleUpdateManyWithoutSoldByInput {
   create: [SaleCreateWithoutSoldByInput!]
   connect: [SaleWhereUniqueInput!]
+  set: [SaleWhereUniqueInput!]
   disconnect: [SaleWhereUniqueInput!]
   delete: [SaleWhereUniqueInput!]
   update: [SaleUpdateWithWhereUniqueWithoutSoldByInput!]
+  deleteMany: [SaleScalarWhereInput!]
   upsert: [SaleUpsertWithWhereUniqueWithoutSoldByInput!]
 }
 
 input SaleUpdateWithoutClientDataInput {
   products: CartProductUpdateManyInput
-  soldBy: UserUpdateOneWithoutSalesInput
+  soldBy: UserUpdateOneRequiredWithoutSalesInput
 }
 
 input SaleUpdateWithoutSoldByDataInput {
   products: CartProductUpdateManyInput
-  client: ClientUpdateOneWithoutSalesInput
+  client: ClientUpdateOneRequiredWithoutSalesInput
 }
 
 input SaleUpdateWithWhereUniqueWithoutClientInput {
@@ -2011,8 +2737,8 @@ type Service implements Node {
   updatedAt: DateTime!
   name: String!
   price: Float!
-  user(where: UserWhereInput): User!
-  client(where: ClientWhereInput): Client!
+  user: User!
+  client: Client!
 }
 
 """A connection to a list of items."""
@@ -2026,6 +2752,7 @@ type ServiceConnection {
 }
 
 input ServiceCreateInput {
+  id: ID
   name: String!
   price: Float!
   user: UserCreateOneInput!
@@ -2104,8 +2831,13 @@ input ServiceSubscriptionWhereInput {
 input ServiceUpdateInput {
   name: String
   price: Float
-  user: UserUpdateOneInput
-  client: ClientUpdateOneInput
+  user: UserUpdateOneRequiredInput
+  client: ClientUpdateOneRequiredInput
+}
+
+input ServiceUpdateManyMutationInput {
+  name: String
+  price: Float
 }
 
 input ServiceWhereInput {
@@ -2277,9 +3009,9 @@ type Subscription {
   sale(where: SaleSubscriptionWhereInput): SaleSubscriptionPayload
   log(where: LogSubscriptionWhereInput): LogSubscriptionPayload
   notifications(where: NotificationsSubscriptionWhereInput): NotificationsSubscriptionPayload
+  cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
   client(where: ClientSubscriptionWhereInput): ClientSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  cartProduct(where: CartProductSubscriptionWhereInput): CartProductSubscriptionPayload
 }
 
 type User implements Node {
@@ -2288,12 +3020,12 @@ type User implements Node {
   updatedAt: DateTime!
   name: String!
   lastName: String
-  notifications(where: NotificationsWhereInput): Notifications!
+  notifications: Notifications!
   phoneNumber: String!
   password: String!
   permissions: [UserPermissions!]!
   isAdmin: Boolean!
-  client(where: ClientWhereInput): Client!
+  client: Client!
   sales(where: SaleWhereInput, orderBy: SaleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sale!]
 }
 
@@ -2308,6 +3040,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
   name: String!
   lastName: String
   phoneNumber: String!
@@ -2339,6 +3072,7 @@ input UserCreatepermissionsInput {
 }
 
 input UserCreateWithoutClientInput {
+  id: ID
   name: String!
   lastName: String
   phoneNumber: String!
@@ -2350,6 +3084,7 @@ input UserCreateWithoutClientInput {
 }
 
 input UserCreateWithoutSalesInput {
+  id: ID
   name: String!
   lastName: String
   phoneNumber: String!
@@ -2408,6 +3143,265 @@ type UserPreviousValues {
   isAdmin: Boolean!
 }
 
+input UserScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  lastName: String
+
+  """All values that are not equal to given value."""
+  lastName_not: String
+
+  """All values that are contained in given list."""
+  lastName_in: [String!]
+
+  """All values that are not contained in given list."""
+  lastName_not_in: [String!]
+
+  """All values less than the given value."""
+  lastName_lt: String
+
+  """All values less than or equal the given value."""
+  lastName_lte: String
+
+  """All values greater than the given value."""
+  lastName_gt: String
+
+  """All values greater than or equal the given value."""
+  lastName_gte: String
+
+  """All values containing the given string."""
+  lastName_contains: String
+
+  """All values not containing the given string."""
+  lastName_not_contains: String
+
+  """All values starting with the given string."""
+  lastName_starts_with: String
+
+  """All values not starting with the given string."""
+  lastName_not_starts_with: String
+
+  """All values ending with the given string."""
+  lastName_ends_with: String
+
+  """All values not ending with the given string."""
+  lastName_not_ends_with: String
+  phoneNumber: String
+
+  """All values that are not equal to given value."""
+  phoneNumber_not: String
+
+  """All values that are contained in given list."""
+  phoneNumber_in: [String!]
+
+  """All values that are not contained in given list."""
+  phoneNumber_not_in: [String!]
+
+  """All values less than the given value."""
+  phoneNumber_lt: String
+
+  """All values less than or equal the given value."""
+  phoneNumber_lte: String
+
+  """All values greater than the given value."""
+  phoneNumber_gt: String
+
+  """All values greater than or equal the given value."""
+  phoneNumber_gte: String
+
+  """All values containing the given string."""
+  phoneNumber_contains: String
+
+  """All values not containing the given string."""
+  phoneNumber_not_contains: String
+
+  """All values starting with the given string."""
+  phoneNumber_starts_with: String
+
+  """All values not starting with the given string."""
+  phoneNumber_not_starts_with: String
+
+  """All values ending with the given string."""
+  phoneNumber_ends_with: String
+
+  """All values not ending with the given string."""
+  phoneNumber_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  isAdmin: Boolean
+
+  """All values that are not equal to given value."""
+  isAdmin_not: Boolean
+}
+
 type UserSubscriptionPayload {
   mutation: MutationType!
   node: User
@@ -2454,8 +3448,8 @@ input UserUpdateDataInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
-  notifications: NotificationsUpdateOneInput
-  client: ClientUpdateOneWithoutUsersInput
+  notifications: NotificationsUpdateOneRequiredInput
+  client: ClientUpdateOneRequiredWithoutUsersInput
   sales: SaleUpdateManyWithoutSoldByInput
 }
 
@@ -2466,32 +3460,56 @@ input UserUpdateInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
-  notifications: NotificationsUpdateOneInput
-  client: ClientUpdateOneWithoutUsersInput
+  notifications: NotificationsUpdateOneRequiredInput
+  client: ClientUpdateOneRequiredWithoutUsersInput
   sales: SaleUpdateManyWithoutSoldByInput
+}
+
+input UserUpdateManyDataInput {
+  name: String
+  lastName: String
+  phoneNumber: String
+  password: String
+  isAdmin: Boolean
+  permissions: UserUpdatepermissionsInput
+}
+
+input UserUpdateManyMutationInput {
+  name: String
+  lastName: String
+  phoneNumber: String
+  password: String
+  isAdmin: Boolean
+  permissions: UserUpdatepermissionsInput
 }
 
 input UserUpdateManyWithoutClientInput {
   create: [UserCreateWithoutClientInput!]
   connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutClientInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutClientInput!]
 }
 
-input UserUpdateOneInput {
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
+}
+
+input UserUpdateOneRequiredInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
 }
 
-input UserUpdateOneWithoutSalesInput {
+input UserUpdateOneRequiredWithoutSalesInput {
   create: UserCreateWithoutSalesInput
   connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutSalesDataInput
   upsert: UserUpsertWithoutSalesInput
 }
@@ -2507,7 +3525,7 @@ input UserUpdateWithoutClientDataInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
-  notifications: NotificationsUpdateOneInput
+  notifications: NotificationsUpdateOneRequiredInput
   sales: SaleUpdateManyWithoutSoldByInput
 }
 
@@ -2518,8 +3536,8 @@ input UserUpdateWithoutSalesDataInput {
   password: String
   isAdmin: Boolean
   permissions: UserUpdatepermissionsInput
-  notifications: NotificationsUpdateOneInput
-  client: ClientUpdateOneWithoutUsersInput
+  notifications: NotificationsUpdateOneRequiredInput
+  client: ClientUpdateOneRequiredWithoutUsersInput
 }
 
 input UserUpdateWithWhereUniqueWithoutClientInput {

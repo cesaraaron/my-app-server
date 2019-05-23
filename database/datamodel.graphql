@@ -1,5 +1,5 @@
 type Client {
-  id: ID! @unique
+  id: ID! @id
   name: String!
   lastName: String
   email: String @unique
@@ -11,23 +11,24 @@ type Client {
 }
 
 type User {
-  id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
   name: String!
   lastName: String
   notifications: Notifications!
   phoneNumber: String! @unique
   password: String!
-  permissions: [UserPermissions!]!
+  permissions: [UserPermissions!]! @scalarList(strategy: RELATION)
   isAdmin: Boolean! @default(value: false)
   client: Client!
   sales: [Sale!]!
 }
 
 type Notifications {
+  id: ID! @id
   fireWhen: Int! @default(value: 5)
-  devices: [String!]!
+  devices: [String!]! @scalarList(strategy: RELATION)
 }
 
 enum UserPermissions {
@@ -39,51 +40,51 @@ enum UserPermissions {
 }
 
 type Product {
-  id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
   name: String!
   price: Float!
   notifications: Boolean!
   quantity: Int!
-  user: User!
+  user: User! @relation(link: INLINE)
   barCodeData: String
-  client: Client!
+  client: Client! @relation(link: INLINE)
 }
 
 type Service {
-  id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
   name: String!
   price: Float!
-  user: User!
-  client: Client!
+  user: User! @relation(link: INLINE)
+  client: Client! @relation(link: INLINE)
 }
 
 type Sale {
-  id: ID! @unique
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
   products: [CartProduct!]!
   soldBy: User!
   client: Client!
 }
 
 type CartProduct {
-  productId: ID!
+  productId: ID! @id
   name: String!
   price: Float!
   quantitySold: Int!
 }
 
 type Log {
-  id: ID! @unique
+  id: ID! @id
   message: String!
   type: LogType!
-  createdAt: DateTime!
-  user: User!
-  client: Client!
+  createdAt: DateTime! @createdAt
+  user: User! @relation(link: INLINE)
+  client: Client! @relation(link: INLINE)
 }
 
 enum LogType {

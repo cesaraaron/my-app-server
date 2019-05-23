@@ -7,7 +7,7 @@
     "playground": "graphql playground",
     "build": "rimraf dist && tsc",
     "prepare": "graphql get-schema -p database && graphql codegen",
-    "deploy": "prisma deploy && npm run prepare"
+    "deploy": "prisma deploy"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
@@ -28,5 +28,8 @@
     "rimraf": "2.6.2",
     "ts-node": "6.0.3",
     "typescript": "2.8.3"
+  },
+  "resolutions": {
+    "**/event-stream": "^4.0.1"
   }
 }
