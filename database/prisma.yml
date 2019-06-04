@@ -10,6 +10,5 @@ hooks:
     - echo "Deployment finished"
     - graphql get-schema -p database
     - graphql codegen
-    - prisma seed
 
 endpoint: https://us1.prisma.sh/cesar-aaron/database/dev
