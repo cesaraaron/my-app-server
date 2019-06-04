@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/cesar-aaron/database/dev
-# timestamp: Thu May 23 2019 16:29:34 GMT-0600 (Central Standard Time)
+# timestamp: Thu May 23 2019 19:58:17 GMT-0600 (Central Standard Time)
 
 type AggregateCartProduct {
   count: Int!
@@ -38,7 +38,8 @@ type BatchPayload {
   count: Long!
 }
 
-type CartProduct {
+type CartProduct implements Node {
+  id: ID!
   productId: ID!
   name: String!
   price: Float!
@@ -56,7 +57,8 @@ type CartProductConnection {
 }
 
 input CartProductCreateInput {
-  productId: ID
+  id: ID
+  productId: ID!
   name: String!
   price: Float!
   quantitySold: Int!
@@ -77,6 +79,8 @@ type CartProductEdge {
 }
 
 enum CartProductOrderByInput {
+  id_ASC
+  id_DESC
   productId_ASC
   productId_DESC
   name_ASC
@@ -88,6 +92,7 @@ enum CartProductOrderByInput {
 }
 
 type CartProductPreviousValues {
+  id: ID!
   productId: ID!
   name: String!
   price: Float!
@@ -103,6 +108,46 @@ input CartProductScalarWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [CartProductScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   productId: ID
 
   """All values that are not equal to given value."""
@@ -269,18 +314,21 @@ input CartProductSubscriptionWhereInput {
 }
 
 input CartProductUpdateDataInput {
+  productId: ID
   name: String
   price: Float
   quantitySold: Int
 }
 
 input CartProductUpdateInput {
+  productId: ID
   name: String
   price: Float
   quantitySold: Int
 }
 
 input CartProductUpdateManyDataInput {
+  productId: ID
   name: String
   price: Float
   quantitySold: Int
@@ -299,6 +347,7 @@ input CartProductUpdateManyInput {
 }
 
 input CartProductUpdateManyMutationInput {
+  productId: ID
   name: String
   price: Float
   quantitySold: Int
@@ -329,6 +378,46 @@ input CartProductWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [CartProductWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   productId: ID
 
   """All values that are not equal to given value."""
@@ -456,7 +545,7 @@ input CartProductWhereInput {
 }
 
 input CartProductWhereUniqueInput {
-  productId: ID
+  id: ID
 }
 
 type Client implements Node {

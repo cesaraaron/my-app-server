@@ -162,7 +162,8 @@ type BatchPayload {
   count: Long!
 }
 
-type CartProduct {
+type CartProduct implements Node {
+  id: ID!
   productId: ID!
   name: String!
   price: Float!
@@ -180,7 +181,8 @@ type CartProductConnection {
 }
 
 input CartProductCreateInput {
-  productId: ID
+  id: ID
+  productId: ID!
   name: String!
   price: Float!
   quantitySold: Int!
@@ -201,6 +203,8 @@ type CartProductEdge {
 }
 
 enum CartProductOrderByInput {
+  id_ASC
+  id_DESC
   productId_ASC
   productId_DESC
   name_ASC
@@ -212,6 +216,7 @@ enum CartProductOrderByInput {
 }
 
 type CartProductPreviousValues {
+  id: ID!
   productId: ID!
   name: String!
   price: Float!
@@ -227,6 +232,46 @@ input CartProductScalarWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [CartProductScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   productId: ID
 
   """All values that are not equal to given value."""
@@ -370,7 +415,9 @@ input CartProductSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [CartProductSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
   mutation_in: [MutationType!]
 
   """
@@ -391,18 +438,21 @@ input CartProductSubscriptionWhereInput {
 }
 
 input CartProductUpdateDataInput {
+  productId: ID
   name: String
   price: Float
   quantitySold: Int
 }
 
 input CartProductUpdateInput {
+  productId: ID
   name: String
   price: Float
   quantitySold: Int
 }
 
 input CartProductUpdateManyDataInput {
+  productId: ID
   name: String
   price: Float
   quantitySold: Int
@@ -421,6 +471,7 @@ input CartProductUpdateManyInput {
 }
 
 input CartProductUpdateManyMutationInput {
+  productId: ID
   name: String
   price: Float
   quantitySold: Int
@@ -451,6 +502,46 @@ input CartProductWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [CartProductWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   productId: ID
 
   """All values that are not equal to given value."""
@@ -578,7 +669,7 @@ input CartProductWhereInput {
 }
 
 input CartProductWhereUniqueInput {
-  productId: ID
+  id: ID
 }
 
 type Client implements Node {
@@ -731,7 +822,9 @@ input ClientSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [ClientSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
   mutation_in: [MutationType!]
 
   """
@@ -1317,7 +1410,9 @@ input LogSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [LogSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
   mutation_in: [MutationType!]
 
   """
@@ -1659,7 +1754,9 @@ input NotificationsSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [NotificationsSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
   mutation_in: [MutationType!]
 
   """
@@ -2130,7 +2227,9 @@ input ProductSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [ProductSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
   mutation_in: [MutationType!]
 
   """
@@ -2659,7 +2758,9 @@ input SaleSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [SaleSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
   mutation_in: [MutationType!]
 
   """
@@ -2918,7 +3019,9 @@ input ServiceSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [ServiceSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
   mutation_in: [MutationType!]
 
   """
@@ -3529,7 +3632,9 @@ input UserSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [UserSubscriptionWhereInput!]
 
-  """The subscription event gets dispatched when it's listed in mutation_in"""
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
   mutation_in: [MutationType!]
 
   """
@@ -3945,7 +4050,9 @@ export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDe
  * Types
 */
 
-export type CartProductOrderByInput =   'productId_ASC' |
+export type CartProductOrderByInput =   'id_ASC' |
+  'id_DESC' |
+  'productId_ASC' |
   'productId_DESC' |
   'name_ASC' |
   'name_DESC' |
@@ -4044,7 +4151,8 @@ export type UserPermissions =   'CREATE_PRODUCTS' |
   'DELETE_SALES'
 
 export interface CartProductCreateInput {
-  productId?: ID_Input | null
+  id?: ID_Input | null
+  productId: ID_Output
   name: String
   price: Float
   quantitySold: Int
@@ -4059,6 +4167,20 @@ export interface CartProductScalarWhereInput {
   AND?: CartProductScalarWhereInput[] | CartProductScalarWhereInput | null
   OR?: CartProductScalarWhereInput[] | CartProductScalarWhereInput | null
   NOT?: CartProductScalarWhereInput[] | CartProductScalarWhereInput | null
+  id?: ID_Input | null
+  id_not?: ID_Input | null
+  id_in?: ID_Output[] | ID_Output | null
+  id_not_in?: ID_Output[] | ID_Output | null
+  id_lt?: ID_Input | null
+  id_lte?: ID_Input | null
+  id_gt?: ID_Input | null
+  id_gte?: ID_Input | null
+  id_contains?: ID_Input | null
+  id_not_contains?: ID_Input | null
+  id_starts_with?: ID_Input | null
+  id_not_starts_with?: ID_Input | null
+  id_ends_with?: ID_Input | null
+  id_not_ends_with?: ID_Input | null
   productId?: ID_Input | null
   productId_not?: ID_Input | null
   productId_in?: ID_Output[] | ID_Output | null
@@ -4117,18 +4239,21 @@ export interface CartProductSubscriptionWhereInput {
 }
 
 export interface CartProductUpdateDataInput {
+  productId?: ID_Input | null
   name?: String | null
   price?: Float | null
   quantitySold?: Int | null
 }
 
 export interface CartProductUpdateInput {
+  productId?: ID_Input | null
   name?: String | null
   price?: Float | null
   quantitySold?: Int | null
 }
 
 export interface CartProductUpdateManyDataInput {
+  productId?: ID_Input | null
   name?: String | null
   price?: Float | null
   quantitySold?: Int | null
@@ -4147,6 +4272,7 @@ export interface CartProductUpdateManyInput {
 }
 
 export interface CartProductUpdateManyMutationInput {
+  productId?: ID_Input | null
   name?: String | null
   price?: Float | null
   quantitySold?: Int | null
@@ -4172,6 +4298,20 @@ export interface CartProductWhereInput {
   AND?: CartProductWhereInput[] | CartProductWhereInput | null
   OR?: CartProductWhereInput[] | CartProductWhereInput | null
   NOT?: CartProductWhereInput[] | CartProductWhereInput | null
+  id?: ID_Input | null
+  id_not?: ID_Input | null
+  id_in?: ID_Output[] | ID_Output | null
+  id_not_in?: ID_Output[] | ID_Output | null
+  id_lt?: ID_Input | null
+  id_lte?: ID_Input | null
+  id_gt?: ID_Input | null
+  id_gte?: ID_Input | null
+  id_contains?: ID_Input | null
+  id_not_contains?: ID_Input | null
+  id_starts_with?: ID_Input | null
+  id_not_starts_with?: ID_Input | null
+  id_ends_with?: ID_Input | null
+  id_not_ends_with?: ID_Input | null
   productId?: ID_Input | null
   productId_not?: ID_Input | null
   productId_in?: ID_Output[] | ID_Output | null
@@ -4219,7 +4359,7 @@ export interface CartProductWhereInput {
 }
 
 export interface CartProductWhereUniqueInput {
-  productId?: ID_Input | null
+  id?: ID_Input | null
 }
 
 export interface ClientCreateInput {
@@ -5781,7 +5921,8 @@ export interface BatchPayload {
   count: Long
 }
 
-export interface CartProduct {
+export interface CartProduct extends Node {
+  id: ID_Output
   productId: ID_Output
   name: String
   price: Float
@@ -5808,6 +5949,7 @@ export interface CartProductEdge {
 }
 
 export interface CartProductPreviousValues {
+  id: ID_Output
   productId: ID_Output
   name: String
   price: Float
@@ -6154,7 +6296,7 @@ export type Boolean = boolean
 export type DateTime = Date | string
 
 /*
-The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). 
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
 */
 export type Float = number
 

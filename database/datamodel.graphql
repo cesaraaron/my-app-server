@@ -72,7 +72,8 @@ type Sale {
 }
 
 type CartProduct {
-  productId: ID! @id
+  id: ID! @id
+  productId: ID!
   name: String!
   price: Float!
   quantitySold: Int!
