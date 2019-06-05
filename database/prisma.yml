@@ -1,4 +1,4 @@
-secret: applebloom
+secret: ${env:PRISMA_SECRET}
 
 datamodel: datamodel.graphql
 
@@ -10,5 +10,6 @@ hooks:
     - echo "Deployment finished"
     - graphql get-schema -p database
     - graphql codegen
+    - npm run update-env
 
-endpoint: https://us1.prisma.sh/cesar-aaron/database/dev
+endpoint: ${env:PRISMA_ENDPOINT}
