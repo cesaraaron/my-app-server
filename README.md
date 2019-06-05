@@ -20,7 +20,7 @@ $ yarn install
 Now you need to deploy to an existing prisma server or setup one:
 
 ```sh
-$ yarn deploy
+$ yarn deploy -n
 ```
 
 When prompt:
