@@ -10,6 +10,5 @@ hooks:
     - echo "Deployment finished"
     - graphql get-schema -p database
     - graphql codegen
-    - npm run update-env
 
 endpoint: ${env:PRISMA_ENDPOINT}

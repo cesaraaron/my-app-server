@@ -17,7 +17,21 @@ $ git clone https://github.com/cesaraaron/my-app-server && cd my-app-server
 $ yarn install
 ```
 
-Now you need to deploy to an existing prisma server or setup one:
+If you already have a prima server up and running, create a `.env.local` file on the root directory with the following keys set to:
+
+```sh
+PRISMA_ENDPOINT= # the url of the prisma server
+PRISMA_SECRET= # can be anything
+APP_SECRET= # can be anything
+```
+
+Then run:
+
+```sh
+$ yarn deploy
+```
+
+If you don't have a server:
 
 ```sh
 $ yarn deploy -n
@@ -25,7 +39,7 @@ $ yarn deploy -n
 
 When prompt:
 
-1. If you don't have a prisma server use a demo server.
+1. Use a demo server.
 
 2. If you haven't registered with Prisma Cloud before, the CLI will now open a browser window asking you to sign up.
 
@@ -35,8 +49,7 @@ When prompt:
 
 5. Just confirm the suggested values by hitting Enter two times.
 
-Now copy the `endpoint` value of [./database/prisma.yml](./database/prisma.yml) and paste it into `PRISMA_ENDPOINT` of the [.env](./.env) file.
-
+Copy the `endpoint` value of [./database/prisma.yml](./database/prisma.yml) and paste it into `PRISMA_ENDPOINT` of `.env.local`
 
 Start the development server:
 
@@ -51,6 +64,8 @@ $ yarn dev
 - [docker-compose](https://docs.docker.com/compose/install/#install-compose)
 - [pm2](https://github.com/Unitech/pm2)
 
+>**\*\*Important**\*\*
+Make sure the `managementApiSecret` of [docker-compose.yaml](./docker-compose.yml) matches the `PRISMA_MANAGEMENT_API_SECRET` in `.env.local` before deploying.
 
 ### Installing
 
