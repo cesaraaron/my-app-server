@@ -4,10 +4,11 @@
     "start": "dotenv -e .env.local -- nodemon -e ts,graphql -x ts-node src/index.ts",
     "dev": "npm-run-all --parallel start playground",
     "debug": "dotenv -e .env.local -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
-    "playground": "graphql playground",
-    "build": "dotenv -e .env.local -- rimraf dist && tsc",
+    "playground": "dotenv -e .env.local -- graphql playground",
+    "build": "rimraf dist && tsc",
     "generate": "graphql get-schema -p database && graphql codegen",
     "deploy": "prisma deploy -e .env.local",
+    "deploy:server": "yarn build && cp .env .env.production && vim .env.production && pm2 kill && dotenv -e .env.production -- pm2 start dist/index.js --name my-app-server",
     "update-env": "node scripts/updateEnv.js"
   },
   "dependencies": {

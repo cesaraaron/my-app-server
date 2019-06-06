@@ -63,15 +63,18 @@ $ yarn dev
 - [docker](https://docs.docker.com/install/)
 - [docker-compose](https://docs.docker.com/compose/install/#install-compose)
 - [pm2](https://github.com/Unitech/pm2)
+- [dotenv-cli](https://github.com/entropitor/dotenv-cli)
 
->**\*\*Important**\*\*
-Make sure the `managementApiSecret` of [docker-compose.yaml](./docker-compose.yml) matches the `PRISMA_MANAGEMENT_API_SECRET` in `.env.local` before deploying.
+> Make sure the `managementApiSecret` of [docker-compose.yaml](./docker-compose.yml) matches the `PRISMA_MANAGEMENT_API_SECRET` in `.env.production` before deploying.
+
+
 
 ### Installing
 
 ```sh
 # Clone the repo
 $ git clone https://github.com/cesaraaron/my-app-server && cd my-app-server
+
 
 # Install dependencies
 $ yarn install
@@ -82,8 +85,12 @@ $ docker-compose up -d
 # Build the graphql-yoga server
 $ yarn build
 
+# Create a local .env.production file on your server and add your env variables
+# If you already have a .env.production file with all the 4 varialbes set, skip this step.
+$ cp .env .env.production && vim .env.production
+
 # Run the graphql-yoga server in the background
-$ pm2 start dist/index.js --name my-app-server
+$ dotenv -e .env.production -- pm2 start dist/index.js --name my-app-server
 ```
 
 # Built with
